@@ -1,0 +1,23 @@
+DIR=`pwd`
+PROJECT=`basename $DIR`
+REL=`parse-setup-version.py`
+echo "Making release $REL of $PROJECT"
+
+rm -rf dist
+python3 setup.py sdist
+
+# clean venv/ directory from the dist
+# TODO: cleaner way to do this (using setup.py/MANIFEST.in)
+cd dist
+FILE="$PROJECT-$REL"
+echo $FILE
+cd dist
+tar xvf "$FILE.tar.gz"
+rm -rf "$FILE/venv"
+rm "$FILE.tar.gz"
+tar zcvf "$FILE.tar.gz" $FILE
+rm -rf $FILE
+cd ..
+
+# twine upload dist/$FILE.tar.gz
+

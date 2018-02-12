@@ -1,0 +1,10 @@
+/venv
+__pycache__
+/.idea
+*.log
+*.tmp
+*.pyc
+/db.sqlite3
+/dist
+/django_jacc.egg-info
+

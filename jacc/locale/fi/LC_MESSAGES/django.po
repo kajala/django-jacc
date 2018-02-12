@@ -1,0 +1,458 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-08 11:45+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: jacc/admin.py:66
+msgid "Refresh cached fields"
+msgstr "Päivitä kakutetut arvot"
+
+#: jacc/admin.py:78
+#, python-brace-format
+msgid "({total_count} account entries)"
+msgstr "({total_count} tilitapahtumaa)"
+
+#: jacc/admin.py:92
+#, python-brace-format
+msgid ""
+"Total debits {total_debits:.2f} | - total credits {total_credits:.2f} | = "
+"{total_amount:.2f}"
+msgstr ""
+
+#: jacc/admin.py:98 jacc/admin.py:103
+msgid "settlement"
+msgstr "tilitykset"
+
+#: jacc/admin.py:104
+msgid "not settlement"
+msgstr "ei tilitys"
+
+#: jacc/admin.py:118
+msgid "account entry type"
+msgstr "tilitapahtuman tyyppi"
+
+#: jacc/admin.py:135 jacc/models.py:144
+msgid "account type"
+msgstr "tilityyppi"
+
+#: jacc/admin.py:154
+msgid "cannot.modify.archived.account.entry"
+msgstr "Arkistoitua tilitietuetta ei vo muokata"
+
+#: jacc/admin.py:240 jacc/admin.py:816 jacc/models.py:72 jacc/models.py:112
+msgid "account entry source file"
+msgstr "tilitapahtumien lähdetiedosto"
+
+#: jacc/admin.py:246 jacc/admin.py:496 jacc/models.py:167
+msgid "account"
+msgstr "tili"
+
+#: jacc/admin.py:254 jacc/models.py:113
+msgid "source invoice"
+msgstr "lähdelasku"
+
+#: jacc/admin.py:262 jacc/models.py:114
+msgid "settled invoice"
+msgstr "kohdelasku"
+
+#: jacc/admin.py:270 jacc/models.py:115
+msgid "settled item"
+msgstr "kohdistus"
+
+#: jacc/admin.py:385
+msgid "invoice items"
+msgstr "laskurivit"
+
+#: jacc/admin.py:386
+msgid "invoices items"
+msgstr "laskurivit"
+
+#: jacc/admin.py:416 jacc/admin.py:487
+msgid "id"
+msgstr ""
+
+#: jacc/admin.py:435 jacc/admin.py:436
+msgid "settlements"
+msgstr "tilitykset"
+
+#: jacc/admin.py:513
+msgid "Re-send invoices"
+msgstr "Lähetä laskut uudelleen"
+
+#: jacc/admin.py:517 jacc/models.py:245
+msgid "late days"
+msgstr "myöhässä"
+
+#: jacc/admin.py:524
+msgid "late.days.filter.not.due"
+msgstr "ei vielä erääntynyt"
+
+#: jacc/admin.py:525 jacc/admin.py:526 jacc/admin.py:527 jacc/admin.py:528
+msgid "late.days.filter.late.range"
+msgstr "myöhässä {}-{}pv"
+
+#: jacc/admin.py:529
+msgid "late.days.filter.late.over.days"
+msgstr "myöhässä yli {}pv"
+
+#: jacc/admin.py:552
+#, python-brace-format
+msgid "({total_count} invoices)"
+msgstr "({total_count} laskua)"
+
+#: jacc/admin.py:561 jacc/admin.py:568
+msgid "invoiced"
+msgstr "laskutettu"
+
+#: jacc/admin.py:562 jacc/admin.py:569
+msgid "settled"
+msgstr "tilitetty"
+
+#: jacc/admin.py:568 jacc/admin.py:569
+msgid "Total"
+msgstr "Yhteensä"
+
+#: jacc/admin.py:574
+msgid "Summarize invoice statistics"
+msgstr "Laskujen yhteenveto"
+
+#: jacc/admin.py:665 jacc/models.py:68 jacc/models.py:82 jacc/models.py:106
+#: jacc/models.py:140 jacc/models.py:163 jacc/models.py:234 jacc/models.py:412
+msgid "created"
+msgstr "luotu"
+
+#: jacc/admin.py:671 jacc/models.py:236
+msgid "sent"
+msgstr "lähetetty"
+
+#: jacc/admin.py:677 jacc/models.py:237
+msgid "due date"
+msgstr "eräpäivä"
+
+#: jacc/admin.py:683 jacc/models.py:244
+msgid "close date"
+msgstr "valmistunut"
+
+#: jacc/admin.py:688
+msgid "set_as_asset"
+msgstr "Aseta vastaavaa tiliksi"
+
+#: jacc/admin.py:693
+msgid "set_as_liability"
+msgstr "Aseta vastattavaa tiliksi"
+
+#: jacc/admin.py:713
+#, fuzzy
+#| msgid "liability"
+msgid "is liability"
+msgstr "vastattavaa"
+
+#: jacc/apps.py:7
+msgid "Accounting"
+msgstr "Kirjanpito"
+
+#: jacc/models.py:33
+msgid "Debit"
+msgstr "Debit"
+
+#: jacc/models.py:34
+msgid "Credit"
+msgstr "Kredit"
+
+#: jacc/models.py:48
+msgid "Not due yet"
+msgstr "Ei vielä erääntynyt"
+
+#: jacc/models.py:49
+msgid "Due"
+msgstr "Erääntynyt"
+
+#: jacc/models.py:50
+msgid "Late"
+msgstr "Myöhässä"
+
+#: jacc/models.py:51
+msgid "Paid"
+msgstr "Maksettu"
+
+#: jacc/models.py:58
+msgid "Invoice"
+msgstr "Lasku"
+
+#: jacc/models.py:59
+msgid "Credit Note"
+msgstr "Hyvityslasku"
+
+#: jacc/models.py:67 jacc/models.py:81 jacc/models.py:138 jacc/models.py:161
+#: jacc/models.py:414
+msgid "name"
+msgstr "nimi"
+
+#: jacc/models.py:69 jacc/models.py:83 jacc/models.py:107 jacc/models.py:141
+#: jacc/models.py:164 jacc/models.py:235 jacc/models.py:413
+msgid "last modified"
+msgstr "muutettu"
+
+#: jacc/models.py:73
+msgid "account entry source files"
+msgstr "tilitapahtumien lähdetiedostot"
+
+#: jacc/models.py:80 jacc/models.py:137
+msgid "code"
+msgstr "koodi"
+
+#: jacc/models.py:84
+msgid "payback priority"
+msgstr "prioriteetti"
+
+#: jacc/models.py:85
+msgid "is settlement"
+msgstr "tilitys"
+
+#: jacc/models.py:86
+msgid "is payment"
+msgstr "maksusuoritus"
+
+#: jacc/models.py:89
+msgid "entry type"
+msgstr "tapahtuman tyyppi"
+
+#: jacc/models.py:90
+msgid "entry types"
+msgstr "tapahtuman tyypit"
+
+#: jacc/models.py:105
+msgid "record account"
+msgstr "kirjaustili"
+
+#: jacc/models.py:108
+msgid "timestamp"
+msgstr "aikaleima"
+
+#: jacc/models.py:109 jacc/models.py:160 jacc/models.py:232
+msgid "type"
+msgstr "tyyppi"
+
+#: jacc/models.py:110
+msgid "description"
+msgstr "kuvaus"
+
+#: jacc/models.py:111 jacc/models.py:240
+msgid "amount"
+msgstr "summa"
+
+#: jacc/models.py:116
+msgid "account.entry.parent"
+msgstr "johdettu"
+
+#: jacc/models.py:117
+msgid "archived"
+msgstr "arkistoitu"
+
+#: jacc/models.py:120
+msgid "account entry"
+msgstr "tilitapahtuma"
+
+#: jacc/models.py:121
+msgid "account entries"
+msgstr "tilitapahtumat"
+
+#: jacc/models.py:133 jacc/models.py:186
+msgid "balance"
+msgstr "saldo"
+
+#: jacc/models.py:139 jacc/models.py:176
+msgid "asset"
+msgstr "vastaavaa"
+
+#: jacc/models.py:145
+msgid "account types"
+msgstr "tilityypit"
+
+#: jacc/models.py:153 jacc/models.py:181
+msgid "liability"
+msgstr "vastattavaa"
+
+#: jacc/models.py:162
+msgid "currency"
+msgstr "valuutta"
+
+#: jacc/models.py:168
+msgid "accounts"
+msgstr "tilit"
+
+#: jacc/models.py:233
+msgid "invoice number"
+msgstr "laskun numero"
+
+#: jacc/models.py:238
+msgid "notes"
+msgstr "muistio"
+
+#: jacc/models.py:239
+msgid "filename"
+msgstr "tiedosto"
+
+#: jacc/models.py:241
+msgid "paid amount"
+msgstr "maksettu"
+
+#: jacc/models.py:242
+msgid "unpaid amount"
+msgstr "maksamatta"
+
+#: jacc/models.py:243
+msgid "overpaid amount"
+msgstr "ylimaksettu"
+
+#: jacc/models.py:246 jacc/models.py:405
+msgid "state"
+msgstr "tila"
+
+#: jacc/models.py:258
+msgid "invoice"
+msgstr "lasku"
+
+#: jacc/models.py:259
+msgid "invoices"
+msgstr "laskut"
+
+#: jacc/models.py:358
+msgid "is paid"
+msgstr "maksettu"
+
+#: jacc/models.py:363
+msgid "is due"
+msgstr "erääntynyt"
+
+#: jacc/models.py:417
+msgid "contract"
+msgstr "sopimus"
+
+#: jacc/models.py:418
+msgid "contracts"
+msgstr "sopimukset"
+
+#: jacc/serializers.py:68
+msgid "entry.type.missing"
+msgstr "tapahtumatyyppi puuttuu"
+
+#: jacc/settle.py:91
+msgid "credit.note.reconciliation"
+msgstr "hyvityslaskun kohdistus"
+
+#: jacc/templates/admin/jacc/account/change_form.html:8
+msgid "History"
+msgstr "historia"
+
+#: jacc/templates/admin/jacc/account/change_form.html:12
+msgid "Account Entries"
+msgstr "Tilitapahtumat"
+
+#: jacc/templates/admin/jacc/account/change_form.html:14
+msgid "View on site"
+msgstr "sivustolle"
+
+#~ msgid "is debit"
+#~ msgstr "debit"
+
+#~ msgid "1-7 days late"
+#~ msgstr "1-7 päivää myöhässä"
+
+#~ msgid "7-14 days late"
+#~ msgstr "7-14 päivää myöhässä"
+
+#~ msgid "14-21 days late"
+#~ msgstr "14-21 päivää myöhässä"
+
+#~ msgid "21-28 days late"
+#~ msgstr "21-28 päivää myöhässä"
+
+#~ msgid "Over 28 days late"
+#~ msgstr "Yli 28 päivää myöhässä"
+
+#~ msgid "0-7 days late"
+#~ msgstr "0-7 päivää myöhässä"
+
+#~ msgid "Code"
+#~ msgstr "Koodi"
+
+#~ msgid "average"
+#~ msgstr "keskiarvo"
+
+#~ msgid "quantity"
+#~ msgstr "määrä"
+
+#~ msgid "number of units delivered"
+#~ msgstr "yksiköiden lkm"
+
+#~ msgid "unit price"
+#~ msgstr "yksikköhinta"
+
+#~ msgid "unit price without tax"
+#~ msgstr "yksikköhinta ilman veroja"
+
+#~ msgid "tax %"
+#~ msgstr "vero %"
+
+#~ msgid "tax/VAT %, e.g. 24"
+#~ msgstr "vero/alv %, esim. 24"
+
+#~ msgid "tax amount"
+#~ msgstr "veron määrä"
+
+#~ msgid "tax excluded amount"
+#~ msgstr "summa ilman veroa"
+
+#~ msgid "total price excluding tax"
+#~ msgstr "summa yhteensä ilman veroa"
+
+#~ msgid "refund.invoice"
+#~ msgstr "hyvityslasku"
+
+#~ msgid "refund"
+#~ msgstr "hyvitys"
+
+#~ msgid "is editable"
+#~ msgstr "muokattavissa"
+
+#~ msgid "paid date"
+#~ msgstr "maksupäivä"
+
+#~ msgid "Account entry type must be set"
+#~ msgstr "Tilitapahtuman tyyppi pitää asettaa"
+
+#~ msgid "Account and invoice must be related to the same contract"
+#~ msgstr "Tili ja lasku pitää liittyä samaan sopimukseen"
+
+#~ msgid "Settled"
+#~ msgstr "Tilitetty"
+
+#~ msgid "is void"
+#~ msgstr "mitätöity"
+
+#~ msgid "user"
+#~ msgstr "käyttäjä"
+
+#~ msgid "Unbalanced transaction {balance:.2f}"
+#~ msgstr "Epätasapainossa oleva tilitapahtuma {balance:.2f}"
+
+#~ msgid "invoice item type"
+#~ msgstr "laskurivin tyyppi"
+
+#~ msgid "invoice item types"
+#~ msgstr "laskurivin tyypit"
