@@ -1,4 +1,5 @@
-# django-jacc
+django-jacc
+===========
 
 Simple double entry accounting system (debits/credits) for Django projects.
 
