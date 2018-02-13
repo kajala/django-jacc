@@ -181,6 +181,7 @@ class AccountEntryAdmin(ModelAdminBase):
         'source_invoice',
         'settled_invoice',
         'settled_item',
+        'parent',
     ]
     ordering = [
         '-id',
@@ -209,7 +210,6 @@ class AccountEntryAdmin(ModelAdminBase):
         'id',
         'created',
         'last_modified',
-        'parent',
         'balance',
         'source_invoice_link',
         'settled_invoice_link',
