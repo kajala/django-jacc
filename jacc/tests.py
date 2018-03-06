@@ -301,6 +301,37 @@ class Tests(TestCase, DefaultTestSetupMixin):
         print('interest =', dec2(interest))
         self.assertEqual(interest.quantize(Decimal('1.00')), Decimal('182.41'))
 
+    def test_calculate_simple_interest2(self):
+        print('test_calculate_simple_interest')
+        apr = Decimal('48.74')
+        capital = Decimal('500.00')
+        et_capital = EntryType.objects.get(code=E_CAPITAL)
+        entries = [
+            AccountEntry(type=et_capital, amount=capital, timestamp=make_datetime(2017, 1, 1)),
+            AccountEntry(type=et_capital, amount=Decimal(-50), timestamp=make_datetime(2017, 3, 1)),
+            AccountEntry(type=et_capital, amount=Decimal(-50), timestamp=make_datetime(2017, 5, 1)),
+            AccountEntry(type=et_capital, amount=Decimal(-50), timestamp=make_datetime(2017, 7, 1)),
+            AccountEntry(type=et_capital, amount=Decimal(-50), timestamp=make_datetime(2017, 9, 1)),
+            AccountEntry(type=et_capital, amount=Decimal(-50), timestamp=make_datetime(2017, 11, 1)),
+        ]
+        timestamp = make_datetime(2020, 1, 1)
+        interest = calculate_simple_interest(entries, apr, timestamp.date())
+        print('interest =', dec2(interest))
+        self.assertEqual(interest.quantize(Decimal('1.00')), Decimal('426.11'))
+
+    def test_calculate_simple_interest3(self):
+        print('test_calculate_simple_interest')
+        apr = Decimal('3.00')
+        capital = Decimal('500.00')
+        et_capital = EntryType.objects.get(code=E_CAPITAL)
+        entries = [
+            AccountEntry(type=et_capital, amount=capital, timestamp=make_datetime(2018, 2, 10)),
+        ]
+        timestamp = make_datetime(2018, 3, 1)
+        interest = calculate_simple_interest(entries, apr, timestamp.date())
+        print('interest =', dec2(interest))
+        self.assertEqual(interest.quantize(Decimal('1.00')), Decimal('0.78'))
+
     def test_credit_note(self):
         print('test_credit_note')
 
