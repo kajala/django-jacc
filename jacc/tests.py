@@ -302,7 +302,7 @@ class Tests(TestCase, DefaultTestSetupMixin):
         self.assertEqual(interest.quantize(Decimal('1.00')), Decimal('182.41'))
 
     def test_calculate_simple_interest2(self):
-        print('test_calculate_simple_interest')
+        print('test_calculate_simple_interest2')
         apr = Decimal('48.74')
         capital = Decimal('500.00')
         et_capital = EntryType.objects.get(code=E_CAPITAL)
@@ -320,14 +320,14 @@ class Tests(TestCase, DefaultTestSetupMixin):
         self.assertEqual(interest.quantize(Decimal('1.00')), Decimal('426.11'))
 
     def test_calculate_simple_interest3(self):
-        print('test_calculate_simple_interest')
+        print('test_calculate_simple_interest3')
         apr = Decimal('3.00')
         capital = Decimal('500.00')
         et_capital = EntryType.objects.get(code=E_CAPITAL)
         entries = [
-            AccountEntry(type=et_capital, amount=capital, timestamp=make_datetime(2018, 2, 10)),
+            AccountEntry(type=et_capital, amount=capital, timestamp=make_datetime(2018, 1, 10)),
         ]
-        interest = calculate_simple_interest(entries, apr, date(2018, 3, 1))
+        interest = calculate_simple_interest(entries, apr, date(2018, 3, 1), begin=date(2018, 2, 10))
         print('interest =', dec2(interest))
         self.assertEqual(interest.quantize(Decimal('1.00')), Decimal('0.78'))
 
