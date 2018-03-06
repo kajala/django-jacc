@@ -327,8 +327,7 @@ class Tests(TestCase, DefaultTestSetupMixin):
         entries = [
             AccountEntry(type=et_capital, amount=capital, timestamp=make_datetime(2018, 2, 10)),
         ]
-        timestamp = make_datetime(2018, 3, 1)
-        interest = calculate_simple_interest(entries, apr, timestamp.date())
+        interest = calculate_simple_interest(entries, apr, date(2018, 3, 1))
         print('interest =', dec2(interest))
         self.assertEqual(interest.quantize(Decimal('1.00')), Decimal('0.78'))
 
