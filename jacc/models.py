@@ -230,7 +230,7 @@ class Invoice(models.Model, CachedFieldsMixin):
     """
     objects = InvoiceManager()
     type = models.CharField(verbose_name=_('type'), max_length=2, db_index=True, default=INVOICE_DEFAULT, blank=True, choices=INVOICE_TYPE)
-    number = models.IntegerField(verbose_name=_('invoice number'), default=None, null=True, blank=True, db_index=True)
+    number = models.BigIntegerField(verbose_name=_('invoice number'), default=None, null=True, blank=True, db_index=True)
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, db_index=True, editable=False, blank=True)
     sent = models.DateTimeField(verbose_name=_('sent'), db_index=True, default=None, blank=True, null=True)
