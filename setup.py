@@ -8,7 +8,7 @@ install_requires = [str(ir.req) for ir in reqs if str(ir.req) != 'None']
 
 setup(
     name='django-jacc',
-    version='1.0.5',
+    version='1.0.6',
     author=u'Jani Kajala',
     author_email='kajala@gmail.com',
     packages=find_packages(exclude=['project', 'venv']),
