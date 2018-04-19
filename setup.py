@@ -3,7 +3,7 @@ from distutils.core import setup
 from setuptools import find_packages
 
 
-def parse_requirements(filename):
+def parse_requirements(filename, session=False):
     """ load requirements from a pip requirements file """
     lineiter = (line.strip() for line in open(filename))
     return [line for line in lineiter if line and not line.startswith("#")]
