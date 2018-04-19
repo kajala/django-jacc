@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 from distutils.core import setup
 from setuptools import find_packages
-from pip.req import parse_requirements
+
+
+def parse_requirements(filename):
+    """ load requirements from a pip requirements file """
+    lineiter = (line.strip() for line in open(filename))
+    return [line for line in lineiter if line and not line.startswith("#")]
+
 
 reqs = parse_requirements('requirements.txt', session=False)
 install_requires = [str(ir.req) for ir in reqs if str(ir.req) != 'None']
