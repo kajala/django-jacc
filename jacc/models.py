@@ -77,8 +77,8 @@ class AccountEntrySourceFile(models.Model):
 
 
 class EntryType(models.Model):
-    code = models.CharField(verbose_name=_('code'), max_length=32, db_index=True, unique=True)
-    name = models.CharField(verbose_name=_('name'), max_length=64, db_index=True, unique=True)
+    code = models.CharField(verbose_name=_('code'), max_length=32, db_index=True)
+    name = models.CharField(verbose_name=_('name'), max_length=64, db_index=True)
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, db_index=True, editable=False, blank=True)
     payback_priority = models.SmallIntegerField(verbose_name=_('payback priority'), default=0, blank=True, db_index=True)
@@ -88,6 +88,10 @@ class EntryType(models.Model):
     class Meta:
         verbose_name = _('entry type')
         verbose_name_plural = _('entry types')
+
+        unique_together = (
+            ('code', 'name', 'is_settlement'),
+        )
 
     def __str__(self):
         return str(self.name)
