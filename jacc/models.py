@@ -117,7 +117,7 @@ class EntryType(models.Model):
         verbose_name_plural = _('entry types')
 
     def __str__(self):
-        return str(self.name)
+        return self.code
 
 
 class AccountEntryManager(models.Manager):
