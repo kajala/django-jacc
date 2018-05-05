@@ -391,3 +391,12 @@ class Tests(TestCase, DefaultTestSetupMixin):
         self.assertEqual(invoice.get_paid_amount(), Decimal('110.00'))
         self.assertEqual(invoice.get_amount(), Decimal('110.00'))
         self.assertEqual(invoice.get_overpaid_amount(), Decimal('0.00'))
+
+    def test_unique_entry_type(self):
+        a = EntryType.objects.get_unique('JIM', is_settlement=False)
+        b = EntryType.objects.get_unique('JIM')
+        self.assertEqual(a.id, b.id)
+        c = EntryType.objects.get_unique('JIM', is_settlement=True)
+        self.assertNotEqual(a.id, c.id)
+        d = EntryType.objects.get_unique('JIM', is_settlement=True)
+        self.assertEqual(d.id, c.id)

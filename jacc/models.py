@@ -9,6 +9,7 @@ A credit is an accounting entry that either increases a liability or equity acco
 or decreases an asset or expense account.
 Credit means "right", gains/income/revenues/liabilities/equity increased with credit.
 """
+import re
 from datetime import datetime, timedelta
 from decimal import Decimal
 
@@ -76,9 +77,35 @@ class AccountEntrySourceFile(models.Model):
         return '[{}] {}'.format(self.id, self.name)
 
 
+class EntryTypeManager(models.Manager):
+    def get_unique(self, code: str, **kw):
+        """
+        Returns unique code base on code and passed key-value requirements.
+        Uses (2) suffix for clone, (3) for second clone, etc. if requirements differ.
+        :param code: Entry type code
+        :param kw: Key-value pairs of required properties for the entry.
+        :return: EntryType
+        """
+        obj, created = self.get_or_create(code=code, defaults=kw)
+        if not created:
+            for k, v in kw.items():
+                if getattr(obj, k) != v:
+                    # <code> taken and requirements do not match -> try <code>(2)
+                    res = re.match(r'^.+\((\d+)\)$', code)
+                    next_num = 2
+                    if res:
+                        num_str = res.groups(1)[0]
+                        next_num = int(num_str) + 1
+                        code = code[:-2-len(num_str)]
+                    next_code = '{}({})'.format(code, next_num)
+                    return self.get_unique(next_code, **kw)
+        return obj
+
+
 class EntryType(models.Model):
-    code = models.CharField(verbose_name=_('code'), max_length=32, db_index=True)
-    name = models.CharField(verbose_name=_('name'), max_length=64, db_index=True)
+    objects = EntryTypeManager()
+    code = models.CharField(verbose_name=_('code'), max_length=64, db_index=True, unique=True)
+    name = models.CharField(verbose_name=_('name'), max_length=128, db_index=True, blank=True, default='')
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, db_index=True, editable=False, blank=True)
     payback_priority = models.SmallIntegerField(verbose_name=_('payback priority'), default=0, blank=True, db_index=True)
@@ -88,10 +115,6 @@ class EntryType(models.Model):
     class Meta:
         verbose_name = _('entry type')
         verbose_name_plural = _('entry types')
-
-        unique_together = (
-            ('code', 'name', 'is_settlement'),
-        )
 
     def __str__(self):
         return str(self.name)
