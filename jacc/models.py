@@ -15,6 +15,7 @@ from decimal import Decimal
 
 from math import floor
 
+from django.core.exceptions import ValidationError
 from jacc.helpers import sum_queryset
 from django.conf import settings
 from django.db import models, transaction
@@ -149,6 +150,10 @@ class AccountEntry(models.Model):
 
     def __str__(self):
         return '[{}] {} {} {}'.format(self.id, self.timestamp.date().isoformat() if self.timestamp else None, self.type, self.amount)
+
+    def clean(self):
+        if self.source_invoice and self.settled_invoice:
+            raise ValidationError('Both source_invoice ({}) and settled_invoice ({}) cannot be set same time for account entry ({})'.format(self.source_invoice, self.settled_invoice, self))
 
     @property
     def balance(self) -> Decimal:

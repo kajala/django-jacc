@@ -92,9 +92,9 @@ def settle_credit_note(credit_note: Invoice, original_invoice: Invoice, cls, acc
 
     pmts = []
     if amt > Decimal(0):
-        pmt = cls.objects.create(account=account, amount=amt, type=entry_type, source_invoice=credit_note, settled_invoice=original_invoice, description=description, **kwargs)
+        pmt = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=original_invoice, description=description, **kwargs)
         pmts.append(pmt)
-        pmt = cls.objects.create(account=account, amount=-amt, type=entry_type, source_invoice=original_invoice, settled_invoice=credit_note, description=description, **kwargs)
+        pmt = cls.objects.create(account=account, amount=-amt, type=entry_type, settled_invoice=credit_note, description=description, **kwargs)
         pmts.append(pmt)
 
     return pmts
