@@ -64,6 +64,7 @@ def settle_assigned_invoice(receivables_account: Account, settlement: AccountEnt
     return new_payments
 
 
+@transaction.atomic
 def settle_credit_note(credit_note: Invoice, original_invoice: Invoice, cls, account: Account, **kwargs) -> list:
     """
     Settles credit note. Records settling account entries for both original invoice and the credit note
@@ -80,7 +81,7 @@ def settle_credit_note(credit_note: Invoice, original_invoice: Invoice, cls, acc
     assert original_invoice
     assert original_invoice.type == INVOICE_DEFAULT
 
-    credit = -credit_note.get_amount()
+    credit = -credit_note.get_unpaid_amount()
     balance = original_invoice.get_unpaid_amount()
     amt = min(balance, credit)
     entry_type = kwargs.pop('entry_type', None)
