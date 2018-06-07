@@ -1,3 +1,4 @@
+from datetime import datetime
 from decimal import Decimal
 from django.contrib import messages
 from django.contrib.admin import SimpleListFilter
@@ -7,6 +8,7 @@ from django.db import transaction
 from django.db.models.functions import Coalesce
 from django import forms
 from django.urls import reverse, ResolverMatch
+from django.utils.formats import date_format
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.text import format_lazy
@@ -658,27 +660,39 @@ class InvoiceAdmin(ModelAdminBase):
         instance.update_cached_fields()
         return super().construct_change_message(request, form, formsets, add)
 
+    def _format_date(self, obj) -> str:
+        """
+        Short date format.
+        :param obj: date or datetime or None
+        :return: str
+        """
+        if obj is None:
+            return ''
+        if isinstance(obj, datetime):
+            obj = obj.date()
+        return date_format(obj, 'SHORT_DATE_FORMAT')
+
     def created_brief(self, obj):
         assert isinstance(obj, Invoice)
-        return obj.created.date() if obj.created else None
+        return self._format_date(obj.created)
     created_brief.admin_order_field = 'created'
     created_brief.short_description = _('created')
 
     def sent_brief(self, obj):
         assert isinstance(obj, Invoice)
-        return obj.sent.date() if obj.sent else None
+        return self._format_date(obj.sent)
     sent_brief.admin_order_field = 'sent'
     sent_brief.short_description = _('sent')
 
     def due_date_brief(self, obj):
         assert isinstance(obj, Invoice)
-        return obj.due_date.date() if obj.due_date else None
+        return self._format_date(obj.due_date)
     due_date_brief.admin_order_field = 'due_date'
     due_date_brief.short_description = _('due date')
 
     def close_date_brief(self, obj):
         assert isinstance(obj, Invoice)
-        return obj.close_date.date() if obj.close_date else None
+        return self._format_date(obj.close_date)
     close_date_brief.admin_order_field = 'close_date'
     close_date_brief.short_description = _('close date')
 
