@@ -65,12 +65,12 @@ def settle_assigned_invoice(receivables_account: Account, settlement: AccountEnt
 
 
 @transaction.atomic
-def settle_credit_note(credit_note: Invoice, original_invoice: Invoice, cls, account: Account, **kwargs) -> list:
+def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: Account, **kwargs) -> list:
     """
     Settles credit note. Records settling account entries for both original invoice and the credit note
     (negative entries for the credit note).
     :param credit_note: Credit note to settle
-    :param original_invoice: Original invoice to settle
+    :param debit_note: Invoice to settle
     :param cls: AccountEntry (derived) class to use for new entries
     :param account: Settlement account
     :param kwargs: Variable arguments to cls() instance creation
@@ -78,11 +78,11 @@ def settle_credit_note(credit_note: Invoice, original_invoice: Invoice, cls, acc
     """
     assert isinstance(credit_note, Invoice)
     assert credit_note.type == INVOICE_CREDIT_NOTE
-    assert original_invoice
-    assert original_invoice.type == INVOICE_DEFAULT
+    assert debit_note
+    assert debit_note.type == INVOICE_DEFAULT
 
     credit = -credit_note.get_unpaid_amount()
-    balance = original_invoice.get_unpaid_amount()
+    balance = debit_note.get_unpaid_amount()
     amt = min(balance, credit)
     entry_type = kwargs.pop('entry_type', None)
     if entry_type is None:
@@ -93,7 +93,7 @@ def settle_credit_note(credit_note: Invoice, original_invoice: Invoice, cls, acc
 
     pmts = []
     if amt > Decimal(0):
-        pmt = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=original_invoice, description=description, **kwargs)
+        pmt = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=debit_note, description=description, **kwargs)
         pmts.append(pmt)
         pmt = cls.objects.create(account=account, amount=-amt, type=entry_type, settled_invoice=credit_note, description=description, **kwargs)
         pmts.append(pmt)
