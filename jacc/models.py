@@ -87,19 +87,27 @@ class EntryTypeManager(models.Manager):
         :param kw: Key-value pairs of required properties for the entry.
         :return: EntryType
         """
-        obj, created = self.get_or_create(code=code, defaults=kw)
-        if not created:
-            for k, v in kw.items():
-                if getattr(obj, k) != v:
-                    # <code> taken and requirements do not match -> try <code>(2)
-                    res = re.match(r'^.+\((\d+)\)$', code)
-                    next_num = 2
-                    if res:
-                        num_str = res.groups(1)[0]
-                        next_num = int(num_str) + 1
-                        code = code[:-2-len(num_str)]
-                    next_code = '{}({})'.format(code, next_num)
-                    return self.get_unique(next_code, **kw)
+        next_code = code
+        next_num = 1
+        res = re.match(r'^.+\((\d+)\)$', code)
+        if res:
+            code_base = res.groups(1)[0]
+        else:
+            code_base = code
+
+        obj, created = None, False
+        while not created:
+            obj, created = self.get_or_create(code=next_code, defaults=kw)
+            if not created:
+                match = True
+                for k, v in kw.items():
+                    if getattr(obj, k) != v:
+                        next_code = '{}({})'.format(code_base, next_num)
+                        next_num += 1
+                        match = False
+                        break
+                if match:
+                    break
         return obj
 
 
