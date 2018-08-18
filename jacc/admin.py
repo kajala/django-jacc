@@ -380,7 +380,7 @@ class SingleSettlementsAccountSettlementInlineFormSet(AccountEntryInlineFormSet)
         return entries
 
 
-class InvoiceItemInline(admin.TabularInline):  # # TODO: override in app
+class InvoiceItemInline(admin.TabularInline):  # TODO: override in app
     model = AccountEntry
     formset = SingleReceivablesAccountInvoiceItemInlineFormSet  # TODO: override in app
     fk_name = 'source_invoice'
