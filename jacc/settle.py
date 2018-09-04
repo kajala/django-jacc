@@ -2,6 +2,7 @@ from decimal import Decimal
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from jacc.models import AccountEntry, Invoice, EntryType, Account, INVOICE_CREDIT_NOTE, INVOICE_DEFAULT
 
@@ -69,6 +70,7 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
     """
     Settles credit note. Records settling account entries for both original invoice and the credit note
     (negative entries for the credit note).
+    Default timestamp for account entries is 'created' time of the credit note, can be overriden by kwargs.
     :param credit_note: Credit note to settle
     :param debit_note: Invoice to settle
     :param cls: AccountEntry (derived) class to use for new entries
@@ -93,9 +95,15 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
 
     pmts = []
     if amt > Decimal(0):
-        pmt = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=debit_note, description=description, **kwargs)
+        timestamp = kwargs.pop('timestamp')
+        if not timestamp and credit_note.created:
+            timestamp = credit_note.created
+        if not timestamp:
+            timestamp = now()
+
+        pmt = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=debit_note, description=description, timestamp=timestamp, **kwargs)
         pmts.append(pmt)
-        pmt = cls.objects.create(account=account, amount=-amt, type=entry_type, settled_invoice=credit_note, description=description, **kwargs)
+        pmt = cls.objects.create(account=account, amount=-amt, type=entry_type, settled_invoice=credit_note, description=description, timestamp=timestamp, **kwargs)
         pmts.append(pmt)
 
     return pmts
