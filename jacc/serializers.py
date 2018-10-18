@@ -11,6 +11,7 @@ class EntryTypeSerializer(ModelSerializer):
         fields = [
             'id',
             'code',
+            'identifier',
             'name',
             'created',
             'last_modified',
