@@ -179,6 +179,7 @@ class AccountEntryAdmin(ModelAdminBase):
     raw_id_fields = [
         'account',
         'source_file',
+        'type',
         'parent',
         'source_invoice',
         'settled_invoice',
@@ -398,6 +399,7 @@ class InvoiceItemInline(admin.TabularInline):  # TODO: override in app
     ]
     raw_id_fields = [
         'account',
+        'type',
         'source_invoice',
         'settled_invoice',
         'settled_item',
@@ -453,6 +455,7 @@ class InvoiceSettlementInline(admin.TabularInline):  # TODO: override in app
     ]
     raw_id_fields = [
         'account',
+        'type',
         'source_invoice',
         'settled_invoice',
         'source_file',
