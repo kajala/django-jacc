@@ -78,42 +78,9 @@ class AccountEntrySourceFile(models.Model):
         return '[{}] {}'.format(self.id, self.name)
 
 
-class EntryTypeManager(models.Manager):
-    def get_unique(self, code: str, **kw):
-        """
-        Returns unique code base on code and passed key-value requirements.
-        Uses (2) suffix for clone, (3) for second clone, etc. if requirements differ.
-        :param code: Entry type code
-        :param kw: Key-value pairs of required properties for the entry.
-        :return: EntryType
-        """
-        next_code = code
-        next_num = 1
-        res = re.match(r'^.+\((\d+)\)$', code)
-        if res:
-            code_base = res.groups(1)[0]
-        else:
-            code_base = code
-
-        obj, created = None, False
-        while not created:
-            obj, created = self.get_or_create(code=next_code, defaults=kw)
-            if not created:
-                match = True
-                for k, v in kw.items():
-                    if getattr(obj, k) != v:
-                        next_code = '{}({})'.format(code_base, next_num)
-                        next_num += 1
-                        match = False
-                        break
-                if match:
-                    break
-        return obj
-
-
 class EntryType(models.Model):
-    objects = EntryTypeManager()
     code = models.CharField(verbose_name=_('code'), max_length=64, db_index=True, unique=True)
+    identifier = models.CharField(verbose_name=_('identifier'), max_length=40, db_index=True, blank=True, default='')
     name = models.CharField(verbose_name=_('name'), max_length=128, db_index=True, blank=True, default='')
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, db_index=True, editable=False, blank=True)
@@ -252,7 +219,8 @@ class InvoiceManager(models.Manager):
         for obj in self.filter(**kw):
             obj.update_cached_fields()
 
-    def get_next_invoice_number(self, queryset: QuerySet):
+    @staticmethod
+    def get_next_invoice_number(queryset: QuerySet):
         """
         Returns the next available invoice number from the queryset.
         The logic removes all non-digit characters from the invoice number string and increments

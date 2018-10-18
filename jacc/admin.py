@@ -760,7 +760,8 @@ def toggle_payment(modeladmin, request: HttpRequest, queryset: QuerySet):
 
 class EntryTypeAdmin(ModelAdminBase):
     list_display = [
-        'code',
+        'id',
+        'identifier',
         'name',
         'is_settlement',
         'is_payment',
@@ -778,6 +779,7 @@ class EntryTypeAdmin(ModelAdminBase):
         toggle_settlement,
         toggle_payment,
     ]
+    exclude = ()
     ordering = ['name', ]
     allow_add = True
     allow_delete = True
