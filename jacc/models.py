@@ -219,18 +219,6 @@ class InvoiceManager(models.Manager):
         for obj in self.filter(**kw):
             obj.update_cached_fields()
 
-    @staticmethod
-    def get_next_invoice_number(queryset: QuerySet):
-        """
-        Returns the next available invoice number from the queryset.
-        The logic removes all non-digit characters from the invoice number string and increments
-        resulting integer by one.
-        :param queryset: QuerySet
-        :return: str
-        """
-        obj = queryset.order_by('-number').first()
-        return '1' if not obj else str(int(re.sub(r'[^\d]', '', obj.number)) + 1)
-
 
 def get_default_due_date():
     return now() + timedelta(days=settings.DEFAULT_DUE_DATE_DAYS) if hasattr(settings, 'DEFAULT_DUE_DATE_DAYS') else None
