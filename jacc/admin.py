@@ -346,10 +346,13 @@ class AccountEntryInlineFormSet(forms.BaseInlineFormSet):
             obj.account = account
             obj.source_invoice = source_invoice
             obj.settled_invoice = settled_invoice
-            if obj.amount is None and obj.parent:
-                obj.amount = obj.parent.amount
-            if obj.type is None and obj.parent:
-                obj.type = obj.parent.type
+            if obj.parent:
+                if obj.amount is None:
+                    obj.amount = obj.parent.amount
+                if obj.type is None:
+                    obj.type = obj.parent.type
+                if obj.amount > obj.parent.amount > Decimal(0) or obj.amount < obj.parent.amount < Decimal(0):
+                    raise ValidationError(_('Derived account entry amount cannot be larger than original'))
             for k, v in kw.items():
                 setattr(obj, k, v)
 
