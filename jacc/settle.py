@@ -96,9 +96,9 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
     pmts = []
     if amt > Decimal(0):
         timestamp = kwargs.pop('timestamp', credit_note.created or now())
-        pmt = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=debit_note, description=description, timestamp=timestamp, **kwargs)
-        pmts.append(pmt)
-        pmt = cls.objects.create(account=account, amount=-amt, type=entry_type, settled_invoice=credit_note, description=description, timestamp=timestamp, **kwargs)
-        pmts.append(pmt)
+        pmt1 = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=debit_note, description=description + ' #{}'.format(credit_note.number), timestamp=timestamp, **kwargs)
+        pmts.append(pmt1)
+        pmt2 = cls.objects.create(account=account, parent=pmt1, amount=-amt, type=entry_type, settled_invoice=credit_note, description=description + ' #{}'.format(debit_note.number), timestamp=timestamp, **kwargs)
+        pmts.append(pmt2)
 
     return pmts
