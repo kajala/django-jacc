@@ -29,9 +29,10 @@ def settle_assigned_invoice(receivables_account: Account, settlement: AccountEnt
         raise ValidationError('Cannot target positive settlement {} to credit note {}'.format(settlement, settlement.settled_invoice))
     if not invoice:
         raise ValidationError('Cannot target settlement {} without settled invoice'.format(settlement))
+    assert isinstance(invoice, Invoice)
     if not settlement.type.is_settlement:
         raise ValidationError('Cannot settle account entry {} which is not settlement'.format(settlement))
-    if AccountEntry.objects.filter(parent=settlement).count() > 0:
+    if AccountEntry.objects.filter(parent=settlement, account=receivables_account).count() > 0:
         raise ValidationError('Settlement is parent of old account entries already, maybe duplicate settlement?')
     if not receivables_account:
         raise ValidationError('Receivables account missing. Invoice with no rows?')
@@ -96,8 +97,10 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
     pmts = []
     if amt > Decimal(0):
         timestamp = kwargs.pop('timestamp', credit_note.created or now())
+        # record entry to debit note settlement account
         pmt1 = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=debit_note, description=description + ' #{}'.format(credit_note.number), timestamp=timestamp, **kwargs)
         pmts.append(pmt1)
+        # record entry to credit note settlement account
         pmt2 = cls.objects.create(account=account, parent=pmt1, amount=-amt, type=entry_type, settled_invoice=credit_note, description=description + ' #{}'.format(debit_note.number), timestamp=timestamp, **kwargs)
         pmts.append(pmt2)
 
