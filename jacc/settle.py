@@ -86,7 +86,14 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
 
     credit = -credit_note.get_unpaid_amount()
     balance = debit_note.get_unpaid_amount()
+
     amt = min(balance, credit)
+    amount = kwargs.pop('amount', None)
+    if amount is not None:
+        if amount > amt:
+            raise ValidationError(_('Cannot settle credit note amount which is larger than remaining unpaid balance'))
+        amt = amount
+
     entry_type = kwargs.pop('entry_type', None)
     if entry_type is None:
         if not hasattr(settings, 'E_CREDIT_NOTE_RECONCILIATION'):
