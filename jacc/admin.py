@@ -563,13 +563,11 @@ def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet)
         qs2 = qs.filter(state=state)
 
         invoiced = qs2.filter(state=state).aggregate(amount=Coalesce(Sum('amount'), 0), count=Count('*'))
-        unpaid = qs2.filter(state=state).aggregate(amount=Coalesce(Sum('unpaid_amount'), 0), count=Count('*'))
 
         lines.append('{state_name} {label} | x{count} | {amount:.2f}'.format(label=_('invoiced'), state_name=state_name, **invoiced))
 
         for k in ('amount', 'count'):
             invoiced_total[k] += invoiced[k]
-            unpaid_total[k] += unpaid[k]
 
     lines.append(_('Total') + ' {label} | x{count} | {amount:.2f}'.format(label=_('amount'), **invoiced_total))
     lines.append('</pre>')
