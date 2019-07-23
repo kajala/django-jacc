@@ -564,7 +564,7 @@ def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet)
 
         invoiced = qs2.filter(state=state).aggregate(amount=Coalesce(Sum('amount'), 0), count=Count('*'))
 
-        lines.append('{state_name} {label} | x{count} | {amount:.2f}'.format(label=_('invoiced'), state_name=state_name, **invoiced))
+        lines.append('{state_name} | x{count} | {amount:.2f}'.format(label=_('invoiced'), state_name=state_name, **invoiced))
 
         for k in ('amount', 'count'):
             invoiced_total[k] += invoiced[k]
