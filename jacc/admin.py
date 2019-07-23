@@ -549,11 +549,10 @@ class InvoiceLateDaysFilter(SimpleListFilter):
 
 
 def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet):
-    # invoice_states = list([i.state for i in qs.distinct('state').order_by('state')])
     invoice_states = list([state for state, name in INVOICE_STATE])
 
     invoiced_total = {'amount': Decimal('0.00'), 'count': 0}
-    settled_total = {'amount': Decimal('0.00'), 'count': 0}
+    unpaid_total = {'amount': Decimal('0.00'), 'count': 0}
 
     lines = [
         '<pre>',
@@ -563,18 +562,16 @@ def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet)
         state_name = choices_label(INVOICE_STATE, state)
         qs2 = qs.filter(state=state)
 
-        invoiced = AccountEntry.objects.filter(source_invoice__in=qs2, parent=None).aggregate(amount=Coalesce(Sum('amount'), 0), count=Count('source_invoice', distinct=True))
-        settled = AccountEntry.objects.filter(settled_invoice__in=qs2).exclude(parent=None).aggregate(amount=Coalesce(Sum('amount'), 0), count=Count('settled_invoice', distinct=True))
+        invoiced = qs2.filter(state=state).aggregate(amount=Coalesce(Sum('amount'), 0), count=Count('*'))
+        unpaid = qs2.filter(state=state).aggregate(amount=Coalesce(Sum('unpaid_amount'), 0), count=Count('*'))
 
-        lines.append('{state_name} / {label} | x{count} | {amount:.2f}'.format(label=_('invoiced'), state_name=state_name, **invoiced))
-        lines.append('{state_name} / {label} | x{count} | {amount:.2f}'.format(label=_('settled'), state_name=state_name, **settled))
+        lines.append('{state_name} {label} | x{count} | {amount:.2f}'.format(label=_('invoiced'), state_name=state_name, **invoiced))
 
         for k in ('amount', 'count'):
             invoiced_total[k] += invoiced[k]
-            settled_total[k] += settled[k]
+            unpaid_total[k] += unpaid[k]
 
-    lines.append(_('Total') + ' {label} | x{count} | {amount:.2f}'.format(label=_('invoiced'), **invoiced_total))
-    lines.append(_('Total') + ' {label} | x{count} | {amount:.2f}'.format(label=_('settled'), **settled_total))
+    lines.append(_('Total') + ' {label} | x{count} | {amount:.2f}'.format(label=_('amount'), **invoiced_total))
     lines.append('</pre>')
 
     lines = align_lines(lines, '|')
