@@ -15,6 +15,7 @@ cd dist
 tar xvf "$FILE.tar.gz"
 rm -rf "$FILE/venv"
 rm "$FILE.tar.gz"
+find . -name "__pycache__" -type d -exec rm -r "{}" \;
 tar zcvf "$FILE.tar.gz" $FILE
 rm -rf $FILE
 cd ..
