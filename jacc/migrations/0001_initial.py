@@ -10,6 +10,7 @@ import jutil.cache
 class Migration(migrations.Migration):
 
     initial = True
+    replaces = [('jacc', '0001_initial'), ('jacc', '0002_auto_20171020_1331'), ('jacc', '0003_auto_20171030_1933'), ('jacc', '0004_auto_20171030_1935'), ('jacc', '0005_auto_20171030_1958'), ('jacc', '0006_account_name'), ('jacc', '0007_invoice_number'), ('jacc', '0008_auto_20180121_1705'), ('jacc', '0009_accountentry_archived'), ('jacc', '0010_auto_20180201_0734'), ('jacc', '0011_auto_20180208_1146'), ('jacc', '0012_auto_20180218_0638'), ('jacc', '0013_auto_20180329_1052'), ('jacc', '0014_auto_20180430_1506'), ('jacc', '0015_auto_20180505_1512'), ('jacc', '0016_auto_20180505_1604'), ('jacc', '0017_auto_20180807_1808'), ('jacc', '0018_auto_20181008_2322'), ('jacc', '0019_entrytype_identifier')]
 
     dependencies = [
     ]
