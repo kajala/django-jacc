@@ -21,7 +21,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import QuerySet, Sum, Count
 from django.http import HttpRequest
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import gettext_lazy as _, gettext
 from jacc.settle import settle_assigned_invoice
 from jutil.admin import ModelAdminBase, admin_log
 from django.db import models

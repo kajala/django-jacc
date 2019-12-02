@@ -23,7 +23,7 @@ from django.db.models import QuerySet, Q
 from django.utils.timezone import now
 from jutil.cache import CachedFieldsMixin
 from jutil.dict import choices_label
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 CATEGORY_ANY = ''

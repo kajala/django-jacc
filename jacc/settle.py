@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils.timezone import now
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from jacc.models import AccountEntry, Invoice, EntryType, Account, INVOICE_CREDIT_NOTE, INVOICE_DEFAULT
 
 
