@@ -165,7 +165,7 @@ class Account(models.Model):
     Collects together accounting entries and provides summarizing functionality.
     """
     type = models.ForeignKey(AccountType, verbose_name=_('type'), related_name='+', on_delete=models.PROTECT)
-    name = models.CharField(verbose_name=_('name'), max_length=32, blank=True, default='', db_index=True)
+    name = models.CharField(verbose_name=_('name'), max_length=64, blank=True, default='', db_index=True)
     currency = models.CharField(verbose_name=_('currency'), max_length=3, default='EUR', choices=CURRENCY_TYPE, blank=True)
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, db_index=True, editable=False, blank=True)
