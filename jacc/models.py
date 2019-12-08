@@ -383,8 +383,8 @@ class Invoice(models.Model, CachedFieldsMixin):
                 return first.timestamp
         return None
 
-    def get_late_days(self) -> int:
-        t = self.close_date
+    def get_late_days(self, t: datetime or None = None) -> int:
+        t = self.close_date or t
         if not t:
             t = now()
         return int(floor((t - self.due_date).total_seconds() / 86400.0))
