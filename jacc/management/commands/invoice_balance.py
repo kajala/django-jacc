@@ -1,6 +1,6 @@
 from decimal import Decimal
 from django.core.management.base import CommandParser
-from jacc.models import EntryType, AccountEntry, Invoice
+from jacc.models import AccountEntry, Invoice
 from jutil.command import SafeCommand
 
 
@@ -27,4 +27,5 @@ class Command(SafeCommand):
             for tx in inv.receivables.order_by('timestamp', 'id'):
                 assert isinstance(tx, AccountEntry)
                 bal += tx.amount
-                print('  [{}] {} {} {}{} {}'.format(tx.id, tx.timestamp.date().isoformat(), tx.type, '+' if tx.amount >= Decimal('0.00') else '', tx.amount, bal))
+                print('  [{}] {} {} {}{} {}'.format(tx.id, tx.timestamp.date().isoformat(), tx.type,
+                                                    '+' if tx.amount >= Decimal('0.00') else '', tx.amount, bal))

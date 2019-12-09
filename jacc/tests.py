@@ -1,10 +1,8 @@
 from decimal import Decimal
 from datetime import timedelta, datetime, date
-from pprint import pprint
 import pytz
 from jacc.interests import calculate_simple_interest
 from jacc.models import AccountEntry, Account, Invoice, EntryType, AccountType, INVOICE_CREDIT_NOTE
-from django.conf import settings
 from django.test import TestCase
 from django.utils.timezone import now
 from jacc.settle import settle_assigned_invoice, settle_credit_note

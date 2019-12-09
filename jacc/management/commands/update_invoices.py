@@ -1,8 +1,5 @@
-from datetime import timedelta
-
-from jacc.models import AccountEntry, Invoice
+from jacc.models import Invoice
 from django.core.management.base import CommandParser
-from django.utils.timezone import now
 from jutil.command import SafeCommand
 
 

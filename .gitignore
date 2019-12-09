@@ -7,4 +7,5 @@ __pycache__
 /db.sqlite3
 /dist
 /django_jacc.egg-info
+/project/settings.py
 

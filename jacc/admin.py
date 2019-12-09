@@ -1,10 +1,9 @@
+# pylint: disable=protected-access
 from datetime import datetime
 from decimal import Decimal
 from django.contrib import messages
 from django.contrib.admin import SimpleListFilter
-from django.contrib.admin.options import InlineModelAdmin
 from django.contrib.messages import add_message, INFO
-from django.db import transaction
 from django.db.models.functions import Coalesce
 from django import forms
 from django.urls import reverse, ResolverMatch
@@ -12,7 +11,6 @@ from django.utils.formats import date_format
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.text import format_lazy
-from django.utils.timezone import now
 from jacc.models import Account, AccountEntry, Invoice, AccountType, EntryType, AccountEntrySourceFile, INVOICE_STATE
 from django.conf import settings
 from django.conf.urls import url
@@ -21,14 +19,13 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import QuerySet, Sum, Count
 from django.http import HttpRequest
-from django.utils.translation import gettext_lazy as _, gettext
+from django.utils.translation import gettext_lazy as _
 from jacc.settle import settle_assigned_invoice
 from jutil.admin import ModelAdminBase, admin_log
-from django.db import models
 from jutil.dict import choices_label
 
 
-def align_lines(lines: list, column_separator: str='|') -> list:
+def align_lines(lines: list, column_separator: str = '|') -> list:
     """
     Pads lines so that all rows in single column match. Columns separated by '|' in every line.
     :param lines: list of lines
@@ -65,7 +62,6 @@ def refresh_cached_fields(modeladmin, request, qs):
     for e in qs:
         e.update_cached_fields()
     add_message(request, messages.SUCCESS, 'Cached fields refreshed ({})'.format(qs.count()))
-refresh_cached_fields.short_description = _('Refresh cached fields')
 
 
 def summarize_account_entries(modeladmin, request, qs):
@@ -91,7 +87,8 @@ def summarize_account_entries(modeladmin, request, qs):
         total_debits += res_debit['total']
         total_credits += res_credit['total']
 
-    lines.append(_('Total debits {total_debits:.2f} | - total credits {total_credits:.2f} | = {total_amount:.2f}').format(total_debits=total_debits, total_credits=total_credits, total_amount=total_debits + total_credits))
+    lines.append(_('Total debits {total_debits:.2f} | - total credits {total_credits:.2f} | = {total_amount:.2f}').format(
+        total_debits=total_debits, total_credits=total_credits, total_amount=total_debits + total_credits))
     lines = align_lines(lines, '|')
     messages.add_message(request, INFO, format_html('<br>'.join(lines)), extra_tags='safe')
 
@@ -288,11 +285,11 @@ class AccountEntryAdmin(ModelAdminBase):
         pk = rm.kwargs.get('pk', None)
         if rm.url_name == 'jacc_accountentry_account_changelist' and pk:
             return qs.filter(account=pk)
-        elif rm.url_name == 'jacc_accountentry_sourcefile_invoice_changelist' and pk:
+        if rm.url_name == 'jacc_accountentry_sourcefile_invoice_changelist' and pk:
             return qs.filter(source_invoice=pk)
-        elif rm.url_name == 'jacc_accountentry_settled_invoice_changelist' and pk:
+        if rm.url_name == 'jacc_accountentry_settled_invoice_changelist' and pk:
             return qs.filter(settled_invoice=pk)
-        elif rm.url_name == 'jacc_accountentry_sourcefile_changelist' and pk:
+        if rm.url_name == 'jacc_accountentry_sourcefile_changelist' and pk:
             return qs.filter(source_file=pk)
         return qs
 
@@ -518,7 +515,6 @@ def resend_invoices(modeladmin, request: HttpRequest, queryset: QuerySet):
         assert isinstance(obj, Invoice)
         admin_log([obj, user], 'Invoice id={invoice} marked for re-sending'.format(invoice=obj.id), who=user)
     queryset.update(sent=None)
-resend_invoices.short_description = _('Re-send invoices')
 
 
 class InvoiceLateDaysFilter(SimpleListFilter):
@@ -552,7 +548,6 @@ def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet)
     invoice_states = list([state for state, name in INVOICE_STATE])
 
     invoiced_total = {'amount': Decimal('0.00'), 'count': 0}
-    unpaid_total = {'amount': Decimal('0.00'), 'count': 0}
 
     lines = [
         '<pre>',
@@ -574,7 +569,6 @@ def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet)
 
     lines = align_lines(lines, '|')
     messages.add_message(request, INFO, format_html('<br>'.join(lines)), extra_tags='safe')
-summarize_invoice_statistics.short_description = _('Summarize invoice statistics')
 
 
 class InvoiceAdmin(ModelAdminBase):
@@ -700,12 +694,10 @@ class InvoiceAdmin(ModelAdminBase):
 
 def set_as_asset(modeladmin, request, qs):
     qs.update(is_asset=True)
-set_as_asset.short_description = _('set_as_asset')
 
 
 def set_as_liability(modeladmin, request, qs):
     qs.update(is_asset=False)
-set_as_liability.short_description = _('set_as_liability')
 
 
 class AccountTypeAdmin(ModelAdminBase):
@@ -832,6 +824,13 @@ class AccountEntrySourceFileAdmin(ModelAdminBase):
     entries_link.admin_order_field = 'name'
     entries_link.short_description = _('account entry source file')
 
+
+resend_invoices.short_description = _('Re-send invoices')
+refresh_cached_fields.short_description = _('Refresh cached fields')
+summarize_account_entries.short_description = _('Summmarize account entries')
+summarize_invoice_statistics.short_description = _('Summarize invoice statistics')
+set_as_asset.short_description = _('set_as_asset')
+set_as_liability.short_description = _('set_as_liability')
 
 admin.site.register(Account, AccountAdmin)
 admin.site.register(Invoice, InvoiceAdmin)  # TODO: override in app

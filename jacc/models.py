@@ -9,12 +9,9 @@ A credit is an accounting entry that either increases a liability or equity acco
 or decreases an asset or expense account.
 Credit means "right", gains/income/revenues/liabilities/equity increased with credit.
 """
-import re
 from datetime import datetime, timedelta
 from decimal import Decimal
-
 from math import floor
-
 from django.core.exceptions import ValidationError
 from jacc.helpers import sum_queryset
 from django.conf import settings
@@ -112,10 +109,10 @@ class AccountEntry(models.Model):
     type = models.ForeignKey(EntryType, verbose_name=_('type'), related_name='+', on_delete=models.PROTECT, null=True, default=None, blank=True)
     description = models.CharField(verbose_name=_('description'), max_length=256, default='', blank=True)
     amount = models.DecimalField(verbose_name=_('amount'), max_digits=10, decimal_places=2, blank=True, default=None, null=True, db_index=True)
-    source_file = models.ForeignKey(AccountEntrySourceFile, verbose_name=_('account entry source file'), related_name='+', null=True, default=None, blank=True, on_delete=models.CASCADE, help_text='Source for account entry, e.g. received payment (if any)')
-    source_invoice = models.ForeignKey('Invoice', verbose_name=_('source invoice'), null=True, related_name='+', default=None, blank=True, on_delete=models.CASCADE, help_text='For invoice items')
-    settled_invoice = models.ForeignKey('Invoice', verbose_name=_('settled invoice'), null=True, related_name='+', default=None, blank=True, on_delete=models.PROTECT, help_text='For incoming settlements')
-    settled_item = models.ForeignKey('AccountEntry', verbose_name=_('settled item'), null=True, related_name='settlement_set', default=None, blank=True, on_delete=models.PROTECT, help_text='For matched settlements')
+    source_file = models.ForeignKey(AccountEntrySourceFile, verbose_name=_('account entry source file'), related_name='+', null=True, default=None, blank=True, on_delete=models.CASCADE, help_text=_('entry.source.file.help.text'))
+    source_invoice = models.ForeignKey('Invoice', verbose_name=_('source invoice'), null=True, related_name='+', default=None, blank=True, on_delete=models.CASCADE, help_text=_('entry.source.invoice.help.text'))
+    settled_invoice = models.ForeignKey('Invoice', verbose_name=_('settled invoice'), null=True, related_name='+', default=None, blank=True, on_delete=models.PROTECT, help_text=_('entry.settled.invoice.help.text'))
+    settled_item = models.ForeignKey('AccountEntry', verbose_name=_('settled item'), null=True, related_name='settlement_set', default=None, blank=True, on_delete=models.PROTECT, help_text=_('entry.settled.item.help.text'))
     parent = models.ForeignKey('AccountEntry', verbose_name=_('account.entry.parent'), related_name='child_set', db_index=True, on_delete=models.CASCADE, null=True, default=None, blank=True)
     archived = models.BooleanField(_('archived'), default=False, blank=True)
 
@@ -351,17 +348,14 @@ class Invoice(models.Model, CachedFieldsMixin):
         return sum_queryset(self.receivables)
 
     def get_overpaid_amount(self) -> Decimal:
+        amt = sum_queryset(self.receivables)
         if self.type == INVOICE_CREDIT_NOTE:
-            return max(Decimal('0.00'), sum_queryset(self.receivables))
-        else:
-            return max(Decimal('0.00'), -sum_queryset(self.receivables))
+            return max(Decimal('0.00'), amt)
+        return max(Decimal('0.00'), -amt)
 
     @property
     def is_paid(self) -> bool:
-        if self.type == INVOICE_CREDIT_NOTE:
-            return self.unpaid_amount >= Decimal('0.00')
-        else:
-            return self.unpaid_amount <= Decimal('0.00')
+        return self.unpaid_amount >= Decimal('0.00') if self.type == INVOICE_CREDIT_NOTE else self.unpaid_amount <= Decimal('0.00')
     is_paid.fget.short_description = _('is paid')
 
     @property
