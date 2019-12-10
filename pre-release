@@ -1,0 +1,18 @@
+source venv/bin/activate
+python manage.py test
+if [ "$?" != "0" ]; then
+    echo "Django manage.py test reported problems, terminating release"
+    exit 1
+fi
+echo "Django manage.py test ok, proceeding..."
+
+source venv/bin/activate
+prospector
+if [ "$?" != "0" ]; then
+    echo "Prospector reported problems, terminating release"
+    exit 1
+fi
+echo "Prospector cleared build, proceeding..."
+
+exit 0
+
