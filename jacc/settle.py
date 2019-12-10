@@ -46,7 +46,8 @@ def settle_assigned_invoice(receivables_account: Account, settlement: AccountEnt
         if invoice.type == INVOICE_DEFAULT:
             if bal > Decimal(0):
                 amt = min(remaining, bal)
-                ae = cls.objects.create(account=receivables_account, amount=-amt, type=item.type, settled_item=item, settled_invoice=invoice, timestamp=timestamp, description=settlement.description, parent=settlement, **kwargs)
+                ae = cls.objects.create(account=receivables_account, amount=-amt, type=item.type, settled_item=item, settled_invoice=invoice,
+                                        timestamp=timestamp, description=settlement.description, parent=settlement, **kwargs)
                 new_payments.append(ae)
                 remaining -= amt
                 if remaining <= Decimal(0):
@@ -54,7 +55,8 @@ def settle_assigned_invoice(receivables_account: Account, settlement: AccountEnt
         elif invoice.type == INVOICE_CREDIT_NOTE:
             if bal < Decimal(0):
                 amt = max(remaining, bal)
-                ae = cls.objects.create(account=receivables_account, amount=-amt, type=item.type, settled_item=item, settled_invoice=invoice, timestamp=timestamp, description=settlement.description, parent=settlement, **kwargs)
+                ae = cls.objects.create(account=receivables_account, amount=-amt, type=item.type, settled_item=item, settled_invoice=invoice,
+                                        timestamp=timestamp, description=settlement.description, parent=settlement, **kwargs)
                 new_payments.append(ae)
                 remaining -= amt
                 if remaining >= Decimal(0):
@@ -97,7 +99,8 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
     entry_type = kwargs.pop('entry_type', None)
     if entry_type is None:
         if not hasattr(settings, 'E_CREDIT_NOTE_RECONCILIATION'):
-            raise Exception('settle_credit_note() requires settings.E_CREDIT_NOTE_RECONCILIATION (account entry type code) or entry_type to be pass in kwargs')
+            raise Exception('settle_credit_note() requires settings.E_CREDIT_NOTE_RECONCILIATION (account entry type code) '
+                            'or entry_type to be pass in kwargs')
         entry_type = EntryType.objects.get(code=settings.E_CREDIT_NOTE_RECONCILIATION)
     description = kwargs.pop('description', _('credit.note.reconciliation'))
 
@@ -105,10 +108,12 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
     if amt > Decimal(0):
         timestamp = kwargs.pop('timestamp', credit_note.created or now())
         # record entry to debit note settlement account
-        pmt1 = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=debit_note, description=description + ' #{}'.format(credit_note.number), timestamp=timestamp, **kwargs)
+        pmt1 = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=debit_note,
+                                  description=description + ' #{}'.format(credit_note.number), timestamp=timestamp, **kwargs)
         pmts.append(pmt1)
         # record entry to credit note settlement account
-        pmt2 = cls.objects.create(account=account, parent=pmt1, amount=-amt, type=entry_type, settled_invoice=credit_note, description=description + ' #{}'.format(debit_note.number), timestamp=timestamp, **kwargs)
+        pmt2 = cls.objects.create(account=account, parent=pmt1, amount=-amt, type=entry_type, settled_invoice=credit_note,
+                                  description=description + ' #{}'.format(debit_note.number), timestamp=timestamp, **kwargs)
         pmts.append(pmt2)
 
     return pmts

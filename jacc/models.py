@@ -109,11 +109,11 @@ class AccountEntry(models.Model):
     type = models.ForeignKey(EntryType, verbose_name=_('type'), related_name='+', on_delete=models.PROTECT, null=True, default=None, blank=True)
     description = models.CharField(verbose_name=_('description'), max_length=256, default='', blank=True)
     amount = models.DecimalField(verbose_name=_('amount'), max_digits=10, decimal_places=2, blank=True, default=None, null=True, db_index=True)
-    source_file = models.ForeignKey(AccountEntrySourceFile, verbose_name=_('account entry source file'), related_name='+', null=True, default=None, blank=True, on_delete=models.CASCADE, help_text=_('entry.source.file.help.text'))
-    source_invoice = models.ForeignKey('Invoice', verbose_name=_('source invoice'), null=True, related_name='+', default=None, blank=True, on_delete=models.CASCADE, help_text=_('entry.source.invoice.help.text'))
-    settled_invoice = models.ForeignKey('Invoice', verbose_name=_('settled invoice'), null=True, related_name='+', default=None, blank=True, on_delete=models.PROTECT, help_text=_('entry.settled.invoice.help.text'))
-    settled_item = models.ForeignKey('AccountEntry', verbose_name=_('settled item'), null=True, related_name='settlement_set', default=None, blank=True, on_delete=models.PROTECT, help_text=_('entry.settled.item.help.text'))
-    parent = models.ForeignKey('AccountEntry', verbose_name=_('account.entry.parent'), related_name='child_set', db_index=True, on_delete=models.CASCADE, null=True, default=None, blank=True)
+    source_file = models.ForeignKey(AccountEntrySourceFile, verbose_name=_('account entry source file'), related_name='+', null=True, default=None, blank=True, on_delete=models.CASCADE, help_text=_('entry.source.file.help.text'))  # nopep8, pylint: disable=line-too-long
+    source_invoice = models.ForeignKey('Invoice', verbose_name=_('source invoice'), null=True, related_name='+', default=None, blank=True, on_delete=models.CASCADE, help_text=_('entry.source.invoice.help.text'))  # nopep8, pylint: disable=line-too-long
+    settled_invoice = models.ForeignKey('Invoice', verbose_name=_('settled invoice'), null=True, related_name='+', default=None, blank=True, on_delete=models.PROTECT, help_text=_('entry.settled.invoice.help.text'))  # nopep8, pylint: disable=line-too-long
+    settled_item = models.ForeignKey('AccountEntry', verbose_name=_('settled item'), null=True, related_name='settlement_set', default=None, blank=True, on_delete=models.PROTECT, help_text=_('entry.settled.item.help.text'))  # nopep8, pylint: disable=line-too-long
+    parent = models.ForeignKey('AccountEntry', verbose_name=_('account.entry.parent'), related_name='child_set', db_index=True, on_delete=models.CASCADE, null=True, default=None, blank=True)  # nopep8, pylint: disable=line-too-long
     archived = models.BooleanField(_('archived'), default=False, blank=True)
 
     class Meta:
@@ -125,7 +125,8 @@ class AccountEntry(models.Model):
 
     def clean(self):
         if self.source_invoice and self.settled_invoice:
-            raise ValidationError('Both source_invoice ({}) and settled_invoice ({}) cannot be set same time for account entry ({})'.format(self.source_invoice, self.settled_invoice, self))
+            raise ValidationError('Both source_invoice ({}) and settled_invoice ({}) cannot be set same time for account entry ({})'.format(
+                self.source_invoice, self.settled_invoice, self))
 
     @property
     def balance(self) -> Decimal:
@@ -242,9 +243,9 @@ class Invoice(models.Model, CachedFieldsMixin):
     notes = models.TextField(verbose_name=_('notes'), blank=True, default='')
     filename = models.CharField(verbose_name=_('filename'), max_length=255, blank=True, default='', db_index=True)
     amount = models.DecimalField(verbose_name=_('amount'), max_digits=10, decimal_places=2, default=0, blank=True)
-    paid_amount = models.DecimalField(verbose_name=_('paid amount'), max_digits=10, decimal_places=2, editable=False, blank=True, null=True, default=None, db_index=True)
-    unpaid_amount = models.DecimalField(verbose_name=_('unpaid amount'), max_digits=10, decimal_places=2, editable=False, blank=True, null=True, default=None, db_index=True)
-    overpaid_amount = models.DecimalField(verbose_name=_('overpaid amount'), max_digits=10, decimal_places=2, editable=False, blank=True, null=True, default=None, db_index=True)
+    paid_amount = models.DecimalField(verbose_name=_('paid amount'), max_digits=10, decimal_places=2, editable=False, blank=True, null=True, default=None, db_index=True)  # nopep8, pylint: disable=line-too-long
+    unpaid_amount = models.DecimalField(verbose_name=_('unpaid amount'), max_digits=10, decimal_places=2, editable=False, blank=True, null=True, default=None, db_index=True)  # nopep8, pylint: disable=line-too-long
+    overpaid_amount = models.DecimalField(verbose_name=_('overpaid amount'), max_digits=10, decimal_places=2, editable=False, blank=True, null=True, default=None, db_index=True)  # nopep8, pylint: disable=line-too-long
     close_date = models.DateTimeField(verbose_name=_('close date'), default=None, null=True, blank=True, db_index=True)
     late_days = models.SmallIntegerField(verbose_name=_('late days'), default=None, null=True, blank=True, db_index=True)
     state = models.CharField(verbose_name=_('state'), max_length=1, blank=True, default='', db_index=True, choices=INVOICE_STATE)
