@@ -8,7 +8,7 @@ from jacc.models import AccountEntry, Invoice, EntryType, Account, INVOICE_CREDI
 
 
 @transaction.atomic
-def settle_assigned_invoice(receivables_account: Account, settlement: AccountEntry, cls, **kwargs) -> list:
+def settle_invoice(receivables_account: Account, settlement: AccountEntry, invoice: Invoice, cls, **kwargs) -> list:
     """
     Finds unpaid items in the invoice and generates entries to receivables account.
     Settlement is matched to invoice items based on entry types payback order.
@@ -18,28 +18,25 @@ def settle_assigned_invoice(receivables_account: Account, settlement: AccountEnt
     (only matching settled_invoice).
     :param receivables_account: Account which receives settled entries of the invoice
     :param settlement: Settlement to target to unpaid invoice items
+    :param invoice: Invoice to be settled
     :param cls: Class for generated account entries, e.g. AccountEntry
     :param kwargs: Extra attributes for created for generated account entries
     :return: list (generated receivables account entries)
     """
-    invoice = settlement.settled_invoice
-    if settlement.amount < Decimal(0) and settlement.settled_invoice.type != INVOICE_CREDIT_NOTE:
-        raise ValidationError('Cannot target negative settlement {} to invoice {}'.format(settlement, settlement.settled_invoice))
-    if settlement.amount > Decimal(0) and settlement.settled_invoice.type == INVOICE_CREDIT_NOTE:
-        raise ValidationError('Cannot target positive settlement {} to credit note {}'.format(settlement, settlement.settled_invoice))
+    assert isinstance(invoice, Invoice)
     if not invoice:
         raise ValidationError('Cannot target settlement {} without settled invoice'.format(settlement))
-    assert isinstance(invoice, Invoice)
-    if not settlement.type.is_settlement:
-        raise ValidationError('Cannot settle account entry {} which is not settlement'.format(settlement))
-    if AccountEntry.objects.filter(parent=settlement, account=receivables_account).count() > 0:
-        raise ValidationError('Settlement is parent of old account entries already, maybe duplicate settlement?')
     if not receivables_account:
         raise ValidationError('Receivables account missing. Invoice with no rows?')
+    if settlement.amount < Decimal(0) and invoice.type != INVOICE_CREDIT_NOTE:
+        raise ValidationError('Cannot target negative settlement {} to invoice {}'.format(settlement, invoice))
+    if settlement.amount > Decimal(0) and invoice.type == INVOICE_CREDIT_NOTE:
+        raise ValidationError('Cannot target positive settlement {} to credit note {}'.format(settlement, invoice))
+    if not settlement.type.is_settlement:
+        raise ValidationError('Cannot settle account entry {} which is not settlement'.format(settlement))
 
     new_payments = []
     remaining = Decimal(settlement.amount)
-    invoice = settlement.settled_invoice
     timestamp = kwargs.pop('timestamp', settlement.timestamp)
     assert isinstance(invoice, Invoice)
     for item, bal in invoice.get_unpaid_items(receivables_account):
@@ -66,6 +63,24 @@ def settle_assigned_invoice(receivables_account: Account, settlement: AccountEnt
 
     invoice.update_cached_fields()
     return new_payments
+
+
+@transaction.atomic
+def settle_assigned_invoice(receivables_account: Account, settlement: AccountEntry, cls, **kwargs) -> list:
+    """
+    Finds unpaid items in the invoice and generates entries to receivables account.
+    Settlement is matched to invoice items based on entry types payback order.
+    Generated payment entries have 'parent' field pointing to settlement, so that
+    if settlement is (ever) deleted the payment entries will get deleted as well.
+    In case of overpayment method generates entry to receivables account without matching invoice settled_item
+    (only matching settled_invoice).
+    :param receivables_account: Account which receives settled entries of the invoice
+    :param settlement: Settlement to target to unpaid invoice items
+    :param cls: Class for generated account entries, e.g. AccountEntry
+    :param kwargs: Extra attributes for created for generated account entries
+    :return: list (generated receivables account entries)
+    """
+    return settle_invoice(receivables_account, settlement, settlement.settled_invoice, cls, **kwargs)
 
 
 @transaction.atomic
