@@ -201,14 +201,16 @@ class Account(models.Model):
     def needs_settling(self, e: AccountEntry) -> bool:
         """
         Returns True if all of following conditions are True:
-        a) entry type is settlement
-        b) entry has been recorded to this account
-        c) invoice to be settled has been set
-        d) entry has not been settled (=child set empty)
+        a) entry has valid amount set
+        b) entry type is settlement
+        c) entry has been recorded to this account
+        d) invoice to be settled has been set
+        e) entry has not been settled (=child set empty)
         :param e: AccountEntry (settlement)
         :return: bool
         """
-        return e.type and e.type.is_settlement and e.account.id == self.id and e.settled_invoice and AccountEntry.objects.filter(parent=e).count() == 0
+        return e.amount is not None and e.type and e.type.is_settlement and e.account.id == self.id and \
+               e.settled_invoice and AccountEntry.objects.filter(parent=e).count() == 0
 
 
 class InvoiceManager(models.Manager):

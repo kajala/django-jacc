@@ -28,6 +28,8 @@ def settle_invoice(receivables_account: Account, settlement: AccountEntry, invoi
         raise ValidationError('Cannot target settlement {} without settled invoice'.format(settlement))
     if not receivables_account:
         raise ValidationError('Receivables account missing. Invoice with no rows?')
+    if settlement.amount is None:  # nothing to do
+        return list()
     if settlement.amount < Decimal(0) and invoice.type != INVOICE_CREDIT_NOTE:
         raise ValidationError('Cannot target negative settlement {} to invoice {}'.format(settlement, invoice))
     if settlement.amount > Decimal(0) and invoice.type == INVOICE_CREDIT_NOTE:
