@@ -1,7 +1,7 @@
 django-jacc
 ===========
 
-Simple double entry accounting system (debits/credits) for Django projects.
+Simple double entry accounting system (debits/credits) for Django projects. Django 3.0 support and unit test coverage 75%.
 
 A debit is an accounting entry that either increases an asset or expense account,
 or decreases a liability or equity account. Dividends/expenses/assets/losses increased with debit.
@@ -17,3 +17,24 @@ Account type can have code, name and category (asset/liability account). Account
 Entry types can specify product code, name and entry classification (payment/settlement).
 
 In addition to accounts and account entries, the library has models for basic invoices.
+
+
+
+Install
+=======
+
+pip install django-jacc
+
+
+Test Code Coverage
+==================
+
+* `coverage run manage.py; coverage report`
+
+
+Changes
+=======
+
+3.2.0:
++ Django 3.0 support, prospector fixes
+
