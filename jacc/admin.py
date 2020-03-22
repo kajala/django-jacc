@@ -58,13 +58,13 @@ def align_lines(lines: list, column_separator: str = '|') -> list:
     return lines_out
 
 
-def refresh_cached_fields(modeladmin, request, qs):
+def refresh_cached_fields(modeladmin, request, qs):  # pylint: disable=unused-argument
     for e in qs:
         e.update_cached_fields()
     add_message(request, messages.SUCCESS, 'Cached fields refreshed ({})'.format(qs.count()))
 
 
-def summarize_account_entries(modeladmin, request, qs):
+def summarize_account_entries(modeladmin, request, qs):  # pylint: disable=unused-argument
     # {total_count} entries:
     # {amount1} {currency} x {count1} = {total1} {currency}
     # {amount2} {currency} x {count2} = {total2} {currency}
@@ -501,7 +501,7 @@ class InvoiceSettlementInline(admin.TabularInline):  # TODO: override in app
     account_link.short_description = _('account')
 
 
-def resend_invoices(modeladmin, request: HttpRequest, queryset: QuerySet):
+def resend_invoices(modeladmin, request: HttpRequest, queryset: QuerySet):  # pylint: disable=unused-argument
     """
     Marks invoices with as un-sent.
     :param modeladmin:
@@ -544,7 +544,7 @@ class InvoiceLateDaysFilter(SimpleListFilter):
         return queryset
 
 
-def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet):
+def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet):  # pylint: disable=unused-argument
     invoice_states = list([state for state, name in INVOICE_STATE])
 
     invoiced_total = {'amount': Decimal('0.00'), 'count': 0}
@@ -692,11 +692,11 @@ class InvoiceAdmin(ModelAdminBase):
     close_date_brief.short_description = _('close date')
 
 
-def set_as_asset(modeladmin, request, qs):
+def set_as_asset(modeladmin, request, qs):  # pylint: disable=unused-argument
     qs.update(is_asset=True)
 
 
-def set_as_liability(modeladmin, request, qs):
+def set_as_liability(modeladmin, request, qs):  # pylint: disable=unused-argument
     qs.update(is_asset=False)
 
 
@@ -735,7 +735,7 @@ class ContractAdmin(ModelAdminBase):
     allow_delete = True
 
 
-def toggle_settlement(modeladmin, request: HttpRequest, queryset: QuerySet):
+def toggle_settlement(modeladmin, request: HttpRequest, queryset: QuerySet):  # pylint: disable=unused-argument
     for e in queryset:
         assert isinstance(e, EntryType)
         e.is_settlement = not e.is_settlement
@@ -743,7 +743,7 @@ def toggle_settlement(modeladmin, request: HttpRequest, queryset: QuerySet):
         admin_log([e], 'Toggled settlement flag {}'.format('on' if e.is_settlement else 'off'), who=request.user)
 
 
-def toggle_payment(modeladmin, request: HttpRequest, queryset: QuerySet):
+def toggle_payment(modeladmin, request: HttpRequest, queryset: QuerySet):  # pylint: disable=unused-argument
     for e in queryset:
         assert isinstance(e, EntryType)
         e.is_payment = not e.is_payment
