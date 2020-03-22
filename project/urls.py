@@ -21,7 +21,7 @@ from rest_framework.routers import DefaultRouter
 
 
 router = DefaultRouter()
-router.register('account-entries', AccountEntryViewSet, base_name='account-entry')
+router.register('account-entries', AccountEntryViewSet)
 router.register('accounts', AccountViewSet)
 router.register('invoices', InvoiceViewSet)
 
