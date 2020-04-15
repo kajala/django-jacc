@@ -121,7 +121,8 @@ class AccountEntry(models.Model):
         verbose_name_plural = _('account entries')
 
     def __str__(self):
-        return '[{}] {} {} {}'.format(self.id, self.timestamp.date().isoformat() if self.timestamp else None, self.type, self.amount)
+        return '[{}] {} {} {}'.format(self.id, self.timestamp.date().isoformat() if self.timestamp else '',
+                                      self.type if self.type else '', self.amount)
 
     def clean(self):
         if self.source_invoice and self.settled_invoice:
