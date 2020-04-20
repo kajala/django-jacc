@@ -8,4 +8,5 @@ __pycache__
 /dist
 /django_jacc.egg-info
 /project/settings.py
+/.pytype
 

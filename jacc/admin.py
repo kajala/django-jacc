@@ -1,6 +1,8 @@
 # pylint: disable=protected-access
 from datetime import datetime
 from decimal import Decimal
+from typing import Optional
+
 from django.contrib import messages
 from django.contrib.admin import SimpleListFilter
 from django.contrib.messages import add_message, INFO
@@ -329,7 +331,7 @@ class AccountAdmin(ModelAdminBase):
 
 
 class AccountEntryInlineFormSet(forms.BaseInlineFormSet):
-    def clean_entries(self, source_invoice: Invoice or None, settled_invoice: Invoice or None, account: Account, **kw):
+    def clean_entries(self, source_invoice: Optional[Invoice], settled_invoice: Optional[Invoice], account: Optional[Account], **kw):
         """
         This needs to be called from a derived class clean().
         :param source_invoice:

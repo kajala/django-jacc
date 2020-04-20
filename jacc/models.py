@@ -11,6 +11,8 @@ Credit means "right", gains/income/revenues/liabilities/equity increased with cr
 """
 from datetime import datetime, timedelta
 from decimal import Decimal
+from typing import Optional
+
 from math import floor
 from django.core.exceptions import ValidationError
 from jacc.helpers import sum_queryset
@@ -136,7 +138,7 @@ class AccountEntry(models.Model):
         :return: Decimal
         """
         return sum_queryset(AccountEntry.objects.filter(account=self.account, timestamp__lte=self.timestamp).exclude(timestamp=self.timestamp, id__gt=self.id))
-    balance.fget.short_description = _('balance')
+    balance.fget.short_description = _('balance')  # pytype: disable=attribute-error
 
 
 class AccountType(models.Model):
@@ -156,7 +158,7 @@ class AccountType(models.Model):
     @property
     def is_liability(self) -> bool:
         return not self.is_asset
-    is_liability.fget.short_description = _('liability')
+    is_liability.fget.short_description = _('liability')  # pytype: disable=attribute-error
 
 
 class Account(models.Model):
@@ -189,7 +191,7 @@ class Account(models.Model):
     @property
     def balance(self) -> Decimal:
         return sum_queryset(self.accountentry_set.all())
-    balance.fget.short_description = _('balance')
+    balance.fget.short_description = _('balance')  # pytype: disable=attribute-error
 
     def get_balance(self, t: datetime):
         """
@@ -270,7 +272,7 @@ class Invoice(models.Model, CachedFieldsMixin):
         return '[{}] {} {}'.format(self.id, self.due_date.date().isoformat() if self.due_date else '', self.amount)
 
     @property
-    def receivables_account(self) -> Account:
+    def receivables_account(self) -> Optional[Account]:
         """
         Returns receivables account. Receivables account is assumed to be the one were invoice rows were recorded.
         :return: Account or None
@@ -360,14 +362,14 @@ class Invoice(models.Model, CachedFieldsMixin):
     @property
     def is_paid(self) -> bool:
         return self.unpaid_amount >= Decimal('0.00') if self.type == INVOICE_CREDIT_NOTE else self.unpaid_amount <= Decimal('0.00')
-    is_paid.fget.short_description = _('is paid')
+    is_paid.fget.short_description = _('is paid')  # pytype: disable=attribute-error
 
     @property
     def is_due(self) -> bool:
         return not self.is_paid and now() >= self.due_date
-    is_due.fget.short_description = _('is due')
+    is_due.fget.short_description = _('is due')  # pytype: disable=attribute-error
 
-    def get_close_date(self) -> datetime:
+    def get_close_date(self) -> Optional[datetime]:
         recv = self.receivables.order_by('-timestamp', '-id')
         first = recv.first()
         if first is None:
@@ -381,9 +383,9 @@ class Invoice(models.Model, CachedFieldsMixin):
                 return first.timestamp
         return None
 
-    def get_late_days(self, t: datetime or None = None) -> int:
+    def get_late_days(self, t: Optional[datetime] = None) -> int:
         t = self.close_date or t
-        if not t:
+        if t is None:
             t = now()
         return int(floor((t - self.due_date).total_seconds() / 86400.0))
 
@@ -407,7 +409,7 @@ class Invoice(models.Model, CachedFieldsMixin):
     @property
     def state_name(self) -> str:
         return choices_label(INVOICE_STATE, self.state)
-    state_name.fget.short_description = _('state')
+    state_name.fget.short_description = _('state')  # pytype: disable=attribute-error
 
 
 class Contract(models.Model):
