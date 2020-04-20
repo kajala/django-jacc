@@ -19,10 +19,10 @@ source venv/bin/activate
 pip install pytype --upgrade
 pytype -V3.6 jacc
 if [ "$?" != "0" ]; then
-    echo "pytype reported problems, terminating release"
+    echo "Pytype reported problems, terminating release"
     exit 1
 fi
-echo "Prospector cleared build, proceeding..."
+echo "Pytype cleared build, proceeding..."
 
 echo "Updating test coverage"
 source venv/bin/activate
