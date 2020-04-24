@@ -17,7 +17,7 @@ echo "Prospector cleared build, proceeding..."
 
 source venv/bin/activate
 pip install pytype --upgrade -q
-pytype -V3.6 jacc
+pytype --config pytype.cfg
 if [ "$?" != "0" ]; then
     echo "Pytype reported problems, terminating release"
     exit 1
