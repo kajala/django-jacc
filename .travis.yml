@@ -1,0 +1,15 @@
+language: python
+python:
+  - "3.6"
+services:
+  - postgresql
+env:
+  - DJANGO_SETTINGS_MODULE=project.travis
+install:
+  - sudo apt-get install -y libxml2-utils
+  - pip install -r requirements.txt
+  - pip install -r requirements-dev.txt
+script:
+  - python manage.py test
+before_script:
+  - psql -c 'create database django_jacc_test;' -U postgres
