@@ -18,6 +18,9 @@ Entry types can specify product code, name and entry classification (payment/set
 
 In addition to accounts and account entries, the library has models for basic invoices.
 
+[![codecov](https://codecov.io/gh/kajala/django-jacc/branch/master/graph/badge.svg)](https://codecov.io/gh/kajala/django-jacc)
+[![Build Status](https://travis-ci.org/kajala/django-jacc.svg?branch=master)](https://travis-ci.org/kajala/django-jacc)
+
 
 
 Install
