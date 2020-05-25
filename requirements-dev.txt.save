@@ -1,4 +1,4 @@
-psycopg2-binary==2.8.5
+qpsycopg2-binary==2.8.5
 pytype
 prospector
 bandit
@@ -8,3 +8,4 @@ mypy
 djangorestframework-stubs
 django-stubs
 twine
+

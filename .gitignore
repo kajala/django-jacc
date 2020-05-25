@@ -9,4 +9,5 @@ __pycache__
 /django_jacc.egg-info
 /project/settings.py
 /.pytype
+/.mypy_cache
 
