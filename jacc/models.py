@@ -103,7 +103,7 @@ class AccountEntry(models.Model):
     """
     Single mutation in account state.
     """
-    objects = AccountEntryManager()
+    objects: models.Manager = AccountEntryManager()
     account = models.ForeignKey('Account', verbose_name=_('record account'), related_name='accountentry_set', db_index=True, on_delete=models.PROTECT)
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, editable=False, blank=True)
@@ -238,7 +238,7 @@ class Invoice(models.Model, CachedFieldsMixin):
     Note: It is useful sometimes to have full datetime with timezone even for plain dates like due_date,
     because this to be processing to be independent of server, client and invoice time zones.
     """
-    objects = InvoiceManager()
+    objects: models.Manager = InvoiceManager()
     type = models.CharField(verbose_name=_('type'), max_length=2, db_index=True, default=INVOICE_DEFAULT, blank=True, choices=INVOICE_TYPE)
     number = models.CharField(verbose_name=_('invoice number'), max_length=32, default='', blank=True, db_index=True)
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
