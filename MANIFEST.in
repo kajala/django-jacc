@@ -1,5 +1,5 @@
-recursive-include . *.txt *.md *.ini *.conf *.css *.png *.js *.html *.po *.mo *.json *.typed
-global-include *.html *.css *.js *.png *.jpg *.po *.mo *.txt *.md *.json *.typed
+recursive-include . *.txt *.md *.ini *.conf *.css *.png *.js *.html *.po *.mo *.xml *.typed
+global-include *.html *.css *.js *.png *.jpg *.po *.mo *.txt *.md *.xml *.typed
 prune venv
 prune project
 prune downloads
