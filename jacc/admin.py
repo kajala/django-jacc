@@ -1,8 +1,7 @@
 # pylint: disable=protected-access
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional
-
+from typing import Optional, List, Sequence
 from django.contrib import messages
 from django.contrib.admin import SimpleListFilter
 from django.contrib.messages import add_message, INFO
@@ -35,7 +34,7 @@ def align_lines(lines: list, column_separator: str = '|') -> list:
     :return: list of lines
     """
     rows = []
-    col_len = []
+    col_len: List[int] = []
     for line in lines:
         line = str(line)
         cols = []
@@ -47,7 +46,7 @@ def align_lines(lines: list, column_separator: str = '|') -> list:
             col_len[col_index] = max(col_len[col_index], len(col))
         rows.append(cols)
 
-    lines_out = []
+    lines_out: List[str] = []
     for row in rows:
         cols_out = []
         for col_index, col in enumerate(row):
@@ -238,38 +237,38 @@ class AccountEntryAdmin(ModelAdminBase):
             return ''
         admin_url = reverse(self.accountentrysourcefile_admin_change_view_name, args=(obj.source_file.id, ))
         return format_html("<a href='{}'>{}</a>", mark_safe(admin_url), obj.source_file)
-    source_file_link.admin_order_field = 'source_file'
-    source_file_link.short_description = _('account entry source file')
+    source_file_link.admin_order_field = 'source_file'  # type: ignore
+    source_file_link.short_description = _('account entry source file')  # type: ignore
 
     def account_link(self, obj):
         admin_url = reverse(self.account_admin_change_view_name, args=(obj.account.id, ))
         return format_html("<a href='{}'>{}</a>", mark_safe(admin_url), obj.account)
-    account_link.admin_order_field = 'account'
-    account_link.short_description = _('account')
+    account_link.admin_order_field = 'account'  # type: ignore
+    account_link.short_description = _('account')  # type: ignore
 
     def source_invoice_link(self, obj):
         if not obj.source_invoice:
             return ''
         admin_url = reverse(self.invoice_admin_change_view_name, args=(obj.source_invoice.id, ))
         return format_html("<a href='{}'>{}</a>", mark_safe(admin_url), obj.source_invoice)
-    source_invoice_link.admin_order_field = 'source_invoice'
-    source_invoice_link.short_description = _('source invoice')
+    source_invoice_link.admin_order_field = 'source_invoice'  # type: ignore
+    source_invoice_link.short_description = _('source invoice')  # type: ignore
 
     def settled_invoice_link(self, obj):
         if not obj.settled_invoice:
             return ''
         admin_url = reverse(self.invoice_admin_change_view_name, args=(obj.settled_invoice.id, ))
         return format_html("<a href='{}'>{}</a>", mark_safe(admin_url), obj.settled_invoice)
-    settled_invoice_link.admin_order_field = 'settled_invoice'
-    settled_invoice_link.short_description = _('settled invoice')
+    settled_invoice_link.admin_order_field = 'settled_invoice'  # type: ignore
+    settled_invoice_link.short_description = _('settled invoice')  # type: ignore
 
     def settled_item_link(self, obj):
         if not obj.settled_item:
             return ''
         admin_url = reverse(self.accountentry_admin_change_view_name, args=(obj.settled_item.id, ))
         return format_html("<a href='{}'>{}</a>", mark_safe(admin_url), obj.settled_item)
-    settled_item_link.admin_order_field = 'settled_item'
-    settled_item_link.short_description = _('settled item')
+    settled_item_link.admin_order_field = 'settled_item'  # type: ignore
+    settled_item_link.short_description = _('settled item')  # type: ignore
 
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name
@@ -317,7 +316,9 @@ class AccountAdmin(ModelAdminBase):
         'balance',
         'is_asset',
     ]
-    raw_id_fields = []
+    raw_id_fields = [
+        'type',
+    ]
     ordering = [
         '-id',
     ]
@@ -342,7 +343,8 @@ class AccountEntryInlineFormSet(forms.BaseInlineFormSet):
         for form in self.forms:
             obj = form.instance
             assert isinstance(obj, AccountEntry)
-            obj.account = account
+            if account is not None:
+                obj.account = account
             obj.source_invoice = source_invoice
             obj.settled_invoice = settled_invoice
             if obj.parent:
@@ -350,8 +352,9 @@ class AccountEntryInlineFormSet(forms.BaseInlineFormSet):
                     obj.amount = obj.parent.amount
                 if obj.type is None:
                     obj.type = obj.parent.type
-                if obj.amount > obj.parent.amount > Decimal(0) or obj.amount < obj.parent.amount < Decimal(0):
-                    raise ValidationError(_('Derived account entry amount cannot be larger than original'))
+                if obj.amount is not None and obj.parent.amount is not None:
+                    if obj.amount > obj.parent.amount > Decimal(0) or obj.amount < obj.parent.amount < Decimal(0):
+                        raise ValidationError(_('Derived account entry amount cannot be larger than original'))
             for k, v in kw.items():
                 setattr(obj, k, v)
 
@@ -418,8 +421,8 @@ class InvoiceItemInline(admin.TabularInline):  # TODO: override in app
             admin_url = reverse(self.account_entry_change_view_name, args=(obj.id, ))
             return format_html("<a href='{}'>{}</a>", mark_safe(admin_url), obj.id)
         return ''
-    id_link.admin_order_field = 'id'
-    id_link.short_description = _('id')
+    id_link.admin_order_field = 'id'  # type: ignore
+    id_link.short_description = _('id')  # type: ignore
 
     def get_queryset(self, request):
         queryset = self.model._default_manager.get_queryset().filter(type__is_settlement=False)
@@ -490,8 +493,8 @@ class InvoiceSettlementInline(admin.TabularInline):  # TODO: override in app
             admin_url = reverse(self.account_entry_change_view_name, args=(obj.id, ))
             return format_html("<a href='{}'>{}</a>", mark_safe(admin_url), obj.id)
         return ''
-    id_link.admin_order_field = 'id'
-    id_link.short_description = _('id')
+    id_link.admin_order_field = 'id'  # type: ignore
+    id_link.short_description = _('id')  # type: ignore
 
     def account_link(self, obj):
         if obj and obj.id:
@@ -499,8 +502,8 @@ class InvoiceSettlementInline(admin.TabularInline):  # TODO: override in app
             admin_url = reverse(self.account_change_view_name, args=(obj.account.id, ))
             return format_html("<a href='{}'>{}</a>", mark_safe(admin_url), obj.account)
         return ''
-    account_link.admin_order_field = 'account'
-    account_link.short_description = _('account')
+    account_link.admin_order_field = 'account'  # type: ignore
+    account_link.short_description = _('account')  # type: ignore
 
 
 def resend_invoices(modeladmin, request: HttpRequest, queryset: QuerySet):  # pylint: disable=unused-argument
@@ -549,7 +552,7 @@ class InvoiceLateDaysFilter(SimpleListFilter):
 def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet):  # pylint: disable=unused-argument
     invoice_states = list([state for state, name in INVOICE_STATE])
 
-    invoiced_total = {'amount': Decimal('0.00'), 'count': 0}
+    invoiced_total = {'amount': 0.0, 'count': 0}
 
     lines = [
         '<pre>',
@@ -561,12 +564,14 @@ def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet)
 
         invoiced = qs2.filter(state=state).aggregate(amount=Coalesce(Sum('amount'), 0), count=Count('*'))
 
-        lines.append('{state_name} | x{count} | {amount:.2f}'.format(label=_('invoiced'), state_name=state_name, **invoiced))
+        lines.append('{state_name} | x{count} | {amount:.2f}'.format(
+            state_name=state_name, amount=invoiced['amount'], count=invoiced['count']))
 
         for k in ('amount', 'count'):
             invoiced_total[k] += invoiced[k]
 
-    lines.append(_('Total') + ' {label} | x{count} | {amount:.2f}'.format(label=_('amount'), **invoiced_total))
+    lines.append(_('Total') + ' {label} | x{count} | {amount:.2f}'.format(
+        label=_('amount'), amount=invoiced_total['amount'], count=invoiced_total['count']))
     lines.append('</pre>')
 
     lines = align_lines(lines, '|')
@@ -636,7 +641,7 @@ class InvoiceAdmin(ModelAdminBase):
         'overpaid_amount',
         'late_days',
     ]
-    raw_id_fields = [
+    raw_id_fields: Sequence[str] = [
     ]
     search_fields = [
         '=amount',
@@ -672,26 +677,26 @@ class InvoiceAdmin(ModelAdminBase):
     def created_brief(self, obj):
         assert isinstance(obj, Invoice)
         return self._format_date(obj.created)
-    created_brief.admin_order_field = 'created'
-    created_brief.short_description = _('created')
+    created_brief.admin_order_field = 'created'  # type: ignore
+    created_brief.short_description = _('created')  # type: ignore
 
     def sent_brief(self, obj):
         assert isinstance(obj, Invoice)
         return self._format_date(obj.sent)
-    sent_brief.admin_order_field = 'sent'
-    sent_brief.short_description = _('sent')
+    sent_brief.admin_order_field = 'sent'  # type: ignore
+    sent_brief.short_description = _('sent')  # type: ignore
 
     def due_date_brief(self, obj):
         assert isinstance(obj, Invoice)
         return self._format_date(obj.due_date)
-    due_date_brief.admin_order_field = 'due_date'
-    due_date_brief.short_description = _('due date')
+    due_date_brief.admin_order_field = 'due_date'  # type: ignore
+    due_date_brief.short_description = _('due date')  # type: ignore
 
     def close_date_brief(self, obj):
         assert isinstance(obj, Invoice)
         return self._format_date(obj.close_date)
-    close_date_brief.admin_order_field = 'close_date'
-    close_date_brief.short_description = _('close date')
+    close_date_brief.admin_order_field = 'close_date'  # type: ignore
+    close_date_brief.short_description = _('close date')  # type: ignore
 
 
 def set_as_asset(modeladmin, request, qs):  # pylint: disable=unused-argument
@@ -719,18 +724,14 @@ class AccountTypeAdmin(ModelAdminBase):
 
     def is_liability(self, obj):
         return obj.is_liability
-    is_liability.short_description = _('is liability')
-    is_liability.boolean = True
+    is_liability.short_description = _('is liability')  # type: ignore
+    is_liability.boolean = True  # type: ignore
 
 
 class ContractAdmin(ModelAdminBase):
     list_display = [
         'id',
         'name',
-    ]
-    raw_id_fields = [
-    ]
-    actions = [
     ]
     ordering = ['-id', ]
     allow_add = True
@@ -781,16 +782,12 @@ class EntryTypeAdmin(ModelAdminBase):
 
 
 class AccountEntrySourceFileAdmin(ModelAdminBase):
-    actions = [
-    ]
     list_display = [
         'id',
         'created',
         'entries_link',
     ]
     date_hierarchy = 'created'
-    list_filter = [
-    ]
     ordering = [
         '-id',
     ]
@@ -799,8 +796,6 @@ class AccountEntrySourceFileAdmin(ModelAdminBase):
         'name',
         'created',
         'last_modified',
-    ]
-    raw_id_fields = [
     ]
     search_fields = [
         '=name',
@@ -812,8 +807,6 @@ class AccountEntrySourceFileAdmin(ModelAdminBase):
         'last_modified',
         'entries_link',
     ]
-    inlines = [
-    ]
     allow_add = True
     allow_delete = True
 
@@ -823,16 +816,16 @@ class AccountEntrySourceFileAdmin(ModelAdminBase):
             admin_url = reverse('admin:jacc_accountentry_sourcefile_changelist', args=(obj.id, ))
             return format_html("<a href='{}'>{}</a>", mark_safe(admin_url), obj.name)
         return ''
-    entries_link.admin_order_field = 'name'
-    entries_link.short_description = _('account entry source file')
+    entries_link.admin_order_field = 'name'  # type: ignore
+    entries_link.short_description = _('account entry source file')  # type: ignore
 
 
-resend_invoices.short_description = _('Re-send invoices')
-refresh_cached_fields.short_description = _('Refresh cached fields')
-summarize_account_entries.short_description = _('Summmarize account entries')
-summarize_invoice_statistics.short_description = _('Summarize invoice statistics')
-set_as_asset.short_description = _('set_as_asset')
-set_as_liability.short_description = _('set_as_liability')
+resend_invoices.short_description = _('Re-send invoices')  # type: ignore
+refresh_cached_fields.short_description = _('Refresh cached fields')  # type: ignore
+summarize_account_entries.short_description = _('Summmarize account entries')  # type: ignore
+summarize_invoice_statistics.short_description = _('Summarize invoice statistics')  # type: ignore
+set_as_asset.short_description = _('set_as_asset')  # type: ignore
+set_as_liability.short_description = _('set_as_liability')  # type: ignore
 
 admin.site.register(Account, AccountAdmin)
 admin.site.register(Invoice, InvoiceAdmin)  # TODO: override in app

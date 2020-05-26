@@ -1,12 +1,13 @@
-# pylint: disable=too-many-locals
 from datetime import date, time, datetime
 from decimal import Decimal
+from typing import Optional
 import pytz
 from django.utils.timezone import now
 from jacc.models import AccountEntry
 
 
-def calculate_simple_interest(entries, rate_pct: Decimal, interest_date: date or None = None, begin: date or None = None) -> Decimal:
+def calculate_simple_interest(entries, rate_pct: Decimal,  # pylint: disable=too-many-locals
+                              interest_date: Optional[date] = None, begin: Optional[date] = None) -> Decimal:
     """
     Calculates simple interest of specified entries over time.
     Does not accumulate interest to interest.
@@ -51,13 +52,16 @@ def calculate_simple_interest(entries, rate_pct: Decimal, interest_date: date or
         if next_date > interest_date:
             next_date = interest_date
             done = True
+        assert cur_date
+        assert bal
         time_days = (next_date - cur_date).days
         if time_days > 0:
             day_interest = bal * daily_rate
             interval_interest = day_interest * Decimal(time_days)
             accum_interest += interval_interest
             cur_date = next_date
-        bal += e.amount
+        if e.amount is not None:
+            bal += e.amount
         if done:
             break
 

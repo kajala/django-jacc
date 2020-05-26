@@ -34,7 +34,7 @@ def settle_invoice(receivables_account: Account, settlement: AccountEntry, invoi
         raise ValidationError('Cannot target negative settlement {} to invoice {}'.format(settlement, invoice))
     if settlement.amount > Decimal(0) and invoice.type == INVOICE_CREDIT_NOTE:
         raise ValidationError('Cannot target positive settlement {} to credit note {}'.format(settlement, invoice))
-    if not settlement.type.is_settlement:
+    if settlement.type is None or not settlement.type.is_settlement:
         raise ValidationError('Cannot settle account entry {} which is not settlement'.format(settlement))
 
     new_payments = []
@@ -82,6 +82,8 @@ def settle_assigned_invoice(receivables_account: Account, settlement: AccountEnt
     :param kwargs: Extra attributes for created for generated account entries
     :return: list (generated receivables account entries)
     """
+    if settlement.settled_invoice is None:
+        raise ValidationError('Cannot target settlement {} without settled invoice'.format(settlement))
     return settle_invoice(receivables_account, settlement, settlement.settled_invoice, cls, **kwargs)
 
 

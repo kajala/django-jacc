@@ -138,7 +138,7 @@ class AccountEntry(models.Model):
         :return: Decimal
         """
         return sum_queryset(AccountEntry.objects.filter(account=self.account, timestamp__lte=self.timestamp).exclude(timestamp=self.timestamp, id__gt=self.id))
-    balance.fget.short_description = _('balance')  # pytype: disable=attribute-error
+    balance.fget.short_description = _('balance')  # type: ignore  # pytype: disable=attribute-error
 
 
 class AccountType(models.Model):
@@ -158,7 +158,7 @@ class AccountType(models.Model):
     @property
     def is_liability(self) -> bool:
         return not self.is_asset
-    is_liability.fget.short_description = _('liability')  # pytype: disable=attribute-error
+    is_liability.fget.short_description = _('liability')  # type: ignore  # pytype: disable=attribute-error
 
 
 class Account(models.Model):
@@ -180,18 +180,18 @@ class Account(models.Model):
 
     def is_asset(self) -> bool:
         return self.type.is_asset
-    is_asset.boolean = True
-    is_asset.short_description = _('asset')
+    is_asset.boolean = True  # type: ignore
+    is_asset.short_description = _('asset')  # type: ignore
 
     def is_liability(self) -> bool:
         return self.type.is_liability
-    is_liability.boolean = True
-    is_liability.short_description = _('liability')
+    is_liability.boolean = True  # type: ignore
+    is_liability.short_description = _('liability')  # type: ignore
 
     @property
     def balance(self) -> Decimal:
         return sum_queryset(self.accountentry_set.all())
-    balance.fget.short_description = _('balance')  # pytype: disable=attribute-error
+    balance.fget.short_description = _('balance')  # type: ignore  # pytype: disable=attribute-error
 
     def get_balance(self, t: datetime):
         """
@@ -212,8 +212,8 @@ class Account(models.Model):
         :param e: AccountEntry (settlement)
         :return: bool
         """
-        return e.amount is not None and e.type and e.type.is_settlement and e.account.id == self.id and \
-               e.settled_invoice and AccountEntry.objects.filter(parent=e).count() == 0
+        return bool(e.amount is not None and e.type and e.type.is_settlement and e.account.id == self.id and
+                    e.settled_invoice and AccountEntry.objects.filter(parent=e).count() == 0)
 
 
 class InvoiceManager(models.Manager):
@@ -326,12 +326,13 @@ class Invoice(models.Model, CachedFieldsMixin):
         unpaid_items = []
         for item, bal in self.get_item_balances(acc):
             assert isinstance(item, AccountEntry)
+            priority = item.type.payback_priority if item.type is not None else 0
             if self.type == INVOICE_DEFAULT:
                 if bal > Decimal(0):
-                    unpaid_items.append((item.type.payback_priority, item, bal))
+                    unpaid_items.append((priority, item, bal))
             elif self.type == INVOICE_CREDIT_NOTE:
                 if bal < Decimal(0):
-                    unpaid_items.append((item.type.payback_priority, item, bal))
+                    unpaid_items.append((priority, item, bal))
             else:
                 raise Exception('jacc.models.Invoice.get_unpaid_items() unimplemented for invoice type {}'.format(self.type))
         return [i[1:] for i in sorted(unpaid_items, key=lambda x: x[0])]
@@ -341,7 +342,10 @@ class Invoice(models.Model, CachedFieldsMixin):
 
     @property
     def receivables(self) -> QuerySet:
-        return self.get_entries(self.receivables_account)
+        acc = self.receivables_account
+        if acc is None:
+            return AccountEntry.objects.none()
+        return self.get_entries(acc)
 
     @property
     def items(self) -> QuerySet:
@@ -361,13 +365,15 @@ class Invoice(models.Model, CachedFieldsMixin):
 
     @property
     def is_paid(self) -> bool:
+        if self.unpaid_amount is None:
+            return False
         return self.unpaid_amount >= Decimal('0.00') if self.type == INVOICE_CREDIT_NOTE else self.unpaid_amount <= Decimal('0.00')
-    is_paid.fget.short_description = _('is paid')  # pytype: disable=attribute-error
+    is_paid.fget.short_description = _('is paid')  # type: ignore  # pytype: disable=attribute-error
 
     @property
     def is_due(self) -> bool:
         return not self.is_paid and now() >= self.due_date
-    is_due.fget.short_description = _('is due')  # pytype: disable=attribute-error
+    is_due.fget.short_description = _('is due')  # type: ignore  # pytype: disable=attribute-error
 
     def get_close_date(self) -> Optional[datetime]:
         recv = self.receivables.order_by('-timestamp', '-id')
@@ -391,6 +397,8 @@ class Invoice(models.Model, CachedFieldsMixin):
 
     @property
     def is_late(self) -> bool:
+        if self.late_days is None:
+            return False
         return not self.is_paid and self.late_days >= settings.LATE_LIMIT_DAYS
 
     def get_state(self) -> str:
@@ -409,7 +417,7 @@ class Invoice(models.Model, CachedFieldsMixin):
     @property
     def state_name(self) -> str:
         return choices_label(INVOICE_STATE, self.state)
-    state_name.fget.short_description = _('state')  # pytype: disable=attribute-error
+    state_name.fget.short_description = _('state')  # type: ignore  # pytype: disable=attribute-error
 
 
 class Contract(models.Model):

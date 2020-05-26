@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from distutils.core import setup
-from setuptools import find_packages
+from setuptools import find_packages  # type: ignore
 
 
 def parse_requirements(filename, session=False):
