@@ -1,38 +1,49 @@
-source venv/bin/activate
-python manage.py test
-if [ "$?" != "0" ]; then
-    echo "Django manage.py test reported problems, terminating release"
-    exit 1
-fi
-echo "Django manage.py test ok, proceeding..."
+#!/bin/bash
 
 source venv/bin/activate
-pip install prospector --upgrade -q
+
+# update tools
+dt -q
+pip install --upgrade -r requirements-dev.txt
+echo "Updated tools (`dt -q -d`)"
+
+# automatic tests
+dt -q
+python manage.py test
+if [ "$?" != "0" ]; then
+    echo "Automatic tests reported problems, terminating release"
+    exit 1
+fi
+echo "Automatic tests ok (`dt -q -d`), proceeding..."
+
+# prospector
+dt -q
 prospector
 if [ "$?" != "0" ]; then
     echo "Prospector reported problems, terminating release"
     exit 1
 fi
-echo "Prospector cleared build, proceeding..."
+echo "Prospector cleared build (`dt -q -d`), proceeding..."
 
-source venv/bin/activate
-pip install pytype --upgrade -q
-pytype --config pytype.cfg
+# mypy
+dt -q
+mypy jutil
 if [ "$?" != "0" ]; then
-    echo "Pytype reported problems, terminating release"
+    echo "Mypy reported problems, terminating release"
     exit 1
 fi
-echo "Pytype cleared build, proceeding..."
+echo "Mypy cleared build (`dt -q -d`), proceeding..."
 
-echo "Updating test coverage"
-source venv/bin/activate
-coverage run --source='.' --omit='*/venv/*' manage.py test
-coverage report
-git add -A '*'
-git commit -m 'test coverage update'
-git push
+# pytype
+# dt -q
+# pytype --config pytype.cfg
+# if [ "$?" != "0" ]; then
+#     echo "Pytype reported problems, terminating release"
+#     exit 1
+# fi
+# echo "Pytype cleared build (`dt -q -d`), proceeding..."
 
-./test-coverage --codecov
+# ./test-coverage --codecov
 
+echo "Pre-release script ok"
 exit 0
-

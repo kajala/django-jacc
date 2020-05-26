@@ -22,6 +22,6 @@ setup(
     license='MIT licence, see LICENCE.txt',
     description='Simple double entry accounting system (debits/credits) for Django projects.',
     long_description=open('README.md').read(),
-    zip_safe=True,
+    zip_safe=False,
     install_requires=install_requires
 )

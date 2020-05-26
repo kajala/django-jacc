@@ -1,3 +1,8 @@
-include *.txt *.md
-recursive-include jacc *
+recursive-include . *.txt *.md *.ini *.conf *.css *.png *.js *.html *.po *.mo *.json *.typed
+global-include *.html *.css *.js *.png *.jpg *.po *.mo *.txt *.md *.json *.typed
+prune venv
 prune project
+prune downloads
+prune uploads
+prune logs
+prune data
