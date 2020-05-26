@@ -27,7 +27,7 @@ echo "Prospector cleared build (`dt -q -d`), proceeding..."
 
 # mypy
 dt -q
-mypy jutil
+mypy .
 if [ "$?" != "0" ]; then
     echo "Mypy reported problems, terminating release"
     exit 1
