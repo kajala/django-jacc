@@ -19,6 +19,7 @@ rm -f "$FILE/coverage.xml"
 rm -rf "$FILE/.mypy_cache"
 rm -rf "$FILE/venv"
 rm -rf "$FILE/data"
+rm -rf "$FILE/.idea"
 rm -rf "$FILE/linecalc.conf"
 rm "$FILE.tar.gz"
 find . -name "__pycache__" -type d -exec rm -r "{}" \;
