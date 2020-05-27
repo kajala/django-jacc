@@ -29,6 +29,20 @@ Install
 pip install django-jacc
 
 
+Static Code Analysis
+====================
+
+The library passes both prospector and mypy checking. To install:
+
+pip install prospector
+pip install mypy
+
+To analyze:
+
+prospector
+mypy .
+
+
 Test Code Coverage
 ==================
 
