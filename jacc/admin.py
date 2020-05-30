@@ -1,7 +1,7 @@
 # pylint: disable=protected-access
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional, List, Sequence
+from typing import Optional, List, Sequence, Any
 from django.contrib import messages
 from django.contrib.admin import SimpleListFilter
 from django.contrib.messages import add_message, INFO
@@ -162,7 +162,7 @@ class AccountEntryAdmin(ModelAdminBase):
     actions = [
         summarize_account_entries,
     ]
-    list_display = [
+    list_display: Sequence[str] = [
         'id',
         'timestamp',
         'type',
@@ -174,7 +174,7 @@ class AccountEntryAdmin(ModelAdminBase):
         'source_file_link',
         'parent',
     ]
-    raw_id_fields = [
+    raw_id_fields: Sequence[str] = [
         'account',
         'source_file',
         'type',
@@ -184,14 +184,14 @@ class AccountEntryAdmin(ModelAdminBase):
         'settled_item',
         'parent',
     ]
-    ordering = [
+    ordering: Sequence[str] = [
         '-id',
     ]
-    search_fields = [
+    search_fields: Sequence[str] = [
         'description',
         '=amount',
     ]
-    fields = [
+    fields: Sequence[str] = [
         'id',
         'account',
         'timestamp',
@@ -207,7 +207,7 @@ class AccountEntryAdmin(ModelAdminBase):
         'parent',
         'archived',
     ]
-    readonly_fields = [
+    readonly_fields: Sequence[str] = [
         'id',
         'created',
         'last_modified',
@@ -217,7 +217,7 @@ class AccountEntryAdmin(ModelAdminBase):
         'settled_item_link',
         'archived',
     ]
-    list_filter = [
+    list_filter: Sequence[Any] = [
         SettlementAccountEntryFilter,
         EntryTypeAccountEntryFilter,
         AccountTypeAccountEntryFilter,
@@ -296,7 +296,7 @@ class AccountEntryAdmin(ModelAdminBase):
 
 
 class AccountAdmin(ModelAdminBase):
-    list_display = [
+    list_display: Sequence[str] = [
         'id',
         'type',
         'name',
@@ -304,25 +304,25 @@ class AccountAdmin(ModelAdminBase):
         'currency',
         'is_asset',
     ]
-    fields = [
+    fields: Sequence[str] = [
         'id',
         'type',
         'name',
         'balance',
         'currency',
     ]
-    readonly_fields = [
+    readonly_fields: Sequence[str] = [
         'id',
         'balance',
         'is_asset',
     ]
-    raw_id_fields = [
+    raw_id_fields: Sequence[str] = [
         'type',
     ]
-    ordering = [
+    ordering: Sequence[str] = [
         '-id',
     ]
-    list_filter = [
+    list_filter: Sequence[Any] = [
         'type',
         'type__is_asset',
     ]
@@ -596,7 +596,7 @@ class InvoiceAdmin(ModelAdminBase):
         InvoiceItemInline,  # TODO: override in app
         InvoiceSettlementInline,  # TODO: override in app
     ]
-    list_display = [
+    list_display: Sequence[str] = [
         'number',
         'created_brief',
         'sent_brief',
@@ -607,7 +607,7 @@ class InvoiceAdmin(ModelAdminBase):
         'paid_amount',
         'unpaid_amount',
     ]
-    fields = [
+    fields: Sequence[str] = [
         'type',
         'number',
         'due_date',
@@ -624,7 +624,7 @@ class InvoiceAdmin(ModelAdminBase):
         'last_modified',
         'sent',
     ]
-    readonly_fields = [
+    readonly_fields: Sequence[str] = [
         'created',
         'last_modified',
         'sent',
@@ -643,12 +643,12 @@ class InvoiceAdmin(ModelAdminBase):
     ]
     raw_id_fields: Sequence[str] = [
     ]
-    search_fields = [
+    search_fields: Sequence[str] = [
         '=amount',
         '=filename',
         '=number',
     ]
-    list_filter = [
+    list_filter: Sequence[Any] = [
         'state',
         InvoiceLateDaysFilter,
     ]
@@ -763,11 +763,11 @@ class EntryTypeAdmin(ModelAdminBase):
         'is_payment',
         'payback_priority',
     ]
-    list_filter = (
+    list_filter: Sequence[Any] = (
         'is_settlement',
         'is_payment',
     )
-    search_fields = (
+    search_fields: Sequence[str] = (
         'name',
         'code',
     )
@@ -775,32 +775,32 @@ class EntryTypeAdmin(ModelAdminBase):
         toggle_settlement,
         toggle_payment,
     ]
-    exclude = ()
-    ordering = ['name', ]
+    exclude: Sequence[str] = ()
+    ordering: Sequence[str] = ['name', ]
     allow_add = True
     allow_delete = True
 
 
 class AccountEntrySourceFileAdmin(ModelAdminBase):
-    list_display = [
+    list_display: Sequence[str] = [
         'id',
         'created',
         'entries_link',
     ]
     date_hierarchy = 'created'
-    ordering = [
+    ordering: Sequence[str] = [
         '-id',
     ]
-    fields = [
+    fields: Sequence[str] = [
         'id',
         'name',
         'created',
         'last_modified',
     ]
-    search_fields = [
+    search_fields: Sequence[str] = [
         '=name',
     ]
-    readonly_fields = [
+    readonly_fields: Sequence[str] = [
         'id',
         'created',
         'name',
