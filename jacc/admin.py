@@ -552,7 +552,8 @@ class InvoiceLateDaysFilter(SimpleListFilter):
 def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet):  # pylint: disable=unused-argument
     invoice_states = list([state for state, name in INVOICE_STATE])
 
-    invoiced_total = {'amount': Decimal('0.00'), 'count': 0}
+    invoiced_total_amount = Decimal('0.00')
+    invoiced_total_count = 0
 
     lines = [
         '<pre>',
@@ -563,15 +564,16 @@ def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet)
         qs2 = qs.filter(state=state)
 
         invoiced = qs2.filter(state=state).aggregate(amount=Coalesce(Sum('amount'), 0), count=Count('*'))
+        invoiced_amount = Decimal(invoiced['amount'])
+        invoiced_count = int(invoiced['count'])
+        invoiced_total_amount += invoiced_amount
+        invoiced_total_count += invoiced_count
 
         lines.append('{state_name} | x{count} | {amount:.2f}'.format(
-            state_name=state_name, amount=invoiced['amount'], count=invoiced['count']))
-
-        invoiced_total['amount'] += Decimal(invoiced['amount'])
-        invoiced_total['count'] += invoiced['count']
+            state_name=state_name, amount=invoiced_amount, count=invoiced_count))
 
     lines.append(_('Total') + ' {label} | x{count} | {amount:.2f}'.format(
-        label=_('amount'), amount=invoiced_total['amount'], count=invoiced_total['count']))
+        label=_('amount'), amount=invoiced_total_amount, count=invoiced_total_count))
     lines.append('</pre>')
 
     lines = align_lines(lines, '|')
