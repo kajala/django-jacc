@@ -552,7 +552,7 @@ class InvoiceLateDaysFilter(SimpleListFilter):
 def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet):  # pylint: disable=unused-argument
     invoice_states = list([state for state, name in INVOICE_STATE])
 
-    invoiced_total = {'amount': 0.0, 'count': 0}
+    invoiced_total = {'amount': Decimal('0.00'), 'count': 0}
 
     lines = [
         '<pre>',
@@ -567,8 +567,8 @@ def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet)
         lines.append('{state_name} | x{count} | {amount:.2f}'.format(
             state_name=state_name, amount=invoiced['amount'], count=invoiced['count']))
 
-        for k in ('amount', 'count'):
-            invoiced_total[k] += invoiced[k]
+        invoiced_total['amount'] += Decimal(invoiced['amount'])
+        invoiced_total['count'] += invoiced['count']
 
     lines.append(_('Total') + ' {label} | x{count} | {amount:.2f}'.format(
         label=_('amount'), amount=invoiced_total['amount'], count=invoiced_total['count']))
