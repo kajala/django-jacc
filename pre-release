@@ -35,13 +35,13 @@ fi
 echo "Mypy cleared build (`dt -q -d`), proceeding..."
 
 # pytype
-# dt -q
-# pytype --config pytype.cfg
-# if [ "$?" != "0" ]; then
-#     echo "Pytype reported problems, terminating release"
-#     exit 1
-# fi
-# echo "Pytype cleared build (`dt -q -d`), proceeding..."
+dt -q
+pytype --config pytype.cfg
+if [ "$?" != "0" ]; then
+    echo "Pytype reported problems, terminating release"
+    exit 1
+fi
+echo "Pytype cleared build (`dt -q -d`), proceeding..."
 
 # ./test-coverage --codecov
 
