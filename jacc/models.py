@@ -11,7 +11,7 @@ Credit means "right", gains/income/revenues/liabilities/equity increased with cr
 """
 from datetime import datetime, timedelta
 from decimal import Decimal
-from typing import Optional
+from typing import Optional, Type
 
 from math import floor
 from django.core.exceptions import ValidationError
@@ -285,7 +285,7 @@ class Invoice(models.Model, CachedFieldsMixin):
         recv = self.receivables_account
         return recv.currency if recv else ''
 
-    def get_entries(self, acc: Account, cls=AccountEntry) -> QuerySet:
+    def get_entries(self, acc: Account, cls: Type[AccountEntry] = AccountEntry) -> QuerySet:
         """
         Returns entries related to this invoice on specified account.
         :param acc: Account
