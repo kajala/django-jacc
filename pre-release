@@ -2,11 +2,6 @@
 
 source venv/bin/activate
 
-# update tools
-dt -q
-pip install --upgrade -r requirements-dev.txt
-echo "Updated tools (`dt -q -d`)"
-
 # automatic tests
 dt -q
 python manage.py test
@@ -18,7 +13,7 @@ echo "Automatic tests ok (`dt -q -d`), proceeding..."
 
 # prospector
 dt -q
-prospector
+prospector -i htmlcov
 if [ "$?" != "0" ]; then
     echo "Prospector reported problems, terminating release"
     exit 1
@@ -42,8 +37,6 @@ if [ "$?" != "0" ]; then
     exit 1
 fi
 echo "Pytype cleared build (`dt -q -d`), proceeding..."
-
-# ./test-coverage --codecov
 
 echo "Pre-release script ok"
 exit 0
