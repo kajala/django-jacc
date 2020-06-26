@@ -2,9 +2,11 @@ psycopg2-binary==2.8.5
 pytype
 prospector
 bandit
+dependency-check
 coverage
 codecov
 mypy
 djangorestframework-stubs
 django-stubs
 twine
+django-extensions
