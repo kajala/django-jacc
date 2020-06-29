@@ -24,6 +24,7 @@ from jutil.cache import CachedFieldsMixin
 from jutil.dict import choices_label
 from django.utils.translation import gettext_lazy as _
 
+from jutil.modelfields import SafeCharField, SafeTextField
 
 CATEGORY_ANY = ''
 CATEGORY_DEBIT = 'D'  # "left", dividends/expenses/assets/losses increased with debit
@@ -65,7 +66,7 @@ class AccountEntrySourceFile(models.Model):
     """
     Account entry source is set for entries based on some event like payment file import
     """
-    name = models.CharField(verbose_name=_('name'), max_length=255, db_index=True, blank=True, default='')
+    name = SafeCharField(verbose_name=_('name'), max_length=255, db_index=True, blank=True, default='')
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, db_index=True, editable=False, blank=True)
 
@@ -78,9 +79,9 @@ class AccountEntrySourceFile(models.Model):
 
 
 class EntryType(models.Model):
-    code = models.CharField(verbose_name=_('code'), max_length=64, db_index=True, unique=True)
-    identifier = models.CharField(verbose_name=_('identifier'), max_length=40, db_index=True, blank=True, default='')
-    name = models.CharField(verbose_name=_('name'), max_length=128, db_index=True, blank=True, default='')
+    code = SafeCharField(verbose_name=_('code'), max_length=64, db_index=True, unique=True)
+    identifier = SafeCharField(verbose_name=_('identifier'), max_length=40, db_index=True, blank=True, default='')
+    name = SafeCharField(verbose_name=_('name'), max_length=128, db_index=True, blank=True, default='')
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, db_index=True, editable=False, blank=True)
     payback_priority = models.SmallIntegerField(verbose_name=_('payback priority'), default=0, blank=True, db_index=True)
@@ -109,7 +110,7 @@ class AccountEntry(models.Model):
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, editable=False, blank=True)
     timestamp = models.DateTimeField(verbose_name=_('timestamp'), default=now, db_index=True, blank=True)
     type = models.ForeignKey(EntryType, verbose_name=_('type'), related_name='+', on_delete=models.PROTECT, null=True, default=None, blank=True)
-    description = models.CharField(verbose_name=_('description'), max_length=256, default='', blank=True)
+    description = SafeCharField(verbose_name=_('description'), max_length=256, default='', blank=True)
     amount = models.DecimalField(verbose_name=_('amount'), max_digits=10, decimal_places=2, blank=True, default=None, null=True, db_index=True)
     source_file = models.ForeignKey(AccountEntrySourceFile, verbose_name=_('account entry source file'), related_name='+', null=True, default=None, blank=True, on_delete=models.CASCADE, help_text=_('entry.source.file.help.text'))  # nopep8, pylint: disable=line-too-long
     source_invoice = models.ForeignKey('Invoice', verbose_name=_('source invoice'), null=True, related_name='+', default=None, blank=True, on_delete=models.CASCADE, help_text=_('entry.source.invoice.help.text'))  # nopep8, pylint: disable=line-too-long
@@ -142,8 +143,8 @@ class AccountEntry(models.Model):
 
 
 class AccountType(models.Model):
-    code = models.CharField(verbose_name=_('code'), max_length=32, db_index=True, unique=True)
-    name = models.CharField(verbose_name=_('name'), max_length=64, db_index=True, unique=True)
+    code = SafeCharField(verbose_name=_('code'), max_length=32, db_index=True, unique=True)
+    name = SafeCharField(verbose_name=_('name'), max_length=64, db_index=True, unique=True)
     is_asset = models.BooleanField(verbose_name=_('asset'))
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, db_index=True, editable=False, blank=True)
@@ -166,8 +167,8 @@ class Account(models.Model):
     Collects together accounting entries and provides summarizing functionality.
     """
     type = models.ForeignKey(AccountType, verbose_name=_('type'), related_name='+', on_delete=models.PROTECT)
-    name = models.CharField(verbose_name=_('name'), max_length=64, blank=True, default='', db_index=True)
-    currency = models.CharField(verbose_name=_('currency'), max_length=3, default='EUR', choices=CURRENCY_TYPE, blank=True)
+    name = SafeCharField(verbose_name=_('name'), max_length=64, blank=True, default='', db_index=True)
+    currency = SafeCharField(verbose_name=_('currency'), max_length=3, default='EUR', choices=CURRENCY_TYPE, blank=True)
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, db_index=True, editable=False, blank=True)
 
@@ -239,21 +240,21 @@ class Invoice(models.Model, CachedFieldsMixin):
     because this to be processing to be independent of server, client and invoice time zones.
     """
     objects: models.Manager = InvoiceManager()
-    type = models.CharField(verbose_name=_('type'), max_length=2, db_index=True, default=INVOICE_DEFAULT, blank=True, choices=INVOICE_TYPE)
-    number = models.CharField(verbose_name=_('invoice number'), max_length=32, default='', blank=True, db_index=True)
+    type = SafeCharField(verbose_name=_('type'), max_length=2, db_index=True, default=INVOICE_DEFAULT, blank=True, choices=INVOICE_TYPE)
+    number = SafeCharField(verbose_name=_('invoice number'), max_length=32, default='', blank=True, db_index=True)
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, db_index=True, editable=False, blank=True)
     sent = models.DateTimeField(verbose_name=_('sent'), db_index=True, default=None, blank=True, null=True)
     due_date = models.DateTimeField(verbose_name=_('due date'), db_index=True, default=get_default_due_date)
-    notes = models.TextField(verbose_name=_('notes'), blank=True, default='')
-    filename = models.CharField(verbose_name=_('filename'), max_length=255, blank=True, default='', db_index=True)
+    notes = SafeTextField(verbose_name=_('notes'), blank=True, default='')
+    filename = SafeCharField(verbose_name=_('filename'), max_length=255, blank=True, default='', db_index=True)
     amount = models.DecimalField(verbose_name=_('amount'), max_digits=10, decimal_places=2, default=0, blank=True)
     paid_amount = models.DecimalField(verbose_name=_('paid amount'), max_digits=10, decimal_places=2, editable=False, blank=True, null=True, default=None, db_index=True)  # nopep8, pylint: disable=line-too-long
     unpaid_amount = models.DecimalField(verbose_name=_('unpaid amount'), max_digits=10, decimal_places=2, editable=False, blank=True, null=True, default=None, db_index=True)  # nopep8, pylint: disable=line-too-long
     overpaid_amount = models.DecimalField(verbose_name=_('overpaid amount'), max_digits=10, decimal_places=2, editable=False, blank=True, null=True, default=None, db_index=True)  # nopep8, pylint: disable=line-too-long
     close_date = models.DateTimeField(verbose_name=_('close date'), default=None, null=True, blank=True, db_index=True)
     late_days = models.SmallIntegerField(verbose_name=_('late days'), default=None, null=True, blank=True, db_index=True)
-    state = models.CharField(verbose_name=_('state'), max_length=1, blank=True, default='', db_index=True, choices=INVOICE_STATE)
+    state = SafeCharField(verbose_name=_('state'), max_length=1, blank=True, default='', db_index=True, choices=INVOICE_STATE)
     cached_fields = [
         'amount',
         'paid_amount',
@@ -426,7 +427,7 @@ class Contract(models.Model):
     """
     created = models.DateTimeField(verbose_name=_('created'), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_('last modified'), auto_now=True, db_index=True, editable=False, blank=True)
-    name = models.CharField(verbose_name=_('name'), max_length=128, default='', blank=True, db_index=True)
+    name = SafeCharField(verbose_name=_('name'), max_length=128, default='', blank=True, db_index=True)
 
     class Meta:
         verbose_name = _('contract')
