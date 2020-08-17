@@ -19,3 +19,5 @@ __pycache__
 /htmlcov
 /.coverage
 /local.*
+.env
+

@@ -2,6 +2,13 @@
 
 source venv/bin/activate
 
+# check that no pending DB changes
+python manage.py migrate | grep makemigrations
+if [ "$?" == "0" ]; then
+    echo "Pending DB changes, run python manage.py makemigrations and commit changes first"
+    exit 1
+fi
+
 # automatic tests
 dt -q
 python manage.py test

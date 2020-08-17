@@ -5,5 +5,6 @@ coverage run --source='.' --omit='*/venv/*,project/*,setup.py,**/migrations/*' m
 if [ "$1" == "--codecov" ]; then
     codecov -X gcov
 fi
+coverage html
 coverage report --skip-empty --skip-covered -m
 
