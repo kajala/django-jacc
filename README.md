@@ -52,6 +52,212 @@ Test Code Coverage
 Changes
 =======
 
-3.2.0:
-+ Django 3.0 support, prospector fixes
+3.5.2:
+* Updated README
+* Upgraded dependencies
 
+3.5.1:
+* Squashed migrations 1-14
+* Deploy process tweaks
+
+3.4.8:
+* Input sanitized fields
+
+3.4.7:
+* Upgrade
+* Pre-release script tweaks
+* Release process tweaks
+
+3.4.6:
+* Py typing tweaks
+
+3.4.5:
+* Test coverage update
+* Cleanup, pytype integration
+
+3.4.4:
+* Float/dec2 fix
+
+3.4.3:
+* Typing tweaks
+
+3.4.2:
+* Mypy fixes
+* MANIFEST tweaks
+* Updated test coverage
+
+3.4.1:
+* Code QA related cleanup
+
+3.3.4:
+* Test coverage update
+
+3.3.3:
+* Test coverage update
+* Test coverage script tweaks
+* Added coverage.xml
+
+3.3.2:
+* Added travis config
+* Updated LICENSE.txt
+* Pytype config
+* Pre-release script tweaks
+
+3.3.1:
+* Test coverage update
+* Pytype integration to build process
+* Pytype -V3.6 passes
+
+3.2.3:
+* Debug cleanup
+
+3.2.2:
+* Admin static fix
+
+3.2.1:
+* Django 3.0 compatibility
+* Prospector fixes
+* Docs
+
+3.1.5:
+* Amount None handling for settlements
+
+3.1.4:
+* Upgrade dependencies
+
+3.1.3:
+* Separated settle invoice / settle assigned invoice
+
+3.1.2:
+* Pre-release process
+* Prospector usage in release
+* Code QA / Prospector cleanup
+
+3.1.1:
+* Cleanup
+* Optional timestamp to get late days
+
+3.0.5:
+* Upgrade dependencies
+
+3.0.4:
+* Longer account names
+* gettext
+
+3.0.3:
+* Reverted migrations
+
+3.0.2:
+* Fixed squashed migration
+
+3.0.1:
+* Release 3.0.1
+* Squashed migrations
+* Deploy cleanup
+
+2.1.18:
+* More robust invoice summary
+* License update
+
+2.1.17:
+* Upgrade dependencies
+
+2.1.16:
+* Variable amount credit note settling
+
+2.1.15:
+* Upgrade dependencies
+
+2.1.14:
+* Credit note description tweaks
+
+2.1.13:
+* Upgrade dependencies
+
+2.1.12:
+* l10n
+* Entry cleanup
+
+2.1.11:
+* Dropped auto-invoice numbering
+
+2.1.10:
+* EntryType(s) as raw fields
+
+2.1.9:
+* Unit test fix
+
+2.1.8:
+* Separated EntryType identifier/code
+
+2.1.7:
+* Invoice numbering helper
+
+2.1.6:
+* Char field as invoice number to support non-numeric invoice numbers
+
+2.1.5:
+* Update invoices tweaks
+
+2.1.4:
+* Default parameter fix
+
+2.1.3:
+* Default credit note account entry timestamps
+* Removed extra #
+
+2.1.2:
+* Dependency upgrade
+
+2.1.1:
+* Upgrade requirements
+
+1.0.16:
+* Optimized entry type get unique
+
+1.0.15:
+* Doc fixes
+
+1.0.14:
+* Admin tweaks
+
+1.0.13:
+* Admin tweaks
+
+1.0.12:
+* Extra validation
+
+1.0.11:
+* Entry type as str  
+
+1.0.10:
+* Entry code as str
+
+1.0.9:
+* EntryType.objects.get unique
+
+1.0.8:
+* Constraints
+
+1.0.7:
+* Replaced parse requirements
+
+1.0.6:
+* Upgraded dependencies
+
+1.0.5:
+* Bigger invoice number
+
+1.0.3:
+* Unit tests
+* Calculate simple interest fix
+
+1.0.2:
+* Db indexing tweaks
+* Parent entry editable by default
+
+1.0.1:
+* Upgraded dependencies
+
+1.0.0:
+* Docs
