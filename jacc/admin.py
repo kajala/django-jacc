@@ -23,7 +23,7 @@ from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 from jacc.settle import settle_assigned_invoice
 from jutil.admin import ModelAdminBase, admin_log
-from jutil.dict import choices_label
+from jutil.format import choices_label
 
 
 def align_lines(lines: list, column_separator: str = '|') -> list:

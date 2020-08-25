@@ -52,6 +52,8 @@ Test Code Coverage
 Changes
 =======
 
+* Upgraded to django-jutil 3.7.1
+
 3.5.2:
 * Updated README
 * Upgraded dependencies

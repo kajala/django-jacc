@@ -9,7 +9,7 @@ from jacc.settle import settle_assigned_invoice, settle_credit_note
 from jutil.dates import add_month
 from jutil.format import dec2
 from jutil.parse import parse_datetime
-from jutil.testing import DefaultTestSetupMixin
+from jutil.testing import TestSetupMixin
 
 
 ACCOUNT_RECEIVABLES = 'RE'
@@ -40,9 +40,9 @@ def make_datetime(year, month, day) -> datetime:
     return pytz.utc.localize(datetime(year=year, month=month, day=day))
 
 
-class Tests(TestCase, DefaultTestSetupMixin):
+class Tests(TestCase, TestSetupMixin):
     def setUp(self):
-        self.add_test_user()
+        self.user = self.add_test_user()
         AccountType.objects.create(code=ACCOUNT_RECEIVABLES, name='Receivables', is_asset=True)
         AccountType.objects.create(code=ACCOUNT_SETTLEMENTS, name='Settlements', is_asset=True)
         ae_types = [
