@@ -176,6 +176,7 @@ def add_reverse_charge(modeladmin, request, qs):
         if e.description:
             initial['description'] += ' / {}'.format(e.description)
         form_cls = modeladmin.reverse_charge_form  # Type: ignore
+        opts = dict(modeladmin.opts.__dict__)
         cx = {
             'qs': qs,
             'original': e,
