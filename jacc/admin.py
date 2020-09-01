@@ -1,17 +1,22 @@
 # pylint: disable=protected-access
+import logging
+import traceback
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional, List, Sequence, Any
+from typing import Optional, List, Sequence, Any, Dict
 from django.contrib import messages
 from django.contrib.admin import SimpleListFilter
 from django.contrib.messages import add_message, INFO
 from django.db.models.functions import Coalesce
 from django import forms
+from django.shortcuts import render
 from django.urls import reverse, ResolverMatch
 from django.utils.formats import date_format
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.text import format_lazy
+
+from jacc.forms import ReverseChargeForm
 from jacc.models import Account, AccountEntry, Invoice, AccountType, EntryType, AccountEntrySourceFile, INVOICE_STATE
 from django.conf import settings
 from django.conf.urls import url
@@ -23,7 +28,10 @@ from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 from jacc.settle import settle_assigned_invoice
 from jutil.admin import ModelAdminBase, admin_log
-from jutil.format import choices_label
+from jutil.format import choices_label, dec2
+from jutil.model import clone_model
+
+logger = logging.getLogger(__name__)
 
 
 def align_lines(lines: list, column_separator: str = '|') -> list:
@@ -148,6 +156,56 @@ class AccountTypeAccountEntryFilter(SimpleListFilter):
         return queryset
 
 
+def add_reverse_charge(modeladmin, request, qs):
+    assert hasattr(modeladmin, 'reverse_charge_form')
+    assert hasattr(modeladmin, 'reverse_charge_template')
+
+    cx: Dict[str, Any] = {}
+    try:
+        if qs.count() != 1:
+            raise ValidationError(_('Exactly one account entry must be selected'))
+        e = qs.first()
+        assert isinstance(e, AccountEntry)
+        if e.amount is None or dec2(e.amount) == Decimal('0.00'):
+            raise ValidationError(_('Exactly one account entry must be selected'))
+
+        initial = {
+            'amount': -e.amount,
+            'description': _('refund')
+        }
+        if e.description:
+            initial['description'] += ' / {}'.format(e.description)
+        form_cls = modeladmin.reverse_charge_form  # Type: ignore
+        cx = {
+            'qs': qs,
+            'original': e,
+        }
+
+        if 'save' in request.POST:
+            cx['form'] = form = form_cls(request.POST, initial=initial)
+            if not form.is_valid():
+                raise ValidationError(form.errors)
+            timestamp = form.cleaned_data['timestamp']
+            amount = form.cleaned_data['amount']
+            description = form.cleaned_data['description']
+            reverse_e = clone_model(e, parent=e.parent, amount=amount, description=description, timestamp=timestamp,
+                                    commit=False)
+            reverse_e.full_clean()
+            reverse_e.save()
+            messages.info(request, '{} {}'.format(reverse_e, _('created')))
+        else:
+            cx['form'] = form = form_cls(initial=initial)
+            return render(request, modeladmin.reverse_charge_template, context=cx)
+    except ValidationError as e:
+        if cx:
+            return render(request, modeladmin.reverse_charge_template, context=cx)
+        messages.error(request, '{}\n'.join(e.messages))
+    except Exception as e:
+        logger.error('add_reverse_charge: %s', traceback.format_exc())
+        messages.error(request, '{}'.format(e))
+    return None
+
+
 class AccountEntryAdminForm(forms.ModelForm):
     def clean(self):
         if self.instance.archived:
@@ -159,8 +217,11 @@ class AccountEntryAdmin(ModelAdminBase):
     form = AccountEntryAdminForm
     date_hierarchy = 'timestamp'
     list_per_page = 50
+    reverse_charge_form = ReverseChargeForm
+    reverse_charge_template = 'admin/jacc/accountentry/reverse_entry.html'
     actions = [
         summarize_account_entries,
+        add_reverse_charge,
     ]
     list_display: Sequence[str] = [
         'id',
@@ -822,9 +883,10 @@ class AccountEntrySourceFileAdmin(ModelAdminBase):
     entries_link.short_description = _('account entry source file')  # type: ignore
 
 
+add_reverse_charge.short_description = _('Add reverse charge')  # type: ignore
 resend_invoices.short_description = _('Re-send invoices')  # type: ignore
 refresh_cached_fields.short_description = _('Refresh cached fields')  # type: ignore
-summarize_account_entries.short_description = _('Summmarize account entries')  # type: ignore
+summarize_account_entries.short_description = _('Summarize account entries')  # type: ignore
 summarize_invoice_statistics.short_description = _('Summarize invoice statistics')  # type: ignore
 set_as_asset.short_description = _('set_as_asset')  # type: ignore
 set_as_liability.short_description = _('set_as_liability')  # type: ignore
