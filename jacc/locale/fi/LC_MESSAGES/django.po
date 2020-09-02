@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-01 19:46+0000\n"
+"POT-Creation-Date: 2020-09-02 13:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,15 +45,11 @@ msgstr "tilitapahtuman tyyppi"
 msgid "account type"
 msgstr "tilityyppi"
 
-#: jacc/admin.py:163
+#: jacc/admin.py:166 jacc/admin.py:170
 msgid "Exactly one account entry must be selected"
 msgstr "Yksi tilitapahtuma pitää olla valittuna"
 
-#: jacc/admin.py:172
-msgid "refund"
-msgstr "hyvitys"
-
-#: jacc/admin.py:193 jacc/admin.py:744 jacc/models.py:70 jacc/models.py:85
+#: jacc/admin.py:195 jacc/admin.py:744 jacc/models.py:70 jacc/models.py:85
 #: jacc/models.py:109 jacc/models.py:149 jacc/models.py:172 jacc/models.py:245
 #: jacc/models.py:428
 msgid "created"
@@ -129,7 +125,7 @@ msgid "Total"
 msgstr "Yhteensä"
 
 #: jacc/admin.py:637 jacc/forms.py:8 jacc/models.py:114 jacc/models.py:251
-#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:14
+#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:10
 msgid "amount"
 msgstr "summa"
 
@@ -182,13 +178,18 @@ msgid "Accounting"
 msgstr "Kirjanpito"
 
 #: jacc/forms.py:7 jacc/models.py:111
+#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:9
 msgid "timestamp"
 msgstr "aikaleima"
 
 #: jacc/forms.py:9 jacc/models.py:113
-#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:15
+#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:11
 msgid "description"
 msgstr "kuvaus"
+
+#: jacc/forms.py:10
+msgid "reverse.charge.form.default.description"
+msgstr "hyvitys"
 
 #: jacc/models.py:35
 msgid "Debit"
@@ -402,17 +403,18 @@ msgstr "Tilitapahtumat"
 msgid "View on site"
 msgstr "sivustolle"
 
-#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:13
-msgid "date"
-msgstr "päivämäärä"
-
 #: jacc/templates/admin/jacc/accountentry/reverse_entry.html:18
-msgid "reverse account entry"
-msgstr "tilitapahtuman korjaus"
-
-#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:23
 msgid "Save"
 msgstr "Tallenna"
+
+#~ msgid "refund"
+#~ msgstr "hyvitys"
+
+#~ msgid "date"
+#~ msgstr "päivämäärä"
+
+#~ msgid "reverse account entry"
+#~ msgstr "tilitapahtuman korjaus"
 
 #~ msgid "invoiced"
 #~ msgstr "laskutettu"

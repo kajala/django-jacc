@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-01 19:46+0000\n"
+"POT-Creation-Date: 2020-09-02 13:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -45,15 +45,11 @@ msgstr ""
 msgid "account type"
 msgstr ""
 
-#: jacc/admin.py:163
+#: jacc/admin.py:166 jacc/admin.py:170
 msgid "Exactly one account entry must be selected"
 msgstr ""
 
-#: jacc/admin.py:172
-msgid "refund"
-msgstr ""
-
-#: jacc/admin.py:193 jacc/admin.py:744 jacc/models.py:70 jacc/models.py:85
+#: jacc/admin.py:195 jacc/admin.py:744 jacc/models.py:70 jacc/models.py:85
 #: jacc/models.py:109 jacc/models.py:149 jacc/models.py:172 jacc/models.py:245
 #: jacc/models.py:428
 msgid "created"
@@ -129,7 +125,7 @@ msgid "Total"
 msgstr ""
 
 #: jacc/admin.py:637 jacc/forms.py:8 jacc/models.py:114 jacc/models.py:251
-#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:14
+#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:10
 msgid "amount"
 msgstr ""
 
@@ -182,13 +178,18 @@ msgid "Accounting"
 msgstr ""
 
 #: jacc/forms.py:7 jacc/models.py:111
+#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:9
 msgid "timestamp"
 msgstr ""
 
 #: jacc/forms.py:9 jacc/models.py:113
-#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:15
+#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:11
 msgid "description"
 msgstr ""
+
+#: jacc/forms.py:10
+msgid "reverse.charge.form.default.description"
+msgstr "refund"
 
 #: jacc/models.py:35
 msgid "Debit"
@@ -406,15 +407,7 @@ msgstr ""
 msgid "View on site"
 msgstr ""
 
-#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:13
-msgid "date"
-msgstr ""
-
 #: jacc/templates/admin/jacc/accountentry/reverse_entry.html:18
-msgid "reverse account entry"
-msgstr ""
-
-#: jacc/templates/admin/jacc/accountentry/reverse_entry.html:23
 msgid "Save"
 msgstr ""
 

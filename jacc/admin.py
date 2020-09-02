@@ -169,14 +169,13 @@ def add_reverse_charge(modeladmin, request, qs):
         if e.amount is None or dec2(e.amount) == Decimal('0.00'):
             raise ValidationError(_('Exactly one account entry must be selected'))
 
+        form_cls = modeladmin.reverse_charge_form  # Type: ignore
         initial = {
             'amount': -e.amount,
-            'description': _('refund')
+            'description': form_cls().fields['description'].initial,
         }
         if e.description:
             initial['description'] += ' / {}'.format(e.description)
-        form_cls = modeladmin.reverse_charge_form  # Type: ignore
-        opts = dict(modeladmin.opts.__dict__)
         cx = {
             'qs': qs,
             'original': e,
