@@ -15,6 +15,7 @@ In the libary, debits are recorded as account entry objects with positive amount
 Every entry is associated with an account, and account objects have always account type associated with them. 
 Account type can have code, name and category (asset/liability account). Account entries also have entry types associated with them. 
 Entry types can specify product code, name and entry classification (payment/settlement).
+Account entries can have parent entry defined, which can be used to represent combined account entries.
 
 In addition to accounts and account entries, the library has models for basic invoices.
 
