@@ -39,7 +39,7 @@ def calculate_simple_interest(entries, rate_pct: Decimal,  # pylint: disable=too
 
         # initial values from the first account entry
         e = entries_list[0]
-        bal = e.amount
+        bal = e.amount or Decimal('0.00')
         cur_date = e.timestamp.date()
         if begin and begin > cur_date:
             cur_date = begin
@@ -53,7 +53,6 @@ def calculate_simple_interest(entries, rate_pct: Decimal,  # pylint: disable=too
             next_date = interest_date
             done = True
         assert cur_date
-        assert bal
         time_days = (next_date - cur_date).days
         if time_days > 0:
             day_interest = bal * daily_rate
