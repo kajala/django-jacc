@@ -53,6 +53,7 @@ def calculate_simple_interest(entries, rate_pct: Decimal,  # pylint: disable=too
             next_date = interest_date
             done = True
         assert cur_date
+        assert bal is not None
         time_days = (next_date - cur_date).days
         if time_days > 0:
             day_interest = bal * daily_rate
