@@ -15,6 +15,7 @@ from django.utils.formats import date_format
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.text import format_lazy
+from django.utils.timezone import now
 
 from jacc.forms import ReverseChargeForm
 from jacc.models import Account, AccountEntry, Invoice, AccountType, EntryType, AccountEntrySourceFile, INVOICE_STATE
@@ -189,7 +190,7 @@ def add_reverse_charge(modeladmin, request, qs):
             amount = form.cleaned_data['amount']
             description = form.cleaned_data['description']
             reverse_e = clone_model(e, parent=e.parent, amount=amount, description=description, timestamp=timestamp,
-                                    commit=False)
+                                    commit=False, created=now())
             reverse_e.full_clean()
             reverse_e.save()
             messages.info(request, '{} {}'.format(reverse_e, _('created')))
