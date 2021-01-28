@@ -92,18 +92,22 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
     """
     Settles credit note. Records settling account entries for both original invoice and the credit note
     (negative entries for the credit note).
-    Default timestamp for account entries is 'created' time of the credit note, can be overriden by kwargs.
+    Default timestamp for account entries is current time, can be overriden by kwargs timestamp.
     :param credit_note: Credit note to settle
     :param debit_note: Invoice to settle
     :param cls: AccountEntry (derived) class to use for new entries
     :param account: Settlement account
     :param kwargs: Variable arguments to cls() instance creation
-    :return: list of new payments
+    :return: list of new settlements
     """
     assert isinstance(credit_note, Invoice)
-    assert credit_note.type == INVOICE_CREDIT_NOTE
-    assert debit_note
-    assert debit_note.type == INVOICE_DEFAULT
+
+    if credit_note.type != INVOICE_CREDIT_NOTE:
+        raise ValidationError(_('Credit note type incorrect'))
+    if debit_note is None:
+        raise ValidationError(_('Debit note missing'))
+    if debit_note.type != INVOICE_DEFAULT:
+        raise ValidationError(_('Debit note type incorrect'))
 
     credit = -credit_note.get_unpaid_amount()
     balance = debit_note.get_unpaid_amount()
@@ -125,7 +129,7 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
 
     pmts = []
     if amt > Decimal(0):
-        timestamp = kwargs.pop('timestamp', credit_note.created or now())
+        timestamp = kwargs.pop('timestamp', now())
         # record entry to debit note settlement account
         pmt1 = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=debit_note,
                                   description=description + ' #{}'.format(credit_note.number), timestamp=timestamp, **kwargs)
