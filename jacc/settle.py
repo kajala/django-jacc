@@ -129,7 +129,9 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
 
     pmts = []
     if amt > Decimal(0):
-        timestamp = kwargs.pop('timestamp', now())
+        timestamp = kwargs.pop('timestamp', None)
+        if timestamp is None:
+            timestamp = now()
         # record entry to debit note settlement account
         pmt1 = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=debit_note,
                                   description=description + ' #{}'.format(credit_note.number), timestamp=timestamp, **kwargs)
