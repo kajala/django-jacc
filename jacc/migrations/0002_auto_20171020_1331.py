@@ -8,13 +8,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0001_initial'),
+        ("jacc", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='accountentry',
-            name='amount',
-            field=models.DecimalField(blank=True, decimal_places=2, default=None, max_digits=10, null=True, verbose_name='amount'),
+            model_name="accountentry",
+            name="amount",
+            field=models.DecimalField(
+                blank=True, decimal_places=2, default=None, max_digits=10, null=True, verbose_name="amount"
+            ),
         ),
     ]

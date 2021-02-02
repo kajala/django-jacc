@@ -25,28 +25,37 @@ def settle_invoice(receivables_account: Account, settlement: AccountEntry, invoi
     """
     assert isinstance(invoice, Invoice)
     if not invoice:
-        raise ValidationError('Cannot target settlement {} without settled invoice'.format(settlement))
+        raise ValidationError("Cannot target settlement {} without settled invoice".format(settlement))
     if not receivables_account:
-        raise ValidationError('Receivables account missing. Invoice with no rows?')
+        raise ValidationError("Receivables account missing. Invoice with no rows?")
     if settlement.amount is None:  # nothing to do
         return list()
     if settlement.amount < Decimal(0) and invoice.type != INVOICE_CREDIT_NOTE:
-        raise ValidationError('Cannot target negative settlement {} to invoice {}'.format(settlement, invoice))
+        raise ValidationError("Cannot target negative settlement {} to invoice {}".format(settlement, invoice))
     if settlement.amount > Decimal(0) and invoice.type == INVOICE_CREDIT_NOTE:
-        raise ValidationError('Cannot target positive settlement {} to credit note {}'.format(settlement, invoice))
+        raise ValidationError("Cannot target positive settlement {} to credit note {}".format(settlement, invoice))
     if settlement.type is None or not settlement.type.is_settlement:
-        raise ValidationError('Cannot settle account entry {} which is not settlement'.format(settlement))
+        raise ValidationError("Cannot settle account entry {} which is not settlement".format(settlement))
 
     new_payments = []
     remaining = Decimal(settlement.amount)
-    timestamp = kwargs.pop('timestamp', settlement.timestamp)
+    timestamp = kwargs.pop("timestamp", settlement.timestamp)
     assert isinstance(invoice, Invoice)
     for item, bal in invoice.get_unpaid_items(receivables_account):
         if invoice.type == INVOICE_DEFAULT:
             if bal > Decimal(0):
                 amt = min(remaining, bal)
-                ae = cls.objects.create(account=receivables_account, amount=-amt, type=item.type, settled_item=item, settled_invoice=invoice,
-                                        timestamp=timestamp, description=settlement.description, parent=settlement, **kwargs)
+                ae = cls.objects.create(
+                    account=receivables_account,
+                    amount=-amt,
+                    type=item.type,
+                    settled_item=item,
+                    settled_invoice=invoice,
+                    timestamp=timestamp,
+                    description=settlement.description,
+                    parent=settlement,
+                    **kwargs
+                )
                 new_payments.append(ae)
                 remaining -= amt
                 if remaining <= Decimal(0):
@@ -54,14 +63,25 @@ def settle_invoice(receivables_account: Account, settlement: AccountEntry, invoi
         elif invoice.type == INVOICE_CREDIT_NOTE:
             if bal < Decimal(0):
                 amt = max(remaining, bal)
-                ae = cls.objects.create(account=receivables_account, amount=-amt, type=item.type, settled_item=item, settled_invoice=invoice,
-                                        timestamp=timestamp, description=settlement.description, parent=settlement, **kwargs)
+                ae = cls.objects.create(
+                    account=receivables_account,
+                    amount=-amt,
+                    type=item.type,
+                    settled_item=item,
+                    settled_invoice=invoice,
+                    timestamp=timestamp,
+                    description=settlement.description,
+                    parent=settlement,
+                    **kwargs
+                )
                 new_payments.append(ae)
                 remaining -= amt
                 if remaining >= Decimal(0):
                     break
         else:
-            raise Exception('jacc.settle.settle_assigned_invoice() unimplemented for invoice type {}'.format(invoice.type))
+            raise Exception(
+                "jacc.settle.settle_assigned_invoice() unimplemented for invoice type {}".format(invoice.type)
+            )
 
     invoice.update_cached_fields()
     return new_payments
@@ -83,7 +103,7 @@ def settle_assigned_invoice(receivables_account: Account, settlement: AccountEnt
     :return: list (generated receivables account entries)
     """
     if settlement.settled_invoice is None:
-        raise ValidationError('Cannot target settlement {} without settled invoice'.format(settlement))
+        raise ValidationError("Cannot target settlement {} without settled invoice".format(settlement))
     return settle_invoice(receivables_account, settlement, settlement.settled_invoice, cls, **kwargs)
 
 
@@ -103,42 +123,59 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
     assert isinstance(credit_note, Invoice)
 
     if credit_note.type != INVOICE_CREDIT_NOTE:
-        raise ValidationError(_('Credit note type incorrect'))
+        raise ValidationError(_("Credit note type incorrect"))
     if debit_note is None:
-        raise ValidationError(_('Debit note missing'))
+        raise ValidationError(_("Debit note missing"))
     if debit_note.type != INVOICE_DEFAULT:
-        raise ValidationError(_('Debit note type incorrect'))
+        raise ValidationError(_("Debit note type incorrect"))
 
     credit = -credit_note.get_unpaid_amount()
     balance = debit_note.get_unpaid_amount()
 
     amt = min(balance, credit)
-    amount = kwargs.pop('amount', None)
+    amount = kwargs.pop("amount", None)
     if amount is not None:
         if amount > amt:
-            raise ValidationError(_('Cannot settle credit note amount which is larger than remaining unpaid balance'))
+            raise ValidationError(_("Cannot settle credit note amount which is larger than remaining unpaid balance"))
         amt = amount
 
-    entry_type = kwargs.pop('entry_type', None)
+    entry_type = kwargs.pop("entry_type", None)
     if entry_type is None:
-        if not hasattr(settings, 'E_CREDIT_NOTE_RECONCILIATION'):
-            raise Exception('settle_credit_note() requires settings.E_CREDIT_NOTE_RECONCILIATION (account entry type code) '
-                            'or entry_type to be pass in kwargs')
+        if not hasattr(settings, "E_CREDIT_NOTE_RECONCILIATION"):
+            raise Exception(
+                "settle_credit_note() requires settings.E_CREDIT_NOTE_RECONCILIATION (account entry type code) "
+                "or entry_type to be pass in kwargs"
+            )
         entry_type = EntryType.objects.get(code=settings.E_CREDIT_NOTE_RECONCILIATION)
-    description = kwargs.pop('description', _('credit.note.reconciliation'))
+    description = kwargs.pop("description", _("credit.note.reconciliation"))
 
     pmts = []
     if amt > Decimal(0):
-        timestamp = kwargs.pop('timestamp', None)
+        timestamp = kwargs.pop("timestamp", None)
         if timestamp is None:
             timestamp = now()
         # record entry to debit note settlement account
-        pmt1 = cls.objects.create(account=account, amount=amt, type=entry_type, settled_invoice=debit_note,
-                                  description=description + ' #{}'.format(credit_note.number), timestamp=timestamp, **kwargs)
+        pmt1 = cls.objects.create(
+            account=account,
+            amount=amt,
+            type=entry_type,
+            settled_invoice=debit_note,
+            description=description + " #{}".format(credit_note.number),
+            timestamp=timestamp,
+            **kwargs
+        )
         pmts.append(pmt1)
         # record entry to credit note settlement account
-        pmt2 = cls.objects.create(account=account, parent=pmt1, amount=-amt, type=entry_type, settled_invoice=credit_note,
-                                  description=description + ' #{}'.format(debit_note.number), timestamp=timestamp, **kwargs)
+        pmt2 = cls.objects.create(
+            account=account,
+            parent=pmt1,
+            amount=-amt,
+            type=entry_type,
+            settled_invoice=credit_note,
+            description=description + " #{}".format(debit_note.number),
+            timestamp=timestamp,
+            **kwargs
+        )
         pmts.append(pmt2)
 
     return pmts

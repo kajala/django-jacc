@@ -8,9 +8,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0003_auto_20171030_1933'),
+        ("jacc", "0003_auto_20171030_1933"),
     ]
 
     operations = [
-        migrations.RenameModel(old_name='AccountEntrySource', new_name='AccountEntrySourceFile'),
+        migrations.RenameModel(old_name="AccountEntrySource", new_name="AccountEntrySourceFile"),
     ]

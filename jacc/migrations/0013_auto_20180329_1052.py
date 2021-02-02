@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0012_auto_20180218_0638'),
+        ("jacc", "0012_auto_20180218_0638"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='invoice',
-            name='number',
-            field=models.BigIntegerField(blank=True, db_index=True, default=None, null=True, verbose_name='invoice number'),
+            model_name="invoice",
+            name="number",
+            field=models.BigIntegerField(
+                blank=True, db_index=True, default=None, null=True, verbose_name="invoice number"
+            ),
         ),
     ]

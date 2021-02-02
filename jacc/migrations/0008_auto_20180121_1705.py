@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0007_invoice_number'),
+        ("jacc", "0007_invoice_number"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='accounttype',
-            old_name='is_debit',
-            new_name='is_asset',
+            model_name="accounttype",
+            old_name="is_debit",
+            new_name="is_asset",
         ),
         migrations.AlterField(
-            model_name='accounttype',
-            name='is_asset',
-            field=models.BooleanField(verbose_name='is asset'),
+            model_name="accounttype",
+            name="is_asset",
+            field=models.BooleanField(verbose_name="is asset"),
         ),
     ]

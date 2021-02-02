@@ -7,13 +7,18 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0010_auto_20180201_0734'),
+        ("jacc", "0010_auto_20180201_0734"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='accountentry',
-            name='account',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='accountentry_set', to='jacc.Account', verbose_name='record account'),
+            model_name="accountentry",
+            name="account",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="accountentry_set",
+                to="jacc.Account",
+                verbose_name="record account",
+            ),
         ),
     ]

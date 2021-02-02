@@ -5,21 +5,21 @@ from django.db.models import F
 
 
 def migr_code_to_identifier_0019_entrytype_identifier(apps, schema):
-    EntryType = apps.get_model('jacc', 'EntryType')
-    EntryType.objects.all().update(identifier=F('code'))
+    EntryType = apps.get_model("jacc", "EntryType")
+    EntryType.objects.all().update(identifier=F("code"))
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0018_auto_20181008_2322'),
+        ("jacc", "0018_auto_20181008_2322"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='entrytype',
-            name='identifier',
-            field=models.CharField(blank=True, db_index=True, default='', max_length=40, verbose_name='identifier'),
+            model_name="entrytype",
+            name="identifier",
+            field=models.CharField(blank=True, db_index=True, default="", max_length=40, verbose_name="identifier"),
         ),
         migrations.RunPython(migr_code_to_identifier_0019_entrytype_identifier),
     ]

@@ -6,22 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0013_auto_20180329_1052'),
+        ("jacc", "0013_auto_20180329_1052"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='entrytype',
-            name='code',
-            field=models.CharField(db_index=True, max_length=32, verbose_name='code'),
+            model_name="entrytype",
+            name="code",
+            field=models.CharField(db_index=True, max_length=32, verbose_name="code"),
         ),
         migrations.AlterField(
-            model_name='entrytype',
-            name='name',
-            field=models.CharField(db_index=True, max_length=64, verbose_name='name'),
+            model_name="entrytype",
+            name="name",
+            field=models.CharField(db_index=True, max_length=64, verbose_name="name"),
         ),
         migrations.AlterUniqueTogether(
-            name='entrytype',
-            unique_together={('code', 'name', 'is_settlement')},
+            name="entrytype",
+            unique_together={("code", "name", "is_settlement")},
         ),
     ]

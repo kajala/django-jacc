@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0005_auto_20171030_1958'),
+        ("jacc", "0005_auto_20171030_1958"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='account',
-            name='name',
-            field=models.CharField(blank=True, db_index=True, default='', max_length=32, verbose_name='name'),
+            model_name="account",
+            name="name",
+            field=models.CharField(blank=True, db_index=True, default="", max_length=32, verbose_name="name"),
         ),
     ]

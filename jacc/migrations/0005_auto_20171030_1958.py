@@ -9,17 +9,26 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0004_auto_20171030_1935'),
+        ("jacc", "0004_auto_20171030_1935"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='accountentrysourcefile',
-            options={'verbose_name': 'account entry source file', 'verbose_name_plural': 'account entry source files'},
+            name="accountentrysourcefile",
+            options={"verbose_name": "account entry source file", "verbose_name_plural": "account entry source files"},
         ),
         migrations.AlterField(
-            model_name='accountentry',
-            name='source_file',
-            field=models.ForeignKey(blank=True, default=None, help_text='Source for account entry, e.g. received payment (if any)', null=True, on_delete=django.db.models.deletion.CASCADE, related_name='+', to='jacc.AccountEntrySourceFile', verbose_name='account entry source file'),
+            model_name="accountentry",
+            name="source_file",
+            field=models.ForeignKey(
+                blank=True,
+                default=None,
+                help_text="Source for account entry, e.g. received payment (if any)",
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="+",
+                to="jacc.AccountEntrySourceFile",
+                verbose_name="account entry source file",
+            ),
         ),
     ]

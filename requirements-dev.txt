@@ -12,4 +12,6 @@ django-stubs
 twine
 django-extensions
 python-dotenv
+pre-commit
+black
 

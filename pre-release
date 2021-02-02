@@ -29,7 +29,7 @@ echo "Prospector cleared build (`dt -q -d`), proceeding..."
 
 # mypy
 dt -q
-mypy .
+mypy jacc
 if [ "$?" != "0" ]; then
     echo "Mypy reported problems, terminating release"
     exit 1

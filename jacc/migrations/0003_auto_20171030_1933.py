@@ -9,13 +9,13 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0002_auto_20171020_1331'),
+        ("jacc", "0002_auto_20171020_1331"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='accountentry',
-            old_name='source',
-            new_name='source_file',
+            model_name="accountentry",
+            old_name="source",
+            new_name="source_file",
         ),
     ]

@@ -8,13 +8,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0006_account_name'),
+        ("jacc", "0006_account_name"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='invoice',
-            name='number',
-            field=models.IntegerField(blank=True, db_index=True, default=None, null=True, verbose_name='invoice number'),
+            model_name="invoice",
+            name="number",
+            field=models.IntegerField(
+                blank=True, db_index=True, default=None, null=True, verbose_name="invoice number"
+            ),
         ),
     ]

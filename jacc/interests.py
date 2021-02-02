@@ -6,8 +6,12 @@ from django.utils.timezone import now
 from jacc.models import AccountEntry
 
 
-def calculate_simple_interest(entries, rate_pct: Decimal,  # pylint: disable=too-many-locals
-                              interest_date: Optional[date] = None, begin: Optional[date] = None) -> Decimal:
+def calculate_simple_interest(  # pylint: disable=too-many-locals
+    entries,
+    rate_pct: Decimal,
+    interest_date: Optional[date] = None,
+    begin: Optional[date] = None,
+) -> Decimal:
     """
     Calculates simple interest of specified entries over time.
     Does not accumulate interest to interest.
@@ -23,23 +27,23 @@ def calculate_simple_interest(entries, rate_pct: Decimal,  # pylint: disable=too
     bal = None
     cur_date = None
     daily_rate = rate_pct / Decimal(36500)
-    accum_interest = Decimal('0.00')
+    accum_interest = Decimal("0.00")
     done = False
 
     entries_list = list(entries)
     nentries = len(entries_list)
     if nentries > 0:
         # make sure we calculate interest over whole range until interest_date
-        last = entries_list[nentries-1]
+        last = entries_list[nentries - 1]
         assert isinstance(last, AccountEntry)
         if last.timestamp.date() < interest_date:
             timestamp = pytz.utc.localize(datetime.combine(interest_date, time(0, 0)))
-            e = AccountEntry(timestamp=timestamp, amount=Decimal('0.00'), type=last.type)
+            e = AccountEntry(timestamp=timestamp, amount=Decimal("0.00"), type=last.type)
             entries_list.append(e)
 
         # initial values from the first account entry
         e = entries_list[0]
-        bal = e.amount or Decimal('0.00')
+        bal = e.amount or Decimal("0.00")
         cur_date = e.timestamp.date()
         if begin and begin > cur_date:
             cur_date = begin

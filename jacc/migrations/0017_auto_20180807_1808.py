@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('jacc', '0016_auto_20180505_1604'),
+        ("jacc", "0016_auto_20180505_1604"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='accountentry',
-            name='archived',
-            field=models.BooleanField(blank=True, default=False, verbose_name='archived'),
+            model_name="accountentry",
+            name="archived",
+            field=models.BooleanField(blank=True, default=False, verbose_name="archived"),
         ),
         migrations.AlterField(
-            model_name='entrytype',
-            name='is_payment',
-            field=models.BooleanField(blank=True, db_index=True, default=False, verbose_name='is payment'),
+            model_name="entrytype",
+            name="is_payment",
+            field=models.BooleanField(blank=True, db_index=True, default=False, verbose_name="is payment"),
         ),
         migrations.AlterField(
-            model_name='entrytype',
-            name='is_settlement',
-            field=models.BooleanField(blank=True, db_index=True, default=False, verbose_name='is settlement'),
+            model_name="entrytype",
+            name="is_settlement",
+            field=models.BooleanField(blank=True, db_index=True, default=False, verbose_name="is settlement"),
         ),
     ]
