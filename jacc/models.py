@@ -145,7 +145,7 @@ class AccountEntry(models.Model):
         blank=True,
         on_delete=models.CASCADE,
         help_text=_("entry.source.file.help.text"),
-    )  # nopep8, pylint: disable=line-too-long
+    )
     source_invoice = models.ForeignKey(
         "Invoice",
         verbose_name=_("source invoice"),
@@ -155,7 +155,7 @@ class AccountEntry(models.Model):
         blank=True,
         on_delete=models.CASCADE,
         help_text=_("entry.source.invoice.help.text"),
-    )  # nopep8, pylint: disable=line-too-long
+    )
     settled_invoice = models.ForeignKey(
         "Invoice",
         verbose_name=_("settled invoice"),
@@ -165,7 +165,7 @@ class AccountEntry(models.Model):
         blank=True,
         on_delete=models.PROTECT,
         help_text=_("entry.settled.invoice.help.text"),
-    )  # nopep8, pylint: disable=line-too-long
+    )
     settled_item = models.ForeignKey(
         "AccountEntry",
         verbose_name=_("settled item"),
@@ -175,7 +175,7 @@ class AccountEntry(models.Model):
         blank=True,
         on_delete=models.PROTECT,
         help_text=_("entry.settled.item.help.text"),
-    )  # nopep8, pylint: disable=line-too-long
+    )
     parent = models.ForeignKey(
         "AccountEntry",
         verbose_name=_("account.entry.parent"),
@@ -185,7 +185,7 @@ class AccountEntry(models.Model):
         null=True,
         default=None,
         blank=True,
-    )  # nopep8, pylint: disable=line-too-long
+    )
     archived = models.BooleanField(_("archived"), default=False, blank=True)
 
     class Meta:
@@ -361,7 +361,7 @@ class Invoice(models.Model, CachedFieldsMixin):
         null=True,
         default=None,
         db_index=True,
-    )  # nopep8, pylint: disable=line-too-long
+    )
     unpaid_amount = models.DecimalField(
         verbose_name=_("unpaid amount"),
         max_digits=10,
@@ -371,7 +371,7 @@ class Invoice(models.Model, CachedFieldsMixin):
         null=True,
         default=None,
         db_index=True,
-    )  # nopep8, pylint: disable=line-too-long
+    )
     overpaid_amount = models.DecimalField(
         verbose_name=_("overpaid amount"),
         max_digits=10,
@@ -381,7 +381,7 @@ class Invoice(models.Model, CachedFieldsMixin):
         null=True,
         default=None,
         db_index=True,
-    )  # nopep8, pylint: disable=line-too-long
+    )
     close_date = models.DateTimeField(verbose_name=_("close date"), default=None, null=True, blank=True, db_index=True)
     late_days = models.SmallIntegerField(
         verbose_name=_("late days"), default=None, null=True, blank=True, db_index=True
