@@ -234,6 +234,27 @@ class AccountEntryAdminForm(forms.ModelForm):
         return super().clean()
 
 
+class AccountEntryNoteInline(admin.TabularInline):
+    model = AccountEntryNote
+    fk_name = "account_entry"
+    verbose_name = _("account entry note")
+    verbose_name_plural = _("account entry notes")
+    extra = 1
+    can_delete = True
+    fields = [
+        "created",
+        "note",
+        "created_by",
+    ]
+    readonly_fields = [
+        "created",
+        "created_by",
+    ]
+    formfield_overrides = {
+        models.TextField: {"widget": widgets.Textarea(attrs={"rows": 3, "cols": 120})},
+    }
+
+
 class AccountEntryAdmin(ModelAdminBase):
     form = AccountEntryAdminForm
     date_hierarchy = "timestamp"
@@ -304,6 +325,9 @@ class AccountEntryAdmin(ModelAdminBase):
         EntryTypeAccountEntryFilter,
         AccountTypeAccountEntryFilter,
         "archived",
+    ]
+    inlines = [
+        AccountEntryNoteInline,
     ]
     account_admin_change_view_name = "admin:jacc_account_change"
     invoice_admin_change_view_name = "admin:jacc_invoice_change"
@@ -396,6 +420,12 @@ class AccountEntryAdmin(ModelAdminBase):
         if rm.url_name == "jacc_accountentry_sourcefile_changelist" and pk:
             return qs.filter(source_file=pk)
         return qs
+
+    def save_formset(self, request, form, formset, change):
+        if formset.model == AccountEntryNote:
+            AccountEntryNoteAdmin.save_account_entry_note_formset(request, form, formset, change)
+        else:
+            formset.save()
 
 
 class AccountAdmin(ModelAdminBase):
@@ -947,27 +977,6 @@ class AccountEntrySourceFileAdmin(ModelAdminBase):
     entries_link.short_description = _("account entry source file")  # type: ignore
 
 
-class AccountEntryNoteInline(admin.TabularInline):
-    model = AccountEntryNote
-    fk_name = "account_entry"
-    verbose_name = _("account entry note")
-    verbose_name_plural = _("account entry notes")
-    extra = 1
-    can_delete = True
-    fields = [
-        "created",
-        "note",
-        "created_by",
-    ]
-    readonly_fields = [
-        "created",
-        "created_by",
-    ]
-    formfield_overrides = {
-        models.TextField: {"widget": widgets.Textarea(attrs={"rows": 3, "cols": 120})},
-    }
-
-
 class AccountEntryNoteAdmin(ModelAdminBase):
     date_hierarchy = "created"
     fields = [
@@ -1017,6 +1026,14 @@ class AccountEntryNoteAdmin(ModelAdminBase):
         if not change:
             obj.created_by = request.user
         else:
+            self.save_account_entry_note(request, obj)
+        return form.save(commit=False)
+
+    @staticmethod
+    def save_account_entry_note(request, obj: AccountEntryNote):
+        if not hasattr(obj, "created_by") or obj.created_by is None:
+            obj.created_by = request.user
+        else:
             old = AccountEntryNote.objects.all().filter(id=obj.id).first()
             if old is not None:
                 assert isinstance(old, AccountEntryNote)
@@ -1027,8 +1044,16 @@ class AccountEntryNoteAdmin(ModelAdminBase):
                         "Note id={} modified, previously: {}".format(old.id, old.note),
                         who=request.user,
                     )
+        obj.save()
 
-        return form.save(commit=False)
+    @staticmethod
+    def save_account_entry_note_formset(request, form, formset, change):  # noqa
+        assert formset.model == AccountEntryNote
+        if formset.model == AccountEntryNote:
+            instances = formset.save(commit=False)
+            for instance in instances:
+                assert isinstance(instance, AccountEntryNote)
+                AccountEntryNoteAdmin.save_account_entry_note(request, instance)
 
 
 add_reverse_charge.short_description = _("Add reverse charge")  # type: ignore
