@@ -9,19 +9,19 @@ def parse_requirements(filename, session=False):
     return [line for line in lineiter if line and not line.startswith("#")]
 
 
-install_requires = parse_requirements('requirements.txt', session=False)
+install_requires = parse_requirements("requirements.txt", session=False)
 
 setup(
-    name='django-jacc',
-    version='3.7.1',
-    author=u'Jani Kajala',
-    author_email='kajala@gmail.com',
-    packages=find_packages(exclude=['project', 'venv']),
+    name="django-jacc",
+    version="3.7.3",
+    author=u"Jani Kajala",
+    author_email="kajala@gmail.com",
+    packages=find_packages(exclude=["project", "venv"]),
     include_package_data=True,
-    url='https://github.com/kajala/django-jacc',
-    license='MIT licence, see LICENCE.txt',
-    description='Simple double entry accounting system (debits/credits) for Django projects.',
-    long_description=open('README.md').read(),
+    url="https://github.com/kajala/django-jacc",
+    license="MIT licence, see LICENCE.txt",
+    description="Simple double entry accounting system (debits/credits) for Django projects.",
+    long_description=open("README.md").read(),
     zip_safe=False,
-    install_requires=install_requires
+    install_requires=install_requires,
 )
