@@ -12,13 +12,9 @@ Credit means "right", gains/income/revenues/liabilities/equity increased with cr
 from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Optional, Type
-
 from math import floor
-
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.forms import widgets
-
 from jacc.helpers import sum_queryset
 from django.conf import settings
 from django.db import models, transaction
