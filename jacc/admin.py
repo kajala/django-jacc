@@ -7,8 +7,10 @@ from typing import Optional, List, Sequence, Any, Dict
 from django.contrib import messages
 from django.contrib.admin import SimpleListFilter
 from django.contrib.messages import add_message, INFO
+from django.db import models
 from django.db.models.functions import Coalesce
 from django import forms
+from django.forms import widgets
 from django.shortcuts import render
 from django.urls import reverse, ResolverMatch
 from django.utils.formats import date_format
@@ -18,7 +20,16 @@ from django.utils.text import format_lazy
 from django.utils.timezone import now
 
 from jacc.forms import ReverseChargeForm
-from jacc.models import Account, AccountEntry, Invoice, AccountType, EntryType, AccountEntrySourceFile, INVOICE_STATE
+from jacc.models import (
+    Account,
+    AccountEntry,
+    Invoice,
+    AccountType,
+    EntryType,
+    AccountEntrySourceFile,
+    INVOICE_STATE,
+    AccountEntryNote,
+)
 from django.conf import settings
 from django.conf.urls import url
 from django.contrib import admin
@@ -936,6 +947,90 @@ class AccountEntrySourceFileAdmin(ModelAdminBase):
     entries_link.short_description = _("account entry source file")  # type: ignore
 
 
+class AccountEntryNoteInline(admin.TabularInline):
+    model = AccountEntryNote
+    fk_name = "account_entry"
+    verbose_name = _("account entry note")
+    verbose_name_plural = _("account entry notes")
+    extra = 1
+    can_delete = True
+    fields = [
+        "created",
+        "note",
+        "created_by",
+    ]
+    readonly_fields = [
+        "created",
+        "created_by",
+    ]
+    formfield_overrides = {
+        models.TextField: {"widget": widgets.Textarea(attrs={"rows": 3, "cols": 120})},
+    }
+
+
+class AccountEntryNoteAdmin(ModelAdminBase):
+    date_hierarchy = "created"
+    fields = [
+        "id",
+        "account_entry",
+        "created",
+        "created_by",
+        "last_modified",
+        "note",
+    ]
+    raw_id_fields = [
+        "account_entry",
+        "created_by",
+    ]
+    readonly_fields = [
+        "id",
+        "created",
+        "created_by",
+        "last_modified",
+    ]
+    write_once_fields = [
+        "account_entry",
+    ]
+    search_fields = [
+        "note",
+    ]
+    list_display = [
+        "created",
+        "account_entry",
+        "note",
+        "created_by",
+    ]
+    list_filter = [
+        "created_by",
+    ]
+    formfield_overrides = {
+        models.TextField: {"widget": widgets.Textarea(attrs={"rows": 3, "cols": 120})},
+    }
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj is not None and hasattr(obj, "id") and obj.id:
+            return list(self.readonly_fields) + list(self.write_once_fields)
+        return self.readonly_fields
+
+    def save_form(self, request, form, change):
+        obj = form.instance
+        if not change:
+            obj.created_by = request.user
+        else:
+            old = AccountEntryNote.objects.all().filter(id=obj.id).first()
+            if old is not None:
+                assert isinstance(old, AccountEntryNote)
+                if old.note != obj.note:
+                    obj.created_by = request.user
+                    admin_log(
+                        [obj, obj.account_entry],
+                        "Note id={} modified, previously: {}".format(old.id, old.note),
+                        who=request.user,
+                    )
+
+        return form.save(commit=False)
+
+
 add_reverse_charge.short_description = _("Add reverse charge")  # type: ignore
 resend_invoices.short_description = _("Re-send invoices")  # type: ignore
 refresh_cached_fields.short_description = _("Refresh cached fields")  # type: ignore
@@ -944,6 +1039,7 @@ summarize_invoice_statistics.short_description = _("Summarize invoice statistics
 set_as_asset.short_description = _("set_as_asset")  # type: ignore
 set_as_liability.short_description = _("set_as_liability")  # type: ignore
 
+admin.site.register(AccountEntryNote, AccountEntryNoteAdmin)
 admin.site.register(Account, AccountAdmin)
 admin.site.register(Invoice, InvoiceAdmin)  # TODO: override in app
 admin.site.register(AccountEntry, AccountEntryAdmin)  # TODO: override in app

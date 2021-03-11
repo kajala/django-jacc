@@ -14,7 +14,11 @@ from decimal import Decimal
 from typing import Optional, Type
 
 from math import floor
+
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.forms import widgets
+
 from jacc.helpers import sum_queryset
 from django.conf import settings
 from django.db import models, transaction
@@ -101,6 +105,27 @@ class EntryType(models.Model):
 
     def __str__(self):
         return "{} ({})".format(self.name, self.code)
+
+
+class AccountEntryNote(models.Model):
+    account_entry = models.ForeignKey(
+        "AccountEntry", verbose_name=_("account entry"), related_name="note_set", on_delete=models.CASCADE
+    )
+    created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
+    created_by = models.ForeignKey(
+        User,
+        verbose_name=_("created by"),
+        editable=False,
+        blank=True,
+        related_name="accountentrynote_set",
+        on_delete=models.CASCADE,
+    )
+    last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, editable=False, blank=True)
+    note = models.TextField(_("note"))
+
+    class Meta:
+        verbose_name = _("account entry note")
+        verbose_name_plural = _("account entry notes")
 
 
 class AccountEntryManager(models.Manager):
