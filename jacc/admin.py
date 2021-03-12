@@ -251,7 +251,7 @@ class AccountEntryNoteInline(admin.TabularInline):
         "created_by",
     ]
     formfield_overrides = {
-        models.TextField: {"widget": widgets.Textarea(attrs={"rows": 3, "cols": 120})},
+        models.TextField: {"widget": widgets.Textarea(attrs={"rows": 3, "cols": 85})},
     }
 
 
@@ -1012,9 +1012,6 @@ class AccountEntryNoteAdmin(ModelAdminBase):
     list_filter = [
         "created_by",
     ]
-    formfield_overrides = {
-        models.TextField: {"widget": widgets.Textarea(attrs={"rows": 3, "cols": 120})},
-    }
 
     def get_readonly_fields(self, request, obj=None):
         if obj is not None and hasattr(obj, "id") and obj.id:
