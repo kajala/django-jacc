@@ -100,8 +100,12 @@ def summarize_account_entries(modeladmin, request, qs):  # pylint: disable=unuse
         assert isinstance(e_type, EntryType)
 
         qs2 = qs.filter(type=e_type)
-        res_debit = qs2.filter(amount__gt=0).aggregate(total=Coalesce(Sum("amount"), 0), count=Count("amount"))
-        res_credit = qs2.filter(amount__lt=0).aggregate(total=Coalesce(Sum("amount"), 0), count=Count("amount"))
+        res_debit = qs2.filter(amount__gt=0).aggregate(
+            total=Coalesce(Sum("amount"), Decimal("0.00")), count=Count("amount")
+        )
+        res_credit = qs2.filter(amount__lt=0).aggregate(
+            total=Coalesce(Sum("amount"), Decimal("0.00")), count=Count("amount")
+        )
         lines.append("{type_name} (debit) | x{count} | {total:.2f}".format(type_name=e_type.name, **res_debit))
         lines.append("{type_name} (credit) | x{count} | {total:.2f}".format(type_name=e_type.name, **res_credit))
         total_debits += res_debit["total"]
@@ -701,7 +705,7 @@ def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet)
         state_name = choices_label(INVOICE_STATE, state)
         qs2 = qs.filter(state=state)
 
-        invoiced = qs2.filter(state=state).aggregate(amount=Coalesce(Sum("amount"), 0), count=Count("*"))
+        invoiced = qs2.filter(state=state).aggregate(amount=Coalesce(Sum("amount"), Decimal("0.00")), count=Count("*"))
         invoiced_amount = Decimal(invoiced["amount"])
         invoiced_count = int(invoiced["count"])
         invoiced_total_amount += invoiced_amount
