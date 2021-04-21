@@ -122,19 +122,25 @@ def summarize_account_entries(modeladmin, request, qs):  # pylint: disable=unuse
 
 class SettlementAccountEntryFilter(SimpleListFilter):
     title = _("settlement")
-    parameter_name = "is_settlement"
+    parameter_name = "settlement"
 
     def lookups(self, request, model_admin):
         return [
-            ("1", _("settlement")),
+            ("S", _("settlement")),
+            ("P", _("payment")),
+            ("N", _("non-payment settlement")),
             ("0", _("not settlement")),
         ]
 
     def queryset(self, request, queryset):
         val = self.value()
         if val:
-            if val == "1":
+            if val == "S":
                 queryset = queryset.filter(parent=None, type__is_settlement=True)
+            if val == "P":
+                queryset = queryset.filter(parent=None, type__is_settlement=True, type__is_payment=True)
+            if val == "N":
+                queryset = queryset.filter(parent=None, type__is_settlement=True, type__is_payment=False)
             elif val == "0":
                 queryset = queryset.exclude(type__is_settlement=True)
         return queryset
