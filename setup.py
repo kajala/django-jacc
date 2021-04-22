@@ -13,7 +13,7 @@ install_requires = parse_requirements("requirements.txt", session=False)
 
 setup(
     name="django-jacc",
-    version="3.8.0",
+    version="3.8.1",
     author=u"Jani Kajala",
     author_email="kajala@gmail.com",
     packages=find_packages(exclude=["project", "venv"]),
