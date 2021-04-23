@@ -351,7 +351,7 @@ class Account(models.Model):
             assert isinstance(e, AccountEntry)
             if e.amount is not None:
                 bal += e.amount
-            if e.cached_balance != bal:
+            if e.cached_balance is None or e.cached_balance != bal:
                 e.cached_balance = bal
                 e.save(update_fields=["cached_balance"])
 
