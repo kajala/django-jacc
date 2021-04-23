@@ -309,7 +309,11 @@ class Account(models.Model):
 
     @property
     def balance(self) -> Decimal:
-        return sum_queryset(self.accountentry_set.all())
+        e = self.accountentry_set.all().order_by("-timestamp", "-id").first()
+        if e is None:
+            return Decimal("0.00")
+        assert isinstance(e, AccountEntry)
+        return e.balance
 
     balance.fget.short_description = _("balance")  # type: ignore  # pytype: disable=attribute-error
 
@@ -347,8 +351,9 @@ class Account(models.Model):
             assert isinstance(e, AccountEntry)
             if e.amount is not None:
                 bal += e.amount
-            e.cached_balance = bal
-            e.save(update_fields=["cached_balance"])
+            if e.cached_balance != bal:
+                e.cached_balance = bal
+                e.save(update_fields=["cached_balance"])
 
 
 class InvoiceManager(models.Manager):

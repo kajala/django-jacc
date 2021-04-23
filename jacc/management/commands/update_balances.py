@@ -9,23 +9,14 @@ class Command(SafeCommand):
     def add_arguments(self, parser: CommandParser):
         parser.add_argument("--account-id", type=str)
         parser.add_argument("--account-type-code", type=str)
-        parser.add_argument("--calculate", action="store_true")
 
     def do(self, *args, **options):
-        qs = AccountEntry.objects.all()
+        acc_qs = Account.objects.all()
         if options["account_type_code"]:
-            qs = qs.filter(account__type__code=options["account_type_code"])
+            acc_qs = acc_qs.filter(type__code=options["account_type_code"])
         if options["account_id"]:
-            qs = qs.filter(account_id=options["account_id"])
-        qs.update(cached_balance=None)
+            acc_qs = acc_qs.filter(id=options["account_id"])
 
-        if options["calculate"]:
-            acc_qs = Account.objects.all()
-            if options["account_type_code"]:
-                acc_qs = qs.filter(type__code=options["account_type_code"])
-            if options["account_id"]:
-                acc_qs = qs.filter(id=options["account_id"])
-
-            for acc in acc_qs:
-                assert isinstance(acc, Account)
-                acc.calculate_balances()
+        for acc in acc_qs:
+            assert isinstance(acc, Account)
+            acc.calculate_balances()
