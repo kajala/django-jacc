@@ -8,11 +8,11 @@ class Command(SafeCommand):
     help = "Invoice balance"
 
     def add_arguments(self, parser: CommandParser):
-        parser.add_argument("invoice", type=int)
+        parser.add_argument("invoice_id", type=int)
         parser.add_argument("--tx", action="store_true")
 
     def do(self, *args, **options):
-        inv = Invoice.objects.get(id=options["invoice"])
+        inv = Invoice.objects.get(id=options["invoice_id"])
         assert isinstance(inv, Invoice)
         inv.update_cached_fields()
 
