@@ -286,6 +286,7 @@ class Account(models.Model):
     last_modified = models.DateTimeField(
         verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True
     )
+    notes = models.TextField(_("notes"), blank=True, default="")
 
     class Meta:
         verbose_name = _("account")

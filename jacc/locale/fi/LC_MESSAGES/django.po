@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-21 23:04+0000\n"
+"POT-Creation-Date: 2021-04-23 13:46+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,7 +49,7 @@ msgstr "ei tilitys"
 msgid "account entry type"
 msgstr "tilitapahtuman tyyppi"
 
-#: jacc/admin.py:167 jacc/models.py:257
+#: jacc/admin.py:167 jacc/models.py:264
 msgid "account type"
 msgstr "tilityyppi"
 
@@ -58,8 +58,8 @@ msgid "Exactly one account entry must be selected"
 msgstr "Yksi tilitapahtuma pitää olla valittuna"
 
 #: jacc/admin.py:226 jacc/admin.py:839 jacc/models.py:71 jacc/models.py:88
-#: jacc/models.py:110 jacc/models.py:144 jacc/models.py:251 jacc/models.py:278
-#: jacc/models.py:367 jacc/models.py:597
+#: jacc/models.py:110 jacc/models.py:144 jacc/models.py:258 jacc/models.py:285
+#: jacc/models.py:384 jacc/models.py:614
 msgid "created"
 msgstr "luotu"
 
@@ -75,23 +75,23 @@ msgstr "tilitapahtuman muistiinpano"
 msgid "account entry notes"
 msgstr "tilitapahtuman muistiinpanot"
 
-#: jacc/admin.py:358 jacc/admin.py:987 jacc/models.py:77 jacc/models.py:162
+#: jacc/admin.py:358 jacc/admin.py:987 jacc/models.py:77 jacc/models.py:165
 msgid "account entry source file"
 msgstr "tilitapahtumien lähdetiedosto"
 
-#: jacc/admin.py:365 jacc/admin.py:654 jacc/models.py:284
+#: jacc/admin.py:365 jacc/admin.py:654 jacc/models.py:292
 msgid "account"
 msgstr "tili"
 
-#: jacc/admin.py:374 jacc/models.py:172
+#: jacc/admin.py:374 jacc/models.py:175
 msgid "source invoice"
 msgstr "lähdelasku"
 
-#: jacc/admin.py:383 jacc/models.py:182
+#: jacc/admin.py:383 jacc/models.py:185
 msgid "settled invoice"
 msgstr "kohdelasku"
 
-#: jacc/admin.py:392 jacc/models.py:192
+#: jacc/admin.py:392 jacc/models.py:195
 msgid "settled item"
 msgstr "kohdistus"
 
@@ -115,7 +115,7 @@ msgstr ""
 msgid "settlements"
 msgstr "tilitykset"
 
-#: jacc/admin.py:674 jacc/models.py:408
+#: jacc/admin.py:674 jacc/models.py:425
 msgid "late days"
 msgstr "myöhässä"
 
@@ -140,20 +140,20 @@ msgstr "({total_count} laskua)"
 msgid "Total"
 msgstr "Yhteensä"
 
-#: jacc/admin.py:729 jacc/forms.py:8 jacc/models.py:158 jacc/models.py:375
+#: jacc/admin.py:729 jacc/forms.py:8 jacc/models.py:158 jacc/models.py:392
 #: jacc/templates/admin/jacc/accountentry/reverse_entry.html:10
 msgid "amount"
 msgstr "summa"
 
-#: jacc/admin.py:846 jacc/models.py:371
+#: jacc/admin.py:846 jacc/models.py:388
 msgid "sent"
 msgstr "lähetetty"
 
-#: jacc/admin.py:853 jacc/models.py:372
+#: jacc/admin.py:853 jacc/models.py:389
 msgid "due date"
 msgstr "eräpäivä"
 
-#: jacc/admin.py:860 jacc/models.py:406
+#: jacc/admin.py:860 jacc/models.py:423
 msgid "close date"
 msgstr "valmistunut"
 
@@ -239,13 +239,13 @@ msgstr "Lasku"
 msgid "Credit Note"
 msgstr "Hyvityslasku"
 
-#: jacc/models.py:70 jacc/models.py:87 jacc/models.py:249 jacc/models.py:276
-#: jacc/models.py:601
+#: jacc/models.py:70 jacc/models.py:87 jacc/models.py:256 jacc/models.py:283
+#: jacc/models.py:618
 msgid "name"
 msgstr "nimi"
 
 #: jacc/models.py:73 jacc/models.py:90 jacc/models.py:119 jacc/models.py:145
-#: jacc/models.py:253 jacc/models.py:280 jacc/models.py:369 jacc/models.py:599
+#: jacc/models.py:260 jacc/models.py:287 jacc/models.py:386 jacc/models.py:616
 msgid "last modified"
 msgstr "muutettu"
 
@@ -253,7 +253,7 @@ msgstr "muutettu"
 msgid "account entry source files"
 msgstr "tilitapahtumien lähdetiedostot"
 
-#: jacc/models.py:85 jacc/models.py:248
+#: jacc/models.py:85 jacc/models.py:255
 msgid "code"
 msgstr "koodi"
 
@@ -281,7 +281,7 @@ msgstr "tapahtuman tyyppi"
 msgid "entry types"
 msgstr "tapahtuman tyypit"
 
-#: jacc/models.py:108 jacc/models.py:213
+#: jacc/models.py:108 jacc/models.py:216
 msgid "account entry"
 msgstr "tilitapahtuma"
 
@@ -297,111 +297,111 @@ msgstr "muistiinpano"
 msgid "record account"
 msgstr "kirjaustili"
 
-#: jacc/models.py:149 jacc/models.py:275 jacc/models.py:364
+#: jacc/models.py:149 jacc/models.py:282 jacc/models.py:381
 msgid "type"
 msgstr "tyyppi"
 
-#: jacc/models.py:168
-msgid "entry.source.file.help.text"
-msgstr "esim. tilitystiedosto"
-
-#: jacc/models.py:178
-msgid "entry.source.invoice.help.text"
-msgstr "esim. lasku jonka rivi tämä kirjaus on"
-
-#: jacc/models.py:188
-msgid "entry.settled.invoice.help.text"
-msgstr "esim. lasku johon kirjaus kohdistettu"
-
-#: jacc/models.py:198
-msgid "entry.settled.item.help.text"
-msgstr "esim. laskun rivi johon kirjaus kohdistettu"
-
-#: jacc/models.py:202
-msgid "account.entry.parent"
-msgstr "johdettu"
-
-#: jacc/models.py:210
-msgid "archived"
-msgstr "arkistoitu"
-
-#: jacc/models.py:214
-msgid "account entries"
-msgstr "tilitapahtumat"
-
-#: jacc/models.py:244 jacc/models.py:306
+#: jacc/models.py:161 jacc/models.py:251 jacc/models.py:314
 msgid "balance"
 msgstr "saldo"
 
-#: jacc/models.py:250 jacc/models.py:294
+#: jacc/models.py:171
+msgid "entry.source.file.help.text"
+msgstr "esim. tilitystiedosto"
+
+#: jacc/models.py:181
+msgid "entry.source.invoice.help.text"
+msgstr "esim. lasku jonka rivi tämä kirjaus on"
+
+#: jacc/models.py:191
+msgid "entry.settled.invoice.help.text"
+msgstr "esim. lasku johon kirjaus kohdistettu"
+
+#: jacc/models.py:201
+msgid "entry.settled.item.help.text"
+msgstr "esim. laskun rivi johon kirjaus kohdistettu"
+
+#: jacc/models.py:205
+msgid "account.entry.parent"
+msgstr "johdettu"
+
+#: jacc/models.py:213
+msgid "archived"
+msgstr "arkistoitu"
+
+#: jacc/models.py:217
+msgid "account entries"
+msgstr "tilitapahtumat"
+
+#: jacc/models.py:257 jacc/models.py:302
 msgid "asset"
 msgstr "vastaavaa"
 
-#: jacc/models.py:258
+#: jacc/models.py:265
 msgid "account types"
 msgstr "tilityypit"
 
-#: jacc/models.py:267 jacc/models.py:300
+#: jacc/models.py:274 jacc/models.py:308
 msgid "liability"
 msgstr "vastattavaa"
 
-#: jacc/models.py:277
+#: jacc/models.py:284
 msgid "currency"
 msgstr "valuutta"
 
-#: jacc/models.py:285
-msgid "accounts"
-msgstr "tilit"
-
-#: jacc/models.py:366
-msgid "invoice number"
-msgstr "laskun numero"
-
-#: jacc/models.py:373
+#: jacc/models.py:289 jacc/models.py:390
 msgid "notes"
 msgstr "muistiinpanot"
 
-#: jacc/models.py:374
+#: jacc/models.py:293
+msgid "accounts"
+msgstr "tilit"
+
+#: jacc/models.py:383
+msgid "invoice number"
+msgstr "laskun numero"
+
+#: jacc/models.py:391
 msgid "filename"
 msgstr "tiedosto"
 
-#: jacc/models.py:377
+#: jacc/models.py:394
 msgid "paid amount"
 msgstr "maksettu"
 
-#: jacc/models.py:387
+#: jacc/models.py:404
 msgid "unpaid amount"
 msgstr "maksamatta"
 
-#: jacc/models.py:397
+#: jacc/models.py:414
 msgid "overpaid amount"
 msgstr "ylimaksettu"
 
-#: jacc/models.py:411 jacc/models.py:589
+#: jacc/models.py:428 jacc/models.py:606
 msgid "state"
 msgstr "tila"
 
-#: jacc/models.py:424
+#: jacc/models.py:441
 msgid "invoice"
 msgstr "lasku"
 
-#: jacc/models.py:425
+#: jacc/models.py:442
 msgid "invoices"
 msgstr "laskut"
 
-#: jacc/models.py:538
+#: jacc/models.py:555
 msgid "is paid"
 msgstr "maksettu"
 
-#: jacc/models.py:544
+#: jacc/models.py:561
 msgid "is due"
 msgstr "erääntynyt"
 
-#: jacc/models.py:604
+#: jacc/models.py:621
 msgid "contract"
 msgstr "sopimus"
 
-#: jacc/models.py:605
+#: jacc/models.py:622
 msgid "contracts"
 msgstr "sopimukset"
 

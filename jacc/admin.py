@@ -301,8 +301,9 @@ class AccountEntryAdmin(ModelAdminBase):
         "-id",
     ]
     search_fields: Sequence[str] = [
-        "description",
+        "=id",
         "=amount",
+        "description",
     ]
     fields: Sequence[str] = [
         "id",
@@ -453,21 +454,24 @@ class AccountAdmin(ModelAdminBase):
         "name",
         "balance",
         "currency",
+        "notes",
     ]
     readonly_fields: Sequence[str] = [
         "id",
         "balance",
         "is_asset",
     ]
-    raw_id_fields: Sequence[str] = [
-        "type",
-    ]
+    raw_id_fields: Sequence[str] = []
     ordering: Sequence[str] = [
         "-id",
     ]
     list_filter: Sequence[Any] = [
         "type",
         "type__is_asset",
+    ]
+    search_fields: Sequence[str] = [
+        "=id",
+        "name",
     ]
     allow_add = True
     allow_delete = True
@@ -933,7 +937,7 @@ class EntryTypeAdmin(ModelAdminBase):
     )
     search_fields: Sequence[str] = (
         "name",
-        "code",
+        "=code",
     )
     actions = [
         toggle_settlement,
