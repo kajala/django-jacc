@@ -14,8 +14,10 @@ class Command(SafeCommand):
     def add_arguments(self, parser: CommandParser):
         parser.add_argument("--account-id", type=str)
         parser.add_argument("--account-type-code", type=str)
+        parser.add_argument("--verbose", action="store_true")
 
     def do(self, *args, **options):
+        verbose = options["verbose"]
         time_begin = now()
         acc_qs = Account.objects.all()
         if options["account_type_code"]:
@@ -23,7 +25,15 @@ class Command(SafeCommand):
         if options["account_id"]:
             acc_qs = acc_qs.filter(id=options["account_id"])
 
-        for acc in acc_qs:
+        if verbose:
+            logger.debug("Calculating balances of %s accounts", acc_qs.count())
+        t1 = time_begin
+        for acc in acc_qs.order_by("id"):
             assert isinstance(acc, Account)
+            if verbose:
+                logger.debug("Account %s calculate_balances() BEGIN", acc)
+                t1 = now()
             acc.calculate_balances()
-        logger.info("update_balances completed in %s", now() - time_begin)
+            if verbose:
+                logger.debug("Account %s calculate_balances() END %s", acc, now() - t1)
+        logger.info("update_balances DONE %s", now() - time_begin)
