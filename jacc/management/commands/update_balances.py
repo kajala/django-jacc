@@ -1,6 +1,11 @@
+import logging
+
 from django.core.management.base import CommandParser
+from django.utils.timezone import now
 from jutil.command import SafeCommand
-from jacc.models import AccountEntry, Account
+from jacc.models import Account
+
+logger = logging.getLogger(__name__)
 
 
 class Command(SafeCommand):
@@ -11,6 +16,7 @@ class Command(SafeCommand):
         parser.add_argument("--account-type-code", type=str)
 
     def do(self, *args, **options):
+        time_begin = now()
         acc_qs = Account.objects.all()
         if options["account_type_code"]:
             acc_qs = acc_qs.filter(type__code=options["account_type_code"])
@@ -20,3 +26,4 @@ class Command(SafeCommand):
         for acc in acc_qs:
             assert isinstance(acc, Account)
             acc.calculate_balances()
+        logger.info("update_balances completed in %s", now() - time_begin)
