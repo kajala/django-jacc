@@ -160,9 +160,6 @@ class AccountEntry(models.Model):
     amount = models.DecimalField(
         verbose_name=_("amount"), max_digits=10, decimal_places=2, blank=True, default=None, null=True, db_index=True
     )
-    cached_balance = models.DecimalField(
-        verbose_name=_("balance"), max_digits=16, decimal_places=2, blank=True, default=None, null=True
-    )
     source_file = models.ForeignKey(
         AccountEntrySourceFile,
         verbose_name=_("account entry source file"),
@@ -242,14 +239,11 @@ class AccountEntry(models.Model):
         Entries are primarily sorted by timestamp followed by id.
         :return: Decimal
         """
-        if self.cached_balance is None:
-            self.cached_balance = sum_queryset(
-                AccountEntry.objects.filter(account=self.account, timestamp__lte=self.timestamp).exclude(
-                    timestamp=self.timestamp, id__gt=self.id
-                )
+        return sum_queryset(
+            AccountEntry.objects.filter(account=self.account, timestamp__lte=self.timestamp).exclude(
+                timestamp=self.timestamp, id__gt=self.id
             )
-            self.save(update_fields=["cached_balance"])
-        return self.cached_balance
+        )
 
     balance.fget.short_description = _("balance")  # type: ignore  # pytype: disable=attribute-error
 
@@ -347,16 +341,6 @@ class Account(models.Model):
             and e.settled_invoice
             and AccountEntry.objects.filter(parent=e).count() == 0
         )
-
-    def calculate_balances(self):
-        bal = Decimal("0.00")
-        for e in list(AccountEntry.objects.all().filter(account=self).order_by("timestamp", "id")):
-            assert isinstance(e, AccountEntry)
-            if e.amount is not None:
-                bal += e.amount
-            if e.cached_balance is None or e.cached_balance != bal:
-                e.cached_balance = bal
-                e.save(update_fields=["cached_balance"])
 
 
 class InvoiceManager(models.Manager):
