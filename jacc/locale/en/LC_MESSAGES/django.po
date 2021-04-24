@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-23 13:46+0000\n"
+"POT-Creation-Date: 2021-04-24 00:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,7 +49,7 @@ msgstr ""
 msgid "account entry type"
 msgstr ""
 
-#: jacc/admin.py:167 jacc/models.py:264
+#: jacc/admin.py:167 jacc/models.py:257
 msgid "account type"
 msgstr ""
 
@@ -57,9 +57,9 @@ msgstr ""
 msgid "Exactly one account entry must be selected"
 msgstr ""
 
-#: jacc/admin.py:226 jacc/admin.py:839 jacc/models.py:71 jacc/models.py:88
-#: jacc/models.py:110 jacc/models.py:144 jacc/models.py:258 jacc/models.py:285
-#: jacc/models.py:384 jacc/models.py:614
+#: jacc/admin.py:226 jacc/admin.py:841 jacc/models.py:71 jacc/models.py:88
+#: jacc/models.py:110 jacc/models.py:144 jacc/models.py:251 jacc/models.py:278
+#: jacc/models.py:368 jacc/models.py:598
 msgid "created"
 msgstr ""
 
@@ -79,117 +79,117 @@ msgstr "parent"
 msgid "account entry notes"
 msgstr "parent"
 
-#: jacc/admin.py:358 jacc/admin.py:987 jacc/models.py:77 jacc/models.py:165
+#: jacc/admin.py:359 jacc/admin.py:989 jacc/models.py:77 jacc/models.py:162
 msgid "account entry source file"
 msgstr ""
 
-#: jacc/admin.py:365 jacc/admin.py:654 jacc/models.py:292
+#: jacc/admin.py:366 jacc/admin.py:656 jacc/models.py:285
 msgid "account"
 msgstr ""
 
-#: jacc/admin.py:374 jacc/models.py:175
+#: jacc/admin.py:375 jacc/models.py:172
 msgid "source invoice"
 msgstr ""
 
-#: jacc/admin.py:383 jacc/models.py:185
+#: jacc/admin.py:384 jacc/models.py:182
 msgid "settled invoice"
 msgstr ""
 
-#: jacc/admin.py:392 jacc/models.py:195
+#: jacc/admin.py:393 jacc/models.py:192
 msgid "settled item"
 msgstr ""
 
-#: jacc/admin.py:502
+#: jacc/admin.py:504
 msgid "Derived account entry amount cannot be larger than original"
 msgstr ""
 
-#: jacc/admin.py:538
+#: jacc/admin.py:540
 msgid "invoice items"
 msgstr ""
 
-#: jacc/admin.py:539
+#: jacc/admin.py:541
 msgid "invoices items"
 msgstr ""
 
-#: jacc/admin.py:571 jacc/admin.py:644
+#: jacc/admin.py:573 jacc/admin.py:646
 msgid "id"
 msgstr ""
 
-#: jacc/admin.py:590 jacc/admin.py:591
+#: jacc/admin.py:592 jacc/admin.py:593
 msgid "settlements"
 msgstr ""
 
-#: jacc/admin.py:674 jacc/models.py:425
+#: jacc/admin.py:676 jacc/models.py:409
 msgid "late days"
 msgstr ""
 
-#: jacc/admin.py:681
+#: jacc/admin.py:683
 msgid "late.days.filter.not.due"
 msgstr "not due yet"
 
-#: jacc/admin.py:682 jacc/admin.py:683 jacc/admin.py:684 jacc/admin.py:685
+#: jacc/admin.py:684 jacc/admin.py:685 jacc/admin.py:686 jacc/admin.py:687
 msgid "late.days.filter.late.range"
 msgstr "late {}-{}d"
 
-#: jacc/admin.py:686
+#: jacc/admin.py:688
 msgid "late.days.filter.late.over.days"
 msgstr "late over {}d"
 
-#: jacc/admin.py:708
+#: jacc/admin.py:710
 #, python-brace-format
 msgid "({total_count} invoices)"
 msgstr ""
 
-#: jacc/admin.py:727
+#: jacc/admin.py:729
 msgid "Total"
 msgstr ""
 
-#: jacc/admin.py:729 jacc/forms.py:8 jacc/models.py:158 jacc/models.py:392
+#: jacc/admin.py:731 jacc/forms.py:8 jacc/models.py:158 jacc/models.py:376
 #: jacc/templates/admin/jacc/accountentry/reverse_entry.html:10
 msgid "amount"
 msgstr ""
 
-#: jacc/admin.py:846 jacc/models.py:388
+#: jacc/admin.py:848 jacc/models.py:372
 msgid "sent"
 msgstr ""
 
-#: jacc/admin.py:853 jacc/models.py:389
+#: jacc/admin.py:855 jacc/models.py:373
 msgid "due date"
 msgstr ""
 
-#: jacc/admin.py:860 jacc/models.py:423
+#: jacc/admin.py:862 jacc/models.py:407
 msgid "close date"
 msgstr ""
 
-#: jacc/admin.py:889
+#: jacc/admin.py:891
 msgid "is liability"
 msgstr ""
 
-#: jacc/admin.py:1066
+#: jacc/admin.py:1068
 msgid "Add reverse charge"
 msgstr ""
 
-#: jacc/admin.py:1067
+#: jacc/admin.py:1069
 msgid "Re-send invoices"
 msgstr ""
 
-#: jacc/admin.py:1068
+#: jacc/admin.py:1070
 msgid "Refresh cached fields"
 msgstr ""
 
-#: jacc/admin.py:1069
+#: jacc/admin.py:1071
 msgid "Summarize account entries"
 msgstr ""
 
-#: jacc/admin.py:1070
+#: jacc/admin.py:1072
 msgid "Summarize invoice statistics"
 msgstr ""
 
-#: jacc/admin.py:1071
+#: jacc/admin.py:1073
 msgid "set_as_asset"
 msgstr "Set as asset"
 
-#: jacc/admin.py:1072
+#: jacc/admin.py:1074
 msgid "set_as_liability"
 msgstr "Set as liability"
 
@@ -243,13 +243,13 @@ msgstr ""
 msgid "Credit Note"
 msgstr ""
 
-#: jacc/models.py:70 jacc/models.py:87 jacc/models.py:256 jacc/models.py:283
-#: jacc/models.py:618
+#: jacc/models.py:70 jacc/models.py:87 jacc/models.py:249 jacc/models.py:276
+#: jacc/models.py:602
 msgid "name"
 msgstr ""
 
 #: jacc/models.py:73 jacc/models.py:90 jacc/models.py:119 jacc/models.py:145
-#: jacc/models.py:260 jacc/models.py:287 jacc/models.py:386 jacc/models.py:616
+#: jacc/models.py:253 jacc/models.py:280 jacc/models.py:370 jacc/models.py:600
 msgid "last modified"
 msgstr ""
 
@@ -257,7 +257,7 @@ msgstr ""
 msgid "account entry source files"
 msgstr ""
 
-#: jacc/models.py:85 jacc/models.py:255
+#: jacc/models.py:85 jacc/models.py:248
 msgid "code"
 msgstr ""
 
@@ -285,7 +285,7 @@ msgstr ""
 msgid "entry types"
 msgstr ""
 
-#: jacc/models.py:108 jacc/models.py:216
+#: jacc/models.py:108 jacc/models.py:213
 msgid "account entry"
 msgstr ""
 
@@ -301,115 +301,115 @@ msgstr ""
 msgid "record account"
 msgstr ""
 
-#: jacc/models.py:149 jacc/models.py:282 jacc/models.py:381
+#: jacc/models.py:149 jacc/models.py:275 jacc/models.py:365
 msgid "type"
 msgstr ""
 
-#: jacc/models.py:161 jacc/models.py:251 jacc/models.py:314
-msgid "balance"
-msgstr ""
-
-#: jacc/models.py:171
+#: jacc/models.py:168
 msgid "entry.source.file.help.text"
 msgstr "e.g. settlement file"
 
-#: jacc/models.py:181
+#: jacc/models.py:178
 msgid "entry.source.invoice.help.text"
 msgstr "e.g. invoice for invoice row entries"
 
-#: jacc/models.py:191
+#: jacc/models.py:188
 msgid "entry.settled.invoice.help.text"
 msgstr "e.g. settled invoice"
 
-#: jacc/models.py:201
+#: jacc/models.py:198
 #, fuzzy
 #| msgid "entry.settled.invoice.help.text"
 msgid "entry.settled.item.help.text"
 msgstr "e.g. settled invoice"
 
-#: jacc/models.py:205
+#: jacc/models.py:202
 msgid "account.entry.parent"
 msgstr "parent"
 
-#: jacc/models.py:213
+#: jacc/models.py:210
 msgid "archived"
 msgstr ""
 
-#: jacc/models.py:217
+#: jacc/models.py:214
 msgid "account entries"
 msgstr ""
 
-#: jacc/models.py:257 jacc/models.py:302
+#: jacc/models.py:244 jacc/models.py:307
+msgid "balance"
+msgstr ""
+
+#: jacc/models.py:250 jacc/models.py:295
 msgid "asset"
 msgstr ""
 
-#: jacc/models.py:265
+#: jacc/models.py:258
 msgid "account types"
 msgstr ""
 
-#: jacc/models.py:274 jacc/models.py:308
+#: jacc/models.py:267 jacc/models.py:301
 #, fuzzy
 #| msgid "set_as_liability"
 msgid "liability"
 msgstr "Set as liability"
 
-#: jacc/models.py:284
+#: jacc/models.py:277
 msgid "currency"
 msgstr ""
 
-#: jacc/models.py:289 jacc/models.py:390
+#: jacc/models.py:282 jacc/models.py:374
 msgid "notes"
 msgstr ""
 
-#: jacc/models.py:293
+#: jacc/models.py:286
 msgid "accounts"
 msgstr ""
 
-#: jacc/models.py:383
+#: jacc/models.py:367
 msgid "invoice number"
 msgstr ""
 
-#: jacc/models.py:391
+#: jacc/models.py:375
 msgid "filename"
 msgstr ""
 
-#: jacc/models.py:394
+#: jacc/models.py:378
 msgid "paid amount"
 msgstr ""
 
-#: jacc/models.py:404
+#: jacc/models.py:388
 msgid "unpaid amount"
 msgstr ""
 
-#: jacc/models.py:414
+#: jacc/models.py:398
 msgid "overpaid amount"
 msgstr ""
 
-#: jacc/models.py:428 jacc/models.py:606
+#: jacc/models.py:412 jacc/models.py:590
 msgid "state"
 msgstr ""
 
-#: jacc/models.py:441
+#: jacc/models.py:425
 msgid "invoice"
 msgstr ""
 
-#: jacc/models.py:442
+#: jacc/models.py:426
 msgid "invoices"
 msgstr ""
 
-#: jacc/models.py:555
+#: jacc/models.py:539
 msgid "is paid"
 msgstr ""
 
-#: jacc/models.py:561
+#: jacc/models.py:545
 msgid "is due"
 msgstr ""
 
-#: jacc/models.py:621
+#: jacc/models.py:605
 msgid "contract"
 msgstr ""
 
-#: jacc/models.py:622
+#: jacc/models.py:606
 msgid "contracts"
 msgstr ""
 

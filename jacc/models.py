@@ -9,7 +9,6 @@ A credit is an accounting entry that either increases a liability or equity acco
 or decreases an asset or expense account.
 Credit means "right", gains/income/revenues/liabilities/equity increased with credit.
 """
-import logging
 from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Optional, Type
@@ -61,8 +60,6 @@ INVOICE_TYPE = (
     (INVOICE_DEFAULT, _("Invoice")),
     (INVOICE_CREDIT_NOTE, _("Credit Note")),
 )
-
-logger = logging.getLogger(__name__)
 
 
 class AccountEntrySourceFile(models.Model):
@@ -236,7 +233,6 @@ class AccountEntry(models.Model):
     def balance(self) -> Decimal:
         """
         Returns account balance after this entry.
-        Entries are primarily sorted by timestamp followed by id.
         :return: Decimal
         """
         return sum_queryset(
@@ -306,11 +302,7 @@ class Account(models.Model):
 
     @property
     def balance(self) -> Decimal:
-        e = self.accountentry_set.all().order_by("-timestamp", "-id").first()
-        if e is None:
-            return Decimal("0.00")
-        assert isinstance(e, AccountEntry)
-        return e.balance
+        return sum_queryset(self.accountentry_set.all())
 
     balance.fget.short_description = _("balance")  # type: ignore  # pytype: disable=attribute-error
 
