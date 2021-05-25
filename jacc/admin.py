@@ -449,6 +449,9 @@ class AccountAdmin(ModelAdminBase):
         "is_asset",
     ]
     fields: Sequence[str] = ["id", "type", "name", "balance", "currency", "notes"]
+    search_fields = [
+        "name",
+    ]
     readonly_fields: Sequence[str] = [
         "id",
         "balance",
