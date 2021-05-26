@@ -331,7 +331,7 @@ class Account(models.Model):
             and e.type.is_settlement
             and e.account.id == self.id
             and e.settled_invoice
-            and AccountEntry.objects.filter(parent=e).count() == 0
+            and not AccountEntry.objects.filter(parent=e).exists()
         )
 
 
