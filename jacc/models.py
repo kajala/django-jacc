@@ -230,6 +230,14 @@ class AccountEntry(models.Model):
             )
 
     @property
+    def is_parent(self) -> bool:
+        """
+        True if this is a parent of some other account entry.
+        :return: bool
+        """
+        return AccountEntry.objects.filter(parent=self).exists()
+
+    @property
     def balance(self) -> Decimal:
         """
         Returns account balance after this entry.
@@ -331,7 +339,7 @@ class Account(models.Model):
             and e.type.is_settlement
             and e.account.id == self.id
             and e.settled_invoice
-            and not AccountEntry.objects.filter(parent=e).exists()
+            and not e.is_parent
         )
 
 
