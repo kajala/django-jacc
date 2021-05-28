@@ -278,13 +278,9 @@ class AccountEntryAdmin(ModelAdminBase):
     list_display: Sequence[str] = [
         "id",
         "timestamp",
+        "account_link",
         "type",
         "amount",
-        "account_link",
-        "source_invoice_link",
-        "settled_invoice_link",
-        "settled_item_link",
-        "source_file_link",
         "parent",
     ]
     raw_id_fields: Sequence[str] = [
@@ -392,8 +388,17 @@ class AccountEntryAdmin(ModelAdminBase):
     settled_item_link.admin_order_field = "settled_item"  # type: ignore
     settled_item_link.short_description = _("settled item")  # type: ignore
 
+    def parent_link(self, obj):
+        if obj.parent is None:
+            return ""
+        admin_url = reverse(self.accountentry_admin_change_view_name, args=(obj.parent.id,))
+        return format_html("<a href='{}'>{}</a>", mark_safe(admin_url), obj.parent)
+
+    parent_link.admin_order_field = "parent"  # type: ignore
+    parent_link.short_description = _("account.entry.parent")  # type: ignore
+
     def get_urls(self):
-        info = self.model._meta.app_label, self.model._meta.model_name
+        info = self.model._meta.app_label, self.model._meta.model_name  # noqa
         return [
             url(
                 r"^by-account/(?P<pk>\d+)/$",
@@ -422,13 +427,14 @@ class AccountEntryAdmin(ModelAdminBase):
         rm = request.resolver_match
         assert isinstance(rm, ResolverMatch)
         pk = rm.kwargs.get("pk", None)
-        if rm.url_name == "jacc_accountentry_account_changelist" and pk:
+        info = self.model._meta.app_label, self.model._meta.model_name  # noqa
+        if rm.url_name == "%s_%s_account_changelist" % info and pk:
             return qs.filter(account=pk)
-        if rm.url_name == "jacc_accountentry_sourcefile_invoice_changelist" and pk:
+        if rm.url_name == "%s_%s_sourcefile_invoice_changelist" % info and pk:
             return qs.filter(source_invoice=pk)
-        if rm.url_name == "jacc_accountentry_settled_invoice_changelist" and pk:
+        if rm.url_name == "%s_%s_settled_invoice_changelist" % info and pk:
             return qs.filter(settled_invoice=pk)
-        if rm.url_name == "jacc_accountentry_sourcefile_changelist" and pk:
+        if rm.url_name == "%s_%s_sourcefile_changelist" % info and pk:
             return qs.filter(source_file=pk)
         return qs
 
