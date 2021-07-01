@@ -442,8 +442,9 @@ class Invoice(models.Model, CachedFieldsMixin):
         Returns receivables account. Receivables account is assumed to be the one were invoice rows were recorded.
         :return: Account or None
         """
-        row = AccountEntry.objects.filter(source_invoice=self).order_by("id").first()
-        return row.account if row else None
+        if not hasattr(self, "cache_receivables_account") or self.cache_receivables_account is None:
+            self.cache_receivables_account = AccountEntry.objects.filter(source_invoice=self).order_by("id").first()
+        return self.cache_receivables_account.account if self.cache_receivables_account else None
 
     @property
     def currency(self) -> str:
