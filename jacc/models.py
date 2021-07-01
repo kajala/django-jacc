@@ -419,6 +419,7 @@ class Invoice(models.Model, CachedFieldsMixin):
     state = SafeCharField(
         verbose_name=_("state"), max_length=1, blank=True, default="", db_index=True, choices=INVOICE_STATE
     )
+    cached_receivables_account: Optional[Account] = None
     cached_fields = [
         "amount",
         "paid_amount",
@@ -442,8 +443,12 @@ class Invoice(models.Model, CachedFieldsMixin):
         Returns receivables account. Receivables account is assumed to be the one were invoice rows were recorded.
         :return: Account or None
         """
-        row = AccountEntry.objects.filter(source_invoice=self).order_by("id").first()
-        return row.account if row else None
+        if self.cached_receivables_account is None:
+            row = AccountEntry.objects.filter(source_invoice=self).order_by("id").first()
+            if row is not None:
+                assert isinstance(row, AccountEntry)
+                self.cached_receivables_account = row.account
+        return self.cached_receivables_account
 
     @property
     def currency(self) -> str:
