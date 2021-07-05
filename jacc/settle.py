@@ -1,6 +1,5 @@
 from decimal import Decimal
 from typing import Optional, Dict, Any
-
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -110,7 +109,7 @@ def settle_assigned_invoice(receivables_account: Account, settlement: AccountEnt
 
 
 @transaction.atomic
-def settle_credit_note(
+def settle_credit_note(  # noqa
     credit_note: Invoice,
     debit_note: Invoice,
     cls,
@@ -129,7 +128,7 @@ def settle_credit_note(
     :param account: Settlement account
     :param debit_kwargs: Optional kwargs for the debit record to cls() instance creation
     :param credit_kwargs: Optional kwargs for the credit record to cls() instance creation
-    :param kwargs: Common variable arguments to cls() instance creation for both records
+    :param kwargs: Shared variable arguments to cls() instance creation for both records
     :return: list of new settlements
     """
     assert isinstance(credit_note, Invoice)
@@ -167,20 +166,24 @@ def settle_credit_note(
         if timestamp is None:
             timestamp = now()
 
-        # record entry to debit note settlement account
-        debit_params = {}
+        # common args for debit and credit entries
+        common_params = {
+            "account": account,
+            "type": entry_type,
+            "timestamp": timestamp,
+        }
         for k, v in kwargs.items():
-            debit_params[k] = v
+            common_params[k] = v
+
+        # record entry to debit note settlement account
+        debit_params = {**common_params}
         if debit_kwargs is not None:
             for k, v in debit_kwargs.items():
                 debit_params[k] = v
         pmt1 = cls(
-            account=account,
             amount=amt,
-            type=entry_type,
             settled_invoice=debit_note,
             description=description + " #{}".format(credit_note.number),
-            timestamp=timestamp,
             **debit_params,
         )
         pmt1.clean()
@@ -188,20 +191,15 @@ def settle_credit_note(
         pmts.append(pmt1)
 
         # record entry to credit note settlement account
-        credit_params = {}
-        for k, v in kwargs.items():
-            credit_params[k] = v
+        credit_params = {**common_params}
         if credit_kwargs is not None:
             for k, v in credit_kwargs.items():
                 credit_params[k] = v
         pmt2 = cls(
-            account=account,
             parent=pmt1,
             amount=-amt,
-            type=entry_type,
             settled_invoice=credit_note,
             description=description + " #{}".format(debit_note.number),
-            timestamp=timestamp,
             **credit_params,
         )
         pmt2.clean()
