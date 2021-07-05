@@ -1,4 +1,6 @@
 from decimal import Decimal
+from typing import Optional, Dict, Any
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -54,7 +56,7 @@ def settle_invoice(receivables_account: Account, settlement: AccountEntry, invoi
                     timestamp=timestamp,
                     description=settlement.description,
                     parent=settlement,
-                    **kwargs
+                    **kwargs,
                 )
                 new_payments.append(ae)
                 remaining -= amt
@@ -72,7 +74,7 @@ def settle_invoice(receivables_account: Account, settlement: AccountEntry, invoi
                     timestamp=timestamp,
                     description=settlement.description,
                     parent=settlement,
-                    **kwargs
+                    **kwargs,
                 )
                 new_payments.append(ae)
                 remaining -= amt
@@ -108,7 +110,15 @@ def settle_assigned_invoice(receivables_account: Account, settlement: AccountEnt
 
 
 @transaction.atomic
-def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: Account, **kwargs) -> list:
+def settle_credit_note(
+    credit_note: Invoice,
+    debit_note: Invoice,
+    cls,
+    account: Account,
+    debit_kwargs: Optional[Dict[str, Any]] = None,
+    credit_kwargs: Optional[Dict[str, Any]] = None,
+    **kwargs
+) -> list:
     """
     Settles credit note. Records settling account entries for both original invoice and the credit note
     (negative entries for the credit note).
@@ -117,7 +127,9 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
     :param debit_note: Invoice to settle
     :param cls: AccountEntry (derived) class to use for new entries
     :param account: Settlement account
-    :param kwargs: Variable arguments to cls() instance creation
+    :param debit_kwargs: Optional kwargs for the debit record to cls() instance creation
+    :param credit_kwargs: Optional kwargs for the credit record to cls() instance creation
+    :param kwargs: Common variable arguments to cls() instance creation for both records
     :return: list of new settlements
     """
     assert isinstance(credit_note, Invoice)
@@ -154,19 +166,35 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
         timestamp = kwargs.pop("timestamp", None)
         if timestamp is None:
             timestamp = now()
+
         # record entry to debit note settlement account
-        pmt1 = cls.objects.create(
+        debit_params = {}
+        for k, v in kwargs.items():
+            debit_params[k] = v
+        if debit_kwargs is not None:
+            for k, v in debit_kwargs.items():
+                debit_params[k] = v
+        pmt1 = cls(
             account=account,
             amount=amt,
             type=entry_type,
             settled_invoice=debit_note,
             description=description + " #{}".format(credit_note.number),
             timestamp=timestamp,
-            **kwargs
+            **debit_params,
         )
+        pmt1.clean()
+        pmt1.save()
         pmts.append(pmt1)
+
         # record entry to credit note settlement account
-        pmt2 = cls.objects.create(
+        credit_params = {}
+        for k, v in kwargs.items():
+            credit_params[k] = v
+        if credit_kwargs is not None:
+            for k, v in credit_kwargs.items():
+                credit_params[k] = v
+        pmt2 = cls(
             account=account,
             parent=pmt1,
             amount=-amt,
@@ -174,8 +202,10 @@ def settle_credit_note(credit_note: Invoice, debit_note: Invoice, cls, account: 
             settled_invoice=credit_note,
             description=description + " #{}".format(debit_note.number),
             timestamp=timestamp,
-            **kwargs
+            **credit_params,
         )
+        pmt2.clean()
+        pmt2.save()
         pmts.append(pmt2)
 
     return pmts
