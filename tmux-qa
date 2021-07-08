@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# create 4-grid
+# run prospector, pytype, mypy and tests
+tmux new-session \; \
+  split-window -v \; \
+  split-window -h \; \
+  select-pane -t 0 \; \
+  split-window -h \; \
+  select-pane -t 0 \; \
+  send-keys 'prospector' C-m \; \
+  select-pane -t 1 \; \
+  send-keys './venv/bin/python ./manage.py test' C-m \; \
+  select-pane -t 2 \; \
+  send-keys 'pytype `./venv/bin/python manage.py apps`' C-m \; \
+  select-pane -t 3 \; \
+  send-keys 'mypy `./venv/bin/python manage.py apps`' C-m \; \
