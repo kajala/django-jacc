@@ -25,6 +25,7 @@ from django.utils.translation import gettext_lazy as _
 
 from jutil.format import choices_label
 from jutil.modelfields import SafeCharField, SafeTextField
+from django.core.validators  import validate_slug
 
 CATEGORY_ANY = ""
 CATEGORY_DEBIT = "D"  # "left", dividends/expenses/assets/losses increased with debit
@@ -372,7 +373,15 @@ class Invoice(models.Model, CachedFieldsMixin):
     type = SafeCharField(
         verbose_name=_("type"), max_length=2, db_index=True, default=INVOICE_DEFAULT, blank=True, choices=INVOICE_TYPE
     )
-    number = SafeCharField(verbose_name=_("invoice number"), max_length=32, default="", blank=True, db_index=True)
+    number = SafeCharField(
+        verbose_name=_("invoice number"),
+        max_length=32,
+        default="",
+        blank=True,
+        db_index=True,
+        error_messages={"invalid": _("Only accept letters, numbers, underscores or hyphens.")},
+        validators=[validate_slug],
+    )
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(
         verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True
