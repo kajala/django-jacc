@@ -13,8 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="invoice",
             name="number",
-            field=models.BigIntegerField(
-                blank=True, db_index=True, default=None, null=True, verbose_name="invoice number"
-            ),
+            field=models.BigIntegerField(blank=True, db_index=True, default=None, null=True, verbose_name="invoice number"),
         ),
     ]

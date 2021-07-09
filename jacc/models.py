@@ -25,7 +25,7 @@ from django.utils.translation import gettext_lazy as _
 
 from jutil.format import choices_label
 from jutil.modelfields import SafeCharField, SafeTextField
-from django.core.validators  import validate_slug
+from django.core.validators import validate_slug
 
 CATEGORY_ANY = ""
 CATEGORY_DEBIT = "D"  # "left", dividends/expenses/assets/losses increased with debit
@@ -70,9 +70,7 @@ class AccountEntrySourceFile(models.Model):
 
     name = SafeCharField(verbose_name=_("name"), max_length=255, db_index=True, blank=True, default="")
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
-    last_modified = models.DateTimeField(
-        verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True
-    )
+    last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True)
 
     class Meta:
         verbose_name = _("account entry source file")
@@ -87,12 +85,8 @@ class EntryType(models.Model):
     identifier = SafeCharField(verbose_name=_("identifier"), max_length=40, db_index=True, blank=True, default="")
     name = SafeCharField(verbose_name=_("name"), max_length=128, db_index=True, blank=True, default="")
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
-    last_modified = models.DateTimeField(
-        verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True
-    )
-    payback_priority = models.SmallIntegerField(
-        verbose_name=_("payback priority"), default=0, blank=True, db_index=True
-    )
+    last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True)
+    payback_priority = models.SmallIntegerField(verbose_name=_("payback priority"), default=0, blank=True, db_index=True)
     is_settlement = models.BooleanField(verbose_name=_("is settlement"), default=False, blank=True, db_index=True)
     is_payment = models.BooleanField(verbose_name=_("is payment"), default=False, blank=True, db_index=True)
 
@@ -105,9 +99,7 @@ class EntryType(models.Model):
 
 
 class AccountEntryNote(models.Model):
-    account_entry = models.ForeignKey(
-        "AccountEntry", verbose_name=_("account entry"), related_name="note_set", on_delete=models.CASCADE
-    )
+    account_entry = models.ForeignKey("AccountEntry", verbose_name=_("account entry"), related_name="note_set", on_delete=models.CASCADE)
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
     created_by = models.ForeignKey(
         User,
@@ -155,9 +147,7 @@ class AccountEntry(models.Model):
         blank=True,
     )
     description = SafeCharField(verbose_name=_("description"), max_length=256, default="", blank=True)
-    amount = models.DecimalField(
-        verbose_name=_("amount"), max_digits=10, decimal_places=2, blank=True, default=None, null=True, db_index=True
-    )
+    amount = models.DecimalField(verbose_name=_("amount"), max_digits=10, decimal_places=2, blank=True, default=None, null=True, db_index=True)
     source_file = models.ForeignKey(
         AccountEntrySourceFile,
         verbose_name=_("account entry source file"),
@@ -244,11 +234,7 @@ class AccountEntry(models.Model):
         Returns account balance after this entry.
         :return: Decimal
         """
-        return sum_queryset(
-            AccountEntry.objects.filter(account=self.account, timestamp__lte=self.timestamp).exclude(
-                timestamp=self.timestamp, id__gt=self.id
-            )
-        )
+        return sum_queryset(AccountEntry.objects.filter(account=self.account, timestamp__lte=self.timestamp).exclude(timestamp=self.timestamp, id__gt=self.id))
 
     balance.fget.short_description = _("balance")  # type: ignore  # pytype: disable=attribute-error
 
@@ -258,9 +244,7 @@ class AccountType(models.Model):
     name = SafeCharField(verbose_name=_("name"), max_length=64, db_index=True, unique=True)
     is_asset = models.BooleanField(verbose_name=_("asset"))
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
-    last_modified = models.DateTimeField(
-        verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True
-    )
+    last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True)
 
     class Meta:
         verbose_name = _("account type")
@@ -285,9 +269,7 @@ class Account(models.Model):
     name = SafeCharField(verbose_name=_("name"), max_length=64, blank=True, default="", db_index=True)
     currency = SafeCharField(verbose_name=_("currency"), max_length=3, default="EUR", choices=CURRENCY_TYPE, blank=True)
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
-    last_modified = models.DateTimeField(
-        verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True
-    )
+    last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True)
     notes = models.TextField(_("notes"), blank=True, default="")
 
     class Meta:
@@ -334,14 +316,7 @@ class Account(models.Model):
         :param e: AccountEntry (settlement)
         :return: bool
         """
-        return bool(
-            e.amount is not None
-            and e.type
-            and e.type.is_settlement
-            and e.account.id == self.id
-            and e.settled_invoice
-            and not e.is_parent
-        )
+        return bool(e.amount is not None and e.type and e.type.is_settlement and e.account.id == self.id and e.settled_invoice and not e.is_parent)
 
 
 class InvoiceManager(models.Manager):
@@ -352,9 +327,7 @@ class InvoiceManager(models.Manager):
 
 
 def get_default_due_date():
-    return (
-        now() + timedelta(days=settings.DEFAULT_DUE_DATE_DAYS) if hasattr(settings, "DEFAULT_DUE_DATE_DAYS") else None
-    )
+    return now() + timedelta(days=settings.DEFAULT_DUE_DATE_DAYS) if hasattr(settings, "DEFAULT_DUE_DATE_DAYS") else None
 
 
 class Invoice(models.Model, CachedFieldsMixin):
@@ -370,9 +343,7 @@ class Invoice(models.Model, CachedFieldsMixin):
     """
 
     objects: models.Manager = InvoiceManager()
-    type = SafeCharField(
-        verbose_name=_("type"), max_length=2, db_index=True, default=INVOICE_DEFAULT, blank=True, choices=INVOICE_TYPE
-    )
+    type = SafeCharField(verbose_name=_("type"), max_length=2, db_index=True, default=INVOICE_DEFAULT, blank=True, choices=INVOICE_TYPE)
     number = SafeCharField(
         verbose_name=_("invoice number"),
         max_length=32,
@@ -383,9 +354,7 @@ class Invoice(models.Model, CachedFieldsMixin):
         validators=[validate_slug],
     )
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
-    last_modified = models.DateTimeField(
-        verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True
-    )
+    last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True)
     sent = models.DateTimeField(verbose_name=_("sent"), db_index=True, default=None, blank=True, null=True)
     due_date = models.DateTimeField(verbose_name=_("due date"), db_index=True, default=get_default_due_date)
     notes = SafeTextField(verbose_name=_("notes"), blank=True, default="")
@@ -422,12 +391,8 @@ class Invoice(models.Model, CachedFieldsMixin):
         db_index=True,
     )
     close_date = models.DateTimeField(verbose_name=_("close date"), default=None, null=True, blank=True, db_index=True)
-    late_days = models.SmallIntegerField(
-        verbose_name=_("late days"), default=None, null=True, blank=True, db_index=True
-    )
-    state = SafeCharField(
-        verbose_name=_("state"), max_length=1, blank=True, default="", db_index=True, choices=INVOICE_STATE
-    )
+    late_days = models.SmallIntegerField(verbose_name=_("late days"), default=None, null=True, blank=True, db_index=True)
+    state = SafeCharField(verbose_name=_("state"), max_length=1, blank=True, default="", db_index=True, choices=INVOICE_STATE)
     cached_receivables_account: Optional[Account] = None
     cached_fields = [
         "amount",
@@ -471,11 +436,7 @@ class Invoice(models.Model, CachedFieldsMixin):
         :param cls: AccountEntry class
         :return: QuerySet
         """
-        return (
-            cls.objects.filter(Q(account=acc) & (Q(source_invoice=self) | Q(settled_invoice=self)))
-            if acc
-            else cls.objects.none()
-        )
+        return cls.objects.filter(Q(account=acc) & (Q(source_invoice=self) | Q(settled_invoice=self))) if acc else cls.objects.none()
 
     def get_balance(self, acc: Account) -> Decimal:
         """
@@ -517,9 +478,7 @@ class Invoice(models.Model, CachedFieldsMixin):
                 if bal < Decimal(0):
                     unpaid_items.append((priority, item, bal))
             else:
-                raise Exception(
-                    "jacc.models.Invoice.get_unpaid_items() unimplemented for invoice type {}".format(self.type)
-                )
+                raise Exception("jacc.models.Invoice.get_unpaid_items() unimplemented for invoice type {}".format(self.type))
         return [i[1:] for i in sorted(unpaid_items, key=lambda x: x[0])]
 
     def get_amount(self) -> Decimal:
@@ -552,11 +511,7 @@ class Invoice(models.Model, CachedFieldsMixin):
     def is_paid(self) -> bool:
         if self.unpaid_amount is None:
             return False
-        return (
-            self.unpaid_amount >= Decimal("0.00")
-            if self.type == INVOICE_CREDIT_NOTE
-            else self.unpaid_amount <= Decimal("0.00")
-        )
+        return self.unpaid_amount >= Decimal("0.00") if self.type == INVOICE_CREDIT_NOTE else self.unpaid_amount <= Decimal("0.00")
 
     is_paid.fget.short_description = _("is paid")  # type: ignore  # pytype: disable=attribute-error
 
@@ -618,9 +573,7 @@ class Contract(models.Model):
     """
 
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
-    last_modified = models.DateTimeField(
-        verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True
-    )
+    last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True)
     name = SafeCharField(verbose_name=_("name"), max_length=128, default="", blank=True, db_index=True)
 
     class Meta:

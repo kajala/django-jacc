@@ -64,9 +64,7 @@ class Migration(migrations.Migration):
                 ("last_modified", models.DateTimeField(auto_now=True, db_index=True, verbose_name="last modified")),
                 (
                     "timestamp",
-                    models.DateTimeField(
-                        blank=True, db_index=True, default=django.utils.timezone.now, verbose_name="timestamp"
-                    ),
+                    models.DateTimeField(blank=True, db_index=True, default=django.utils.timezone.now, verbose_name="timestamp"),
                 ),
                 ("description", models.CharField(blank=True, default="", max_length=256, verbose_name="description")),
                 ("amount", models.DecimalField(decimal_places=2, max_digits=10, verbose_name="amount")),
@@ -223,9 +221,7 @@ class Migration(migrations.Migration):
                 ("sent", models.DateTimeField(blank=True, db_index=True, default=None, null=True, verbose_name="sent")),
                 (
                     "due_date",
-                    models.DateTimeField(
-                        db_index=True, default=jacc.models.get_default_due_date, verbose_name="due date"
-                    ),
+                    models.DateTimeField(db_index=True, default=jacc.models.get_default_due_date, verbose_name="due date"),
                 ),
                 ("notes", models.TextField(blank=True, default="", verbose_name="notes")),
                 (
@@ -281,9 +277,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "late_days",
-                    models.SmallIntegerField(
-                        blank=True, db_index=True, default=None, null=True, verbose_name="late days"
-                    ),
+                    models.SmallIntegerField(blank=True, db_index=True, default=None, null=True, verbose_name="late days"),
                 ),
                 (
                     "state",

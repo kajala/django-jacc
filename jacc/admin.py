@@ -100,12 +100,8 @@ def summarize_account_entries(modeladmin, request, qs):  # pylint: disable=unuse
         assert isinstance(e_type, EntryType)
 
         qs2 = qs.filter(type=e_type)
-        res_debit = qs2.filter(amount__gt=0).aggregate(
-            total=Coalesce(Sum("amount"), Decimal("0.00")), count=Count("amount")
-        )
-        res_credit = qs2.filter(amount__lt=0).aggregate(
-            total=Coalesce(Sum("amount"), Decimal("0.00")), count=Count("amount")
-        )
+        res_debit = qs2.filter(amount__gt=0).aggregate(total=Coalesce(Sum("amount"), Decimal("0.00")), count=Count("amount"))
+        res_credit = qs2.filter(amount__lt=0).aggregate(total=Coalesce(Sum("amount"), Decimal("0.00")), count=Count("amount"))
         lines.append("{type_name} (debit) | x{count} | {total:.2f}".format(type_name=e_type.name, **res_debit))
         lines.append("{type_name} (credit) | x{count} | {total:.2f}".format(type_name=e_type.name, **res_credit))
         total_debits += res_debit["total"]
@@ -479,9 +475,7 @@ class AccountAdmin(ModelAdminBase):
 
 
 class AccountEntryInlineFormSet(forms.BaseInlineFormSet):
-    def clean_entries(
-        self, source_invoice: Optional[Invoice], settled_invoice: Optional[Invoice], account: Optional[Account], **kw
-    ):
+    def clean_entries(self, source_invoice: Optional[Invoice], settled_invoice: Optional[Invoice], account: Optional[Account], **kw):
         """
         This needs to be called from a derived class clean().
         :param source_invoice:
@@ -721,18 +715,9 @@ def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet)
         invoiced_total_amount += invoiced_amount
         invoiced_total_count += invoiced_count
 
-        lines.append(
-            "{state_name} | x{count} | {amount:.2f}".format(
-                state_name=state_name, amount=invoiced_amount, count=invoiced_count
-            )
-        )
+        lines.append("{state_name} | x{count} | {amount:.2f}".format(state_name=state_name, amount=invoiced_amount, count=invoiced_count))
 
-    lines.append(
-        _("Total")
-        + " {label} | x{count} | {amount:.2f}".format(
-            label=_("amount"), amount=invoiced_total_amount, count=invoiced_total_count
-        )
-    )
+    lines.append(_("Total") + " {label} | x{count} | {amount:.2f}".format(label=_("amount"), amount=invoiced_total_amount, count=invoiced_total_count))
     lines.append("</pre>")
 
     lines = align_lines(lines, "|")

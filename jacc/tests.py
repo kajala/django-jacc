@@ -104,9 +104,7 @@ class Tests(TestCase, TestSetupMixin):
         for i in range(len(times)):
             amount = amounts[i]
             t = times[i]
-            e = AccountEntry(
-                account=settlements, amount=Decimal(amount), type=EntryType.objects.get(code=E_SETTLEMENT), timestamp=t
-            )
+            e = AccountEntry(account=settlements, amount=Decimal(amount), type=EntryType.objects.get(code=E_SETTLEMENT), timestamp=t)
             e.full_clean()
             e.save()
             self.assertEqual(settlements.balance, balances[i])
@@ -136,9 +134,7 @@ class Tests(TestCase, TestSetupMixin):
             invoice = Invoice(due_date=t)
             invoice.full_clean()
             invoice.save()
-            AccountEntry.objects.create(
-                account=receivables_acc, source_invoice=invoice, type=EntryType.objects.get(code=E_RENT), amount=amount
-            )
+            AccountEntry.objects.create(account=receivables_acc, source_invoice=invoice, type=EntryType.objects.get(code=E_RENT), amount=amount)
             invoice.update_cached_fields()
             self.assertEqual(invoice.unpaid_amount, amount)
             invoices.append(invoice)
@@ -176,11 +172,7 @@ class Tests(TestCase, TestSetupMixin):
                 paid_amount_real = invoices[i]
                 unpaid_amount_real = invoices[i].get_unpaid_amount()
                 unpaid_amount_ref = unpaid_amounts[i]
-                print(
-                    "checking invoice {} payment status after payment op {} (real {}, expected {})".format(
-                        i, j, unpaid_amount_real, unpaid_amount_ref
-                    )
-                )
+                print("checking invoice {} payment status after payment op {} (real {}, expected {})".format(i, j, unpaid_amount_real, unpaid_amount_ref))
                 self.assertEqual(unpaid_amount_real, unpaid_amount_ref, "[{}][{}]".format(j, i))
 
         # create another acc set
@@ -199,9 +191,7 @@ class Tests(TestCase, TestSetupMixin):
             invoice = Invoice(due_date=t)
             invoice.full_clean()
             invoice.save()
-            AccountEntry.objects.create(
-                account=receivables_acc, source_invoice=invoice, type=EntryType.objects.get(code=E_RENT), amount=amount
-            )
+            AccountEntry.objects.create(account=receivables_acc, source_invoice=invoice, type=EntryType.objects.get(code=E_RENT), amount=amount)
             invoice.update_cached_fields()
             self.assertEqual(invoice.unpaid_amount, amount)
             invoices.append(invoice)
@@ -218,9 +208,7 @@ class Tests(TestCase, TestSetupMixin):
             paid_amount, unpaid_amounts = payment_ops[j]
             if paid_amount is not None and paid_amount > Decimal("0.00"):
                 invoice = unpaid_invoices[0]
-                print(
-                    "Targeting settlement amount", paid_amount, "to invoice", invoice, "invoice.amount", invoice.amount
-                )
+                print("Targeting settlement amount", paid_amount, "to invoice", invoice, "invoice.amount", invoice.amount)
                 p = AccountEntry.objects.create(
                     account=settlements,
                     amount=paid_amount,
@@ -268,9 +256,7 @@ class Tests(TestCase, TestSetupMixin):
         assert isinstance(settlement_acc, Account)
         assert isinstance(invoice, Invoice)
         for ae_type, amt in invoice_components:
-            AccountEntry.objects.create(
-                account=receivables_acc, source_invoice=invoice, type=ae_type, amount=Decimal(amt)
-            )
+            AccountEntry.objects.create(account=receivables_acc, source_invoice=invoice, type=ae_type, amount=Decimal(amt))
 
         # paybacks
         # order (see setUp): cap, fee, interest
@@ -284,9 +270,7 @@ class Tests(TestCase, TestSetupMixin):
         AccountEntry.objects.distinct("type").order_by("type__payback_order")
         for payback, unpaid in paybacks_and_unpaid_components:
             if payback:
-                payback = AccountEntry.objects.create(
-                    account=settlement_acc, settled_invoice=invoice, type=e_settlement, amount=Decimal(payback)
-                )
+                payback = AccountEntry.objects.create(account=settlement_acc, settled_invoice=invoice, type=e_settlement, amount=Decimal(payback))
                 settle_assigned_invoice(receivables_acc, payback, AccountEntry)
             bal = invoice.get_balance(invoice.receivables_account)
             self.assertEqual(bal, unpaid)

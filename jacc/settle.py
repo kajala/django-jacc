@@ -80,9 +80,7 @@ def settle_invoice(receivables_account: Account, settlement: AccountEntry, invoi
                 if remaining >= Decimal(0):
                     break
         else:
-            raise Exception(
-                "jacc.settle.settle_assigned_invoice() unimplemented for invoice type {}".format(invoice.type)
-            )
+            raise Exception("jacc.settle.settle_assigned_invoice() unimplemented for invoice type {}".format(invoice.type))
 
     invoice.update_cached_fields()
     return new_payments
@@ -154,8 +152,7 @@ def settle_credit_note(  # noqa
     if entry_type is None:
         if not hasattr(settings, "E_CREDIT_NOTE_RECONCILIATION"):
             raise Exception(
-                "settle_credit_note() requires settings.E_CREDIT_NOTE_RECONCILIATION (account entry type code) "
-                "or entry_type to be pass in kwargs"
+                "settle_credit_note() requires settings.E_CREDIT_NOTE_RECONCILIATION (account entry type code) " "or entry_type to be pass in kwargs"
             )
         entry_type = EntryType.objects.get(code=settings.E_CREDIT_NOTE_RECONCILIATION)
     description = kwargs.pop("description", _("credit.note.reconciliation"))
