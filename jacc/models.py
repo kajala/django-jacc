@@ -22,10 +22,8 @@ from django.db.models import QuerySet, Q
 from django.utils.timezone import now
 from jutil.cache import CachedFieldsMixin
 from django.utils.translation import gettext_lazy as _
-
 from jutil.format import choices_label
 from jutil.modelfields import SafeCharField, SafeTextField
-from django.core.validators import validate_slug
 
 CATEGORY_ANY = ""
 CATEGORY_DEBIT = "D"  # "left", dividends/expenses/assets/losses increased with debit
