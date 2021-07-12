@@ -333,7 +333,7 @@ def get_default_due_date():
 invoice_number_re = _lazy_re_compile(r'^[-a-zA-Z0-9_\/]+\Z')
 validate_invoice_number = RegexValidator(
     invoice_number_re,
-    _('Only accept letters, numbers, underscores, hyphens or slash'),
+    _('Only accept letters, numbers, underscores, hyphens or slash.'),
     'invalid'
 )
 
