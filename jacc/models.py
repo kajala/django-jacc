@@ -25,7 +25,8 @@ from django.utils.translation import gettext_lazy as _
 
 from jutil.format import choices_label
 from jutil.modelfields import SafeCharField, SafeTextField
-from django.core.validators import validate_slug
+from django.core.validators  import RegexValidator
+from django.utils.regex_helper import _lazy_re_compile
 
 CATEGORY_ANY = ""
 CATEGORY_DEBIT = "D"  # "left", dividends/expenses/assets/losses increased with debit
@@ -329,6 +330,12 @@ class InvoiceManager(models.Manager):
 def get_default_due_date():
     return now() + timedelta(days=settings.DEFAULT_DUE_DATE_DAYS) if hasattr(settings, "DEFAULT_DUE_DATE_DAYS") else None
 
+invoice_number_re = _lazy_re_compile(r'^[-a-zA-Z0-9_\/]+\Z')
+validate_invoice_number = RegexValidator(
+    invoice_number_re,
+    _('Only accept letters, numbers, underscores, hyphens or slash'),
+    'invalid'
+)
 
 class Invoice(models.Model, CachedFieldsMixin):
     """
@@ -350,8 +357,7 @@ class Invoice(models.Model, CachedFieldsMixin):
         default="",
         blank=True,
         db_index=True,
-        error_messages={"invalid": _("Only accept letters, numbers, underscores or hyphens.")},
-        validators=[validate_slug],
+        validators=[validate_invoice_number],
     )
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True)
