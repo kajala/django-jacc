@@ -275,7 +275,7 @@ class Account(models.Model):
         verbose_name_plural = _("accounts")
 
     def __str__(self):
-        return "[{}] {}".format(self.id, self.name)
+        return "[{}] {}".format(self.id, self.name or self.type.name)
 
     def is_asset(self) -> bool:
         return self.type.is_asset
