@@ -3,7 +3,7 @@ import logging
 import traceback
 from datetime import datetime
 from decimal import Decimal
-from typing import Optional, List, Sequence, Any, Dict
+from typing import Optional, Sequence, Any, Dict
 from django.contrib import messages
 from django.contrib.admin import SimpleListFilter
 from django.contrib.messages import add_message, INFO
@@ -12,13 +12,13 @@ from django.db.models.functions import Coalesce
 from django import forms
 from django.forms import widgets
 from django.shortcuts import render
-from django.urls import reverse, ResolverMatch
+from django.urls import reverse, ResolverMatch, path
 from django.utils.formats import date_format
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.text import format_lazy
 from django.utils.timezone import now
-
+from jacc.format import align_lines
 from jacc.forms import ReverseChargeForm
 from jacc.models import (
     Account,
@@ -31,7 +31,6 @@ from jacc.models import (
     AccountEntryNote,
 )
 from django.conf import settings
-from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -44,39 +43,6 @@ from jutil.format import choices_label, dec2
 from jutil.model import clone_model
 
 logger = logging.getLogger(__name__)
-
-
-def align_lines(lines: list, column_separator: str = "|") -> list:
-    """
-    Pads lines so that all rows in single column match. Columns separated by '|' in every line.
-    :param lines: list of lines
-    :param column_separator: column separator. default is '|'
-    :return: list of lines
-    """
-    rows = []
-    col_len: List[int] = []
-    for line in lines:
-        line = str(line)
-        cols = []
-        for col_index, col in enumerate(line.split(column_separator)):
-            col = str(col).strip()
-            cols.append(col)
-            if col_index >= len(col_len):
-                col_len.append(0)
-            col_len[col_index] = max(col_len[col_index], len(col))
-        rows.append(cols)
-
-    lines_out: List[str] = []
-    for row in rows:
-        cols_out = []
-        for col_index, col in enumerate(row):
-            if col_index == 0:
-                col = col.ljust(col_len[col_index])
-            else:
-                col = col.rjust(col_len[col_index])
-            cols_out.append(col)
-        lines_out.append(" ".join(cols_out))
-    return lines_out
 
 
 def refresh_cached_fields(modeladmin, request, qs):  # pylint: disable=unused-argument
@@ -93,20 +59,28 @@ def summarize_account_entries(modeladmin, request, qs):  # pylint: disable=unuse
     e_type_entries = list(qs.distinct("type").order_by("type"))
     total_debits = Decimal("0.00")
     total_credits = Decimal("0.00")
-    lines = ["<pre>", _("({total_count} account entries)").format(total_count=qs.count())]
+    lines = [
+        "<pre>",
+        _("({total_count} account entries)").format(total_count=qs.count()),
+        "",
+        "|".join([str(_("entry type")), str(_("count")), str(_("credit")), str(_("debit"))]),
+    ]
+
     for e_type_entry in e_type_entries:
         assert isinstance(e_type_entry, AccountEntry)
         e_type = e_type_entry.type
         assert isinstance(e_type, EntryType)
 
         qs2 = qs.filter(type=e_type)
-        res_debit = qs2.filter(amount__gt=0).aggregate(total=Coalesce(Sum("amount"), Decimal("0.00")), count=Count("amount"))
-        res_credit = qs2.filter(amount__lt=0).aggregate(total=Coalesce(Sum("amount"), Decimal("0.00")), count=Count("amount"))
-        lines.append("{type_name} (debit) | x{count} | {total:.2f}".format(type_name=e_type.name, **res_debit))
-        lines.append("{type_name} (credit) | x{count} | {total:.2f}".format(type_name=e_type.name, **res_credit))
+        res_debit = qs2.filter(amount__gt=0).aggregate(total=Coalesce(Sum("amount"), Decimal("0.00")), n=Count("amount"))
+        res_credit = qs2.filter(amount__lt=0).aggregate(total=Coalesce(Sum("amount"), Decimal("0.00")), n=Count("amount"))
+        lines.append(
+            "{name}|{n}|{cr:.2f}|{dr:.2f}".format(name=e_type.name, n=res_credit["n"] + res_debit["n"], cr=res_credit["total"], dr=res_debit["total"])
+        )
         total_debits += res_debit["total"]
         total_credits += res_credit["total"]
 
+    lines.append("")
     lines.append(
         _("Total debits {total_debits:.2f} | - total credits {total_credits:.2f} | = {total_amount:.2f}").format(
             total_debits=total_debits, total_credits=total_credits, total_amount=total_debits + total_credits
@@ -340,6 +314,24 @@ class AccountEntryAdmin(ModelAdminBase):
     allow_delete = False
     allow_change = False
 
+    def fill_extra_context(self, request: HttpRequest, extra_context: Optional[Dict[str, Any]]):
+        extra_context = extra_context or {}
+        rm = request.resolver_match
+        assert isinstance(rm, ResolverMatch)
+        pk = rm.kwargs.get("account_id") or request.GET.get("account")
+        if pk:
+            extra_context["account"] = Account.objects.filter(id=pk).first()
+        return extra_context
+
+    def add_view(self, request: HttpRequest, form_url="", extra_context=None):
+        return super().add_view(request, form_url, self.fill_extra_context(request, extra_context))
+
+    def change_view(self, request: HttpRequest, object_id, form_url="", extra_context=None):
+        return super().change_view(request, object_id, form_url, self.fill_extra_context(request, extra_context))
+
+    def custom_changelist_view(self, request: HttpRequest, extra_context=None, **kwargs):  # pylint: disable=unused-argument
+        return self.changelist_view(request, self.fill_extra_context(request, extra_context))
+
     def source_file_link(self, obj):
         assert isinstance(obj, AccountEntry)
         if not obj.source_file:
@@ -396,24 +388,24 @@ class AccountEntryAdmin(ModelAdminBase):
     def get_urls(self):
         info = self.model._meta.app_label, self.model._meta.model_name  # noqa
         return [
-            url(
-                r"^by-account/(?P<pk>\d+)/$",
-                self.admin_site.admin_view(self.kw_changelist_view),
+            path(
+                "by-account/<int:account_id>/",
+                self.admin_site.admin_view(self.custom_changelist_view),
                 name="%s_%s_account_changelist" % info,
             ),
-            url(
-                r"^by-source-invoice/(?P<pk>\d+)/$",
-                self.admin_site.admin_view(self.kw_changelist_view),
+            path(
+                "by-source-invoice/<int:source_invoice_id>/",
+                self.admin_site.admin_view(self.custom_changelist_view),
                 name="%s_%s_source_invoice_changelist" % info,
             ),
-            url(
-                r"^by-settled-invoice/(?P<pk>\d+)/$",
-                self.admin_site.admin_view(self.kw_changelist_view),
+            path(
+                "by-settled-invoice/<int:settled_invoice_id>/",
+                self.admin_site.admin_view(self.custom_changelist_view),
                 name="%s_%s_settled_invoice_changelist" % info,
             ),
-            url(
-                r"^by-source-file/(?P<pk>\d+)/$",
-                self.admin_site.admin_view(self.kw_changelist_view),
+            path(
+                "by-source-file/<int:source_file_id>/",
+                self.admin_site.admin_view(self.custom_changelist_view),
                 name="%s_%s_sourcefile_changelist" % info,
             ),
         ] + super().get_urls()
@@ -422,16 +414,19 @@ class AccountEntryAdmin(ModelAdminBase):
         qs = super().get_queryset(request)
         rm = request.resolver_match
         assert isinstance(rm, ResolverMatch)
-        pk = rm.kwargs.get("pk", None)
         info = self.model._meta.app_label, self.model._meta.model_name  # noqa
-        if rm.url_name == "%s_%s_account_changelist" % info and pk:
-            return qs.filter(account=pk)
-        if rm.url_name == "%s_%s_sourcefile_invoice_changelist" % info and pk:
-            return qs.filter(source_invoice=pk)
-        if rm.url_name == "%s_%s_settled_invoice_changelist" % info and pk:
-            return qs.filter(settled_invoice=pk)
-        if rm.url_name == "%s_%s_sourcefile_changelist" % info and pk:
-            return qs.filter(source_file=pk)
+        account_id = rm.kwargs.get("account_id")
+        if account_id:
+            return qs.filter(account=account_id)
+        source_file_id = rm.kwargs.get("source_file_id")
+        if source_file_id:
+            return qs.filter(source_file=source_file_id)
+        source_invoice_id = rm.kwargs.get("source_invoice_id")
+        if source_invoice_id:
+            return qs.filter(source_invoice=source_invoice_id)
+        settled_invoice_id = rm.kwargs.get("settled_invoice_id")
+        if settled_invoice_id:
+            return qs.filter(settled_invoice=settled_invoice_id)
         return qs
 
     def save_formset(self, request, form, formset, change):
