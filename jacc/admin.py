@@ -75,7 +75,7 @@ def summarize_account_entries(modeladmin, request, qs):  # pylint: disable=unuse
         res_debit = qs2.filter(amount__gt=0).aggregate(total=Coalesce(Sum("amount"), Decimal("0.00")), n=Count("amount"))
         res_credit = qs2.filter(amount__lt=0).aggregate(total=Coalesce(Sum("amount"), Decimal("0.00")), n=Count("amount"))
         lines.append(
-            "{name}|{n}|{cr:.2f}|{dr:.2f}".format(name=e_type.name, n=res_credit["n"] + res_debit["n"], cr=res_credit["total"], dr=res_debit["total"])
+            "{name}|{n}|{cr:.2f}|{dr:.2f}".format(name=e_type.name, n=res_credit["n"] + res_debit["n"], cr=-res_credit["total"], dr=res_debit["total"])
         )
         total_debits += res_debit["total"]
         total_credits += res_credit["total"]
@@ -83,7 +83,7 @@ def summarize_account_entries(modeladmin, request, qs):  # pylint: disable=unuse
     lines.append("")
     lines.append(
         _("Total debits {total_debits:.2f} | - total credits {total_credits:.2f} | = {total_amount:.2f}").format(
-            total_debits=total_debits, total_credits=total_credits, total_amount=total_debits + total_credits
+            total_debits=total_debits, total_credits=-total_credits, total_amount=total_debits + total_credits
         )
     )
     lines = align_lines(lines, "|")
