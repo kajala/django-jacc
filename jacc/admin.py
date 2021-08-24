@@ -10,12 +10,12 @@ from django.contrib.messages import add_message, INFO
 from django.db import models
 from django.db.models.functions import Coalesce
 from django import forms
-from django.forms import widgets
 from django.shortcuts import render
 from django.urls import reverse, ResolverMatch, path
 from django.utils.formats import date_format
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.contrib.admin import widgets
 from django.utils.text import format_lazy
 from django.utils.timezone import now
 from jacc.format import align_lines
@@ -231,7 +231,7 @@ class AccountEntryNoteInline(admin.TabularInline):
         "created_by",
     ]
     formfield_overrides = {
-        models.TextField: {"widget": widgets.Textarea(attrs={"rows": 3, "cols": 85})},
+        models.TextField: {"widget": widgets.AdminTextareaWidget(attrs={"rows": 3})},
     }
 
 
