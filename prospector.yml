@@ -1,0 +1,11 @@
+uses:
+    - django
+
+pylint:
+  disable:
+    - consider-using-f-string
+    - imported-auth-user
+    - useless-suppression
+    - django-not-configured
+  load-plugins:
+    - pylint-django
