@@ -354,7 +354,6 @@ class Invoice(models.Model, CachedFieldsMixin):
         verbose_name=_("paid amount"),
         max_digits=10,
         decimal_places=2,
-        editable=False,
         blank=True,
         null=True,
         default=None,
