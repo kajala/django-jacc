@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-05 22:28+0000\n"
+"POT-Creation-Date: 2022-05-05 22:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -75,7 +75,7 @@ msgstr "Yksi tilitapahtuma pitää olla valittuna"
 
 #: jacc/admin.py:196 jacc/admin.py:823 jacc/models.py:70 jacc/models.py:85
 #: jacc/models.py:101 jacc/models.py:135 jacc/models.py:244 jacc/models.py:269
-#: jacc/models.py:346 jacc/models.py:567
+#: jacc/models.py:346 jacc/models.py:569
 msgid "created"
 msgstr "luotu"
 
@@ -135,7 +135,7 @@ msgstr ""
 msgid "settlements"
 msgstr "tilitykset"
 
-#: jacc/admin.py:667 jacc/models.py:386
+#: jacc/admin.py:667 jacc/models.py:388
 msgid "late days"
 msgstr "myöhässä"
 
@@ -160,7 +160,7 @@ msgstr "({total_count} laskua)"
 msgid "Total"
 msgstr "Yhteensä"
 
-#: jacc/admin.py:715 jacc/forms.py:8 jacc/models.py:148 jacc/models.py:352
+#: jacc/admin.py:715 jacc/forms.py:8 jacc/models.py:148 jacc/models.py:353
 #: jacc/templates/admin/jacc/accountentry/reverse_entry.html:10
 msgid "amount"
 msgstr "summa"
@@ -173,7 +173,7 @@ msgstr "lähetetty"
 msgid "due date"
 msgstr "eräpäivä"
 
-#: jacc/admin.py:844 jacc/models.py:385
+#: jacc/admin.py:844 jacc/models.py:387
 msgid "close date"
 msgstr "valmistunut"
 
@@ -260,12 +260,12 @@ msgid "Credit Note"
 msgstr "Hyvityslasku"
 
 #: jacc/models.py:69 jacc/models.py:84 jacc/models.py:242 jacc/models.py:267
-#: jacc/models.py:569
+#: jacc/models.py:571
 msgid "name"
 msgstr "nimi"
 
 #: jacc/models.py:71 jacc/models.py:86 jacc/models.py:110 jacc/models.py:136
-#: jacc/models.py:245 jacc/models.py:270 jacc/models.py:347 jacc/models.py:568
+#: jacc/models.py:245 jacc/models.py:270 jacc/models.py:347 jacc/models.py:570
 msgid "last modified"
 msgstr "muutettu"
 
@@ -379,59 +379,59 @@ msgstr "laskun numero"
 msgid "filename"
 msgstr "tiedosto"
 
-#: jacc/models.py:352
+#: jacc/models.py:353
 msgid "invoice.amount.help_text"
 msgstr "Laskun kokonaissumma"
 
-#: jacc/models.py:354
+#: jacc/models.py:356
 msgid "paid amount"
 msgstr "maksettu"
 
-#: jacc/models.py:361
+#: jacc/models.py:363
 msgid "invoice.paid_amount.help_text"
-msgstr "Summma joka laskusta on maksettu"
+msgstr "Summa joka laskusta on maksettu"
 
-#: jacc/models.py:364
+#: jacc/models.py:366
 msgid "unpaid amount"
 msgstr "maksamatta"
 
-#: jacc/models.py:372
+#: jacc/models.py:374
 msgid "invoice.unpaid_amount.help_text"
 msgstr "Maksamatta oleva summa"
 
-#: jacc/models.py:375
+#: jacc/models.py:377
 msgid "overpaid amount"
 msgstr "ylimaksettu"
 
-#: jacc/models.py:383
+#: jacc/models.py:385
 msgid "invoice.overpaid_amount.help_text"
 msgstr "Liikaa maksettu summa"
 
-#: jacc/models.py:387 jacc/models.py:559
+#: jacc/models.py:389 jacc/models.py:561
 msgid "state"
 msgstr "tila"
 
-#: jacc/models.py:400
+#: jacc/models.py:402
 msgid "invoice"
 msgstr "lasku"
 
-#: jacc/models.py:401
+#: jacc/models.py:403
 msgid "invoices"
 msgstr "laskut"
 
-#: jacc/models.py:508
+#: jacc/models.py:510
 msgid "is paid"
 msgstr "maksettu"
 
-#: jacc/models.py:514
+#: jacc/models.py:516
 msgid "is due"
 msgstr "erääntynyt"
 
-#: jacc/models.py:572
+#: jacc/models.py:574
 msgid "contract"
 msgstr "sopimus"
 
-#: jacc/models.py:573
+#: jacc/models.py:575
 msgid "contracts"
 msgstr "sopimukset"
 
