@@ -349,15 +349,18 @@ class Invoice(models.Model, CachedFieldsMixin):
     due_date = models.DateTimeField(verbose_name=_("due date"), db_index=True, default=get_default_due_date)
     notes = SafeTextField(verbose_name=_("notes"), blank=True, default="")
     filename = SafeCharField(verbose_name=_("filename"), max_length=255, blank=True, default="", db_index=True)
-    amount = models.DecimalField(verbose_name=_("amount"), max_digits=10, decimal_places=2, default=0, blank=True)
+    amount = models.DecimalField(
+        verbose_name=_("amount"), max_digits=10, decimal_places=2, default=Decimal("0.00"), blank=True, help_text=_("invoice.amount.help_text")
+    )
     paid_amount = models.DecimalField(
         verbose_name=_("paid amount"),
         max_digits=10,
         decimal_places=2,
         blank=True,
         null=True,
-        default=None,
+        default=Decimal("0.00"),
         db_index=True,
+        help_text=_("invoice.paid_amount.help_text"),
     )
     unpaid_amount = models.DecimalField(
         verbose_name=_("unpaid amount"),
@@ -368,6 +371,7 @@ class Invoice(models.Model, CachedFieldsMixin):
         null=True,
         default=None,
         db_index=True,
+        help_text=_("invoice.unpaid_amount.help_text"),
     )
     overpaid_amount = models.DecimalField(
         verbose_name=_("overpaid amount"),
@@ -376,8 +380,9 @@ class Invoice(models.Model, CachedFieldsMixin):
         editable=False,
         blank=True,
         null=True,
-        default=None,
+        default=Decimal("0.00"),
         db_index=True,
+        help_text=_("invoice.overpaid_amount.help_text"),
     )
     close_date = models.DateTimeField(verbose_name=_("close date"), default=None, null=True, blank=True, db_index=True)
     late_days = models.SmallIntegerField(verbose_name=_("late days"), default=None, null=True, blank=True, db_index=True)
