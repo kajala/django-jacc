@@ -1,6 +1,10 @@
 uses:
     - django
 
+ignore-patterns:
+  - (^|/)jacc/migrations(/|$)
+  - (^|/)jacc/tests.py(/|$)
+
 pylint:
   disable:
     - consider-using-f-string

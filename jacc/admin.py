@@ -32,7 +32,6 @@ from jacc.models import (
     INVOICE_NOT_DUE_YET,
     INVOICE_DUE,
     INVOICE_LATE,
-    INVOICE_PAID,
 )
 from django.conf import settings
 from django.contrib import admin
