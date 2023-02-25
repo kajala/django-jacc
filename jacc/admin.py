@@ -727,11 +727,14 @@ class InvoiceStateFilter(SimpleListFilter):
     parameter_name = "invoice-state"
 
     def lookups(self, request, model_admin):
+        late_limit_days = settings.LATE_LIMIT_DAYS
+        day_abbr = _("day.abbr")
         return [
             ("O", capfirst(_("outstanding.invoice"))),
             (INVOICE_NOT_DUE_YET, mark_safe("&nbsp;" * 4 + _("Not due yet"))),
-            (INVOICE_DUE, mark_safe("&nbsp;" * 4 + _("Due"))),
-            (INVOICE_LATE, mark_safe("&nbsp;" * 4 + _("Late"))),
+            ("DL", mark_safe("&nbsp;" * 4 + _("Due") + "&nbsp;/&nbsp;" + _("late"))),
+            (INVOICE_DUE, mark_safe("&nbsp;" * 8 + _("Due") + f"&nbsp;({late_limit_days}{day_abbr})")),
+            (INVOICE_LATE, mark_safe("&nbsp;" * 8 + _("Late"))),
             ("C", capfirst(_("closed.invoice"))),
         ]
 
@@ -742,6 +745,8 @@ class InvoiceStateFilter(SimpleListFilter):
                 queryset = queryset.filter(close_date=None)
             elif val == "C":
                 queryset = queryset.exclude(close_date=None)
+            elif val == "DL":
+                queryset = queryset.filter(state__in=[INVOICE_DUE, INVOICE_LATE])
             else:
                 queryset = queryset.filter(state=val)
         return queryset
