@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-05 22:33+0000\n"
+"POT-Creation-Date: 2023-02-25 20:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,7 +73,7 @@ msgstr ""
 msgid "Exactly one account entry must be selected"
 msgstr ""
 
-#: jacc/admin.py:196 jacc/admin.py:823 jacc/models.py:70 jacc/models.py:85
+#: jacc/admin.py:196 jacc/admin.py:842 jacc/models.py:70 jacc/models.py:85
 #: jacc/models.py:101 jacc/models.py:135 jacc/models.py:244 jacc/models.py:269
 #: jacc/models.py:346 jacc/models.py:569
 msgid "created"
@@ -91,7 +91,7 @@ msgstr ""
 msgid "account entry notes"
 msgstr ""
 
-#: jacc/admin.py:343 jacc/admin.py:971 jacc/models.py:74 jacc/models.py:151
+#: jacc/admin.py:343 jacc/admin.py:990 jacc/models.py:74 jacc/models.py:151
 msgid "account entry source file"
 msgstr ""
 
@@ -165,47 +165,59 @@ msgstr ""
 msgid "amount"
 msgstr ""
 
-#: jacc/admin.py:830 jacc/models.py:348
+#: jacc/admin.py:723 jacc/models.py:389 jacc/models.py:561
+msgid "state"
+msgstr ""
+
+#: jacc/admin.py:727
+msgid "outstanding.invoice"
+msgstr "outstanding"
+
+#: jacc/admin.py:727
+msgid "closed.invoice"
+msgstr "ended"
+
+#: jacc/admin.py:849 jacc/models.py:348
 msgid "sent"
 msgstr ""
 
-#: jacc/admin.py:837 jacc/models.py:349
+#: jacc/admin.py:856 jacc/models.py:349
 msgid "due date"
 msgstr ""
 
-#: jacc/admin.py:844 jacc/models.py:387
+#: jacc/admin.py:863 jacc/models.py:387
 msgid "close date"
 msgstr ""
 
-#: jacc/admin.py:873
+#: jacc/admin.py:892
 msgid "is liability"
 msgstr ""
 
-#: jacc/admin.py:1050
+#: jacc/admin.py:1069
 msgid "Add reverse charge"
 msgstr ""
 
-#: jacc/admin.py:1051
+#: jacc/admin.py:1070
 msgid "Re-send invoices"
 msgstr ""
 
-#: jacc/admin.py:1052
+#: jacc/admin.py:1071
 msgid "Refresh cached fields"
 msgstr ""
 
-#: jacc/admin.py:1053
+#: jacc/admin.py:1072
 msgid "Summarize account entries"
 msgstr ""
 
-#: jacc/admin.py:1054
+#: jacc/admin.py:1073
 msgid "Summarize invoice statistics"
 msgstr ""
 
-#: jacc/admin.py:1055
+#: jacc/admin.py:1074
 msgid "set_as_asset"
 msgstr "Set as asset"
 
-#: jacc/admin.py:1056
+#: jacc/admin.py:1075
 msgid "set_as_liability"
 msgstr "Set as liability"
 
@@ -406,10 +418,6 @@ msgstr ""
 #: jacc/models.py:385
 msgid "invoice.overpaid_amount.help_text"
 msgstr "Amount of payments exceeding invoice total amount"
-
-#: jacc/models.py:389 jacc/models.py:561
-msgid "state"
-msgstr ""
 
 #: jacc/models.py:402
 msgid "invoice"

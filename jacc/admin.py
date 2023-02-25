@@ -16,7 +16,7 @@ from django.utils.formats import date_format
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.contrib.admin import widgets
-from django.utils.text import format_lazy
+from django.utils.text import format_lazy, capfirst
 from django.utils.timezone import now
 from jacc.format import align_lines
 from jacc.forms import ReverseChargeForm
@@ -29,6 +29,10 @@ from jacc.models import (
     AccountEntrySourceFile,
     INVOICE_STATE,
     AccountEntryNote,
+    INVOICE_NOT_DUE_YET,
+    INVOICE_DUE,
+    INVOICE_LATE,
+    INVOICE_PAID,
 )
 from django.conf import settings
 from django.contrib import admin
@@ -719,6 +723,31 @@ def summarize_invoice_statistics(modeladmin, request: HttpRequest, qs: QuerySet)
     messages.add_message(request, INFO, format_html("<br>".join(lines)), extra_tags="safe")
 
 
+class InvoiceStateFilter(SimpleListFilter):
+    title = _("state")
+    parameter_name = "invoice-state"
+
+    def lookups(self, request, model_admin):
+        return [
+            ("O", capfirst(_("outstanding.invoice"))),
+            (INVOICE_NOT_DUE_YET, mark_safe("&nbsp;" * 4 + _("Not due yet"))),
+            (INVOICE_DUE, mark_safe("&nbsp;" * 4 + _("Due"))),
+            (INVOICE_LATE, mark_safe("&nbsp;" * 4 + _("Late"))),
+            ("C", capfirst(_("closed.invoice"))),
+        ]
+
+    def queryset(self, request, queryset):
+        val = self.value()
+        if val:
+            if val == "O":
+                queryset = queryset.filter(close_date=None)
+            elif val == "C":
+                queryset = queryset.exclude(close_date=None)
+            else:
+                queryset = queryset.filter(state=val)
+        return queryset
+
+
 class InvoiceAdmin(ModelAdminBase):
     """
     Invoice admin. Override following in derived classes:
@@ -790,7 +819,7 @@ class InvoiceAdmin(ModelAdminBase):
         "=number",
     ]
     list_filter: Sequence[Any] = [
-        "state",
+        InvoiceStateFilter,
         InvoiceLateDaysFilter,
     ]
     allow_add = True
