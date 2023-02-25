@@ -248,7 +248,7 @@ class AccountEntryAdmin(ModelAdminBase):
         summarize_account_entries,
         add_reverse_charge,
     ]
-    list_display: Sequence[str] = [
+    list_display = [
         "id",
         "timestamp",
         "account_link",
@@ -256,7 +256,7 @@ class AccountEntryAdmin(ModelAdminBase):
         "amount",
         "parent",
     ]
-    raw_id_fields: Sequence[str] = [
+    raw_id_fields = [
         "account",
         "source_file",
         "type",
@@ -266,15 +266,15 @@ class AccountEntryAdmin(ModelAdminBase):
         "settled_item",
         "parent",
     ]
-    ordering: Sequence[str] = [
+    ordering = [
         "-id",
     ]
-    search_fields: Sequence[str] = [
+    search_fields = [
         "=id",
         "=amount",
         "description",
     ]
-    fields: Sequence[str] = [
+    fields = [
         "id",
         "account",
         "timestamp",
@@ -290,7 +290,7 @@ class AccountEntryAdmin(ModelAdminBase):
         "parent",
         "archived",
     ]
-    readonly_fields: Sequence[str] = [
+    readonly_fields = [
         "id",
         "created",
         "last_modified",
@@ -300,7 +300,7 @@ class AccountEntryAdmin(ModelAdminBase):
         "settled_item_link",
         "archived",
     ]
-    list_filter: Sequence[Any] = [
+    list_filter = [
         SettlementAccountEntryFilter,
         EntryTypeAccountEntryFilter,
         AccountTypeAccountEntryFilter,
@@ -440,7 +440,7 @@ class AccountEntryAdmin(ModelAdminBase):
 
 
 class AccountAdmin(ModelAdminBase):
-    list_display: Sequence[str] = [
+    list_display = [
         "id",
         "type",
         "name",
@@ -452,18 +452,18 @@ class AccountAdmin(ModelAdminBase):
     search_fields = [
         "name",
     ]
-    readonly_fields: Sequence[str] = [
+    readonly_fields = [
         "id",
         "balance",
         "is_asset",
     ]
-    raw_id_fields: Sequence[str] = [
+    raw_id_fields = [
         "type",
     ]
-    ordering: Sequence[str] = [
+    ordering = [
         "-id",
     ]
-    list_filter: Sequence[Any] = [
+    list_filter = [
         "type",
         "type__is_asset",
     ]
@@ -766,7 +766,7 @@ class InvoiceAdmin(ModelAdminBase):
         InvoiceItemInline,  # TODO: override in app
         InvoiceSettlementInline,  # TODO: override in app
     ]
-    list_display: Sequence[str] = [
+    list_display = [
         "number",
         "created_brief",
         "sent_brief",
@@ -777,7 +777,7 @@ class InvoiceAdmin(ModelAdminBase):
         "paid_amount",
         "unpaid_amount",
     ]
-    fields: Sequence[str] = [
+    fields = [
         "type",
         "number",
         "due_date",
@@ -794,7 +794,7 @@ class InvoiceAdmin(ModelAdminBase):
         "last_modified",
         "sent",
     ]
-    readonly_fields: Sequence[str] = [
+    readonly_fields = [
         "created",
         "last_modified",
         "sent",
@@ -811,13 +811,13 @@ class InvoiceAdmin(ModelAdminBase):
         "overpaid_amount",
         "late_days",
     ]
-    raw_id_fields: Sequence[str] = []
-    search_fields: Sequence[str] = [
+    raw_id_fields = []
+    search_fields = [
         "=amount",
         "=filename",
         "=number",
     ]
-    list_filter: Sequence[Any] = [
+    list_filter = [
         InvoiceStateFilter,
         InvoiceLateDaysFilter,
     ]
@@ -939,11 +939,11 @@ class EntryTypeAdmin(ModelAdminBase):
         "is_payment",
         "payback_priority",
     ]
-    list_filter: Sequence[Any] = (
+    list_filter = (
         "is_settlement",
         "is_payment",
     )
-    search_fields: Sequence[str] = (
+    search_fields = (
         "=code",
         "name",
     )
@@ -951,8 +951,8 @@ class EntryTypeAdmin(ModelAdminBase):
         toggle_settlement,
         toggle_payment,
     ]
-    exclude: Sequence[str] = ()
-    ordering: Sequence[str] = [
+    exclude = ()
+    ordering = [
         "name",
     ]
     allow_add = True
@@ -960,25 +960,25 @@ class EntryTypeAdmin(ModelAdminBase):
 
 
 class AccountEntrySourceFileAdmin(ModelAdminBase):
-    list_display: Sequence[str] = [
+    list_display = [
         "id",
         "created",
         "entries_link",
     ]
     date_hierarchy = "created"
-    ordering: Sequence[str] = [
+    ordering = [
         "-id",
     ]
-    fields: Sequence[str] = [
+    fields = [
         "id",
         "name",
         "created",
         "last_modified",
     ]
-    search_fields: Sequence[str] = [
+    search_fields = [
         "=name",
     ]
-    readonly_fields: Sequence[str] = [
+    readonly_fields = [
         "id",
         "created",
         "name",
