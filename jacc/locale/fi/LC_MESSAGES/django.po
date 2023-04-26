@@ -223,7 +223,7 @@ msgstr "Lähetä laskut uudelleen"
 
 #: jacc/admin.py:1085
 msgid "Refresh cached fields"
-msgstr "Päivitä kakutetut arvot"
+msgstr "Päivitä välimuistissa olevat arvot"
 
 #: jacc/admin.py:1086
 msgid "Summarize account entries"
