@@ -35,11 +35,6 @@ CATEGORY_TYPE = (
     (CATEGORY_CREDIT, _("Credit")),
 )
 
-CURRENCY_TYPE = (
-    ("EUR", "EUR"),
-    ("USD", "USD"),
-)
-
 INVOICE_NOT_DUE_YET = "N"
 INVOICE_DUE = "D"
 INVOICE_LATE = "L"
@@ -265,7 +260,7 @@ class Account(models.Model):
 
     type = models.ForeignKey(AccountType, verbose_name=_("type"), related_name="+", on_delete=models.PROTECT)
     name = SafeCharField(verbose_name=_("name"), max_length=64, blank=True, default="", db_index=True)
-    currency = SafeCharField(verbose_name=_("currency"), max_length=3, default="EUR", choices=CURRENCY_TYPE, blank=True)
+    currency = SafeCharField(verbose_name=_("currency"), max_length=3, default="EUR", blank=True)
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True)
     notes = models.TextField(_("notes"), blank=True, default="")
