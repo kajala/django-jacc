@@ -10,19 +10,22 @@ from jacc.models import AccountEntry, Invoice, EntryType, Account, INVOICE_CREDI
 
 @transaction.atomic
 def settle_invoice(receivables_account: Account, settlement: AccountEntry, invoice: Invoice, cls, **kwargs) -> list:
-    """
-    Finds unpaid items in the invoice and generates entries to receivables account.
+    """Finds unpaid items in the invoice and generates entries to receivables account.
     Settlement is matched to invoice items based on entry types payback order.
     Generated payment entries have 'parent' field pointing to settlement, so that
     if settlement is (ever) deleted the payment entries will get deleted as well.
     In case of overpayment method generates entry to receivables account without matching invoice settled_item
     (only matching settled_invoice).
-    :param receivables_account: Account which receives settled entries of the invoice
-    :param settlement: Settlement to target to unpaid invoice items
-    :param invoice: Invoice to be settled
-    :param cls: Class for generated account entries, e.g. AccountEntry
-    :param kwargs: Extra attributes for created for generated account entries
-    :return: list (generated receivables account entries)
+
+    Args:
+        receivables_account: Account which receives settled entries of the invoice
+        settlement: Settlement to target to unpaid invoice items
+        invoice: Invoice to be settled
+        cls: Class for generated account entries, e.g. AccountEntry
+        **kwargs: Extra attributes for created for generated account entries
+
+    Returns:
+        list (generated receivables account entries)
     """
     assert isinstance(invoice, Invoice)
     if not invoice:
@@ -88,18 +91,21 @@ def settle_invoice(receivables_account: Account, settlement: AccountEntry, invoi
 
 @transaction.atomic
 def settle_assigned_invoice(receivables_account: Account, settlement: AccountEntry, cls, **kwargs) -> list:
-    """
-    Finds unpaid items in the invoice and generates entries to receivables account.
+    """Finds unpaid items in the invoice and generates entries to receivables account.
     Settlement is matched to invoice items based on entry types payback order.
     Generated payment entries have 'parent' field pointing to settlement, so that
     if settlement is (ever) deleted the payment entries will get deleted as well.
     In case of overpayment method generates entry to receivables account without matching invoice settled_item
     (only matching settled_invoice).
-    :param receivables_account: Account which receives settled entries of the invoice
-    :param settlement: Settlement to target to unpaid invoice items
-    :param cls: Class for generated account entries, e.g. AccountEntry
-    :param kwargs: Extra attributes for created for generated account entries
-    :return: list (generated receivables account entries)
+
+    Args:
+        receivables_account: Account which receives settled entries of the invoice
+        settlement: Settlement to target to unpaid invoice items
+        cls: Class for generated account entries, e.g. AccountEntry
+        **kwargs: Extra attributes for created for generated account entries
+
+    Returns:
+        list (generated receivables account entries)
     """
     if settlement.settled_invoice is None:
         raise ValidationError("Cannot target settlement {} without settled invoice".format(settlement))
@@ -116,18 +122,21 @@ def settle_credit_note(  # noqa
     credit_kwargs: Optional[Dict[str, Any]] = None,
     **kwargs
 ) -> list:
-    """
-    Settles credit note. Records settling account entries for both original invoice and the credit note
+    """Settles credit note. Records settling account entries for both original invoice and the credit note
     (negative entries for the credit note).
     Default timestamp for account entries is current time, can be overriden by kwargs timestamp.
-    :param credit_note: Credit note to settle
-    :param debit_note: Invoice to settle
-    :param cls: AccountEntry (derived) class to use for new entries
-    :param account: Settlement account
-    :param debit_kwargs: Optional kwargs for the debit record to cls() instance creation
-    :param credit_kwargs: Optional kwargs for the credit record to cls() instance creation
-    :param kwargs: Shared variable arguments to cls() instance creation for both records
-    :return: list of new settlements
+
+    Args:
+        credit_note: Credit note to settle
+        debit_note: Invoice to settle
+        cls: AccountEntry (derived) class to use for new entries
+        account: Settlement account
+        debit_kwargs: Optional kwargs for the debit record to cls() instance creation
+        credit_kwargs: Optional kwargs for the credit record to cls() instance creation
+        **kwargs: Shared variable arguments to cls() instance creation for both records
+
+    Returns:
+        list of new settlements
     """
     assert isinstance(credit_note, Invoice)
 

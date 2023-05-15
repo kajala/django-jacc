@@ -1,5 +1,4 @@
-"""
-Double entry accounting system:
+"""Double entry accounting system:
 
 A debit is an accounting entry that either increases an asset or expense account,
 or decreases a liability or equity account. It is positioned to the left in an accounting entry.
@@ -57,9 +56,7 @@ INVOICE_TYPE = (
 
 
 class AccountEntrySourceFile(models.Model):
-    """
-    Account entry source is set for entries based on some event like payment file import
-    """
+    """Account entry source is set for entries based on some event like payment file import"""
 
     name = SafeCharField(verbose_name=_("name"), max_length=255, db_index=True, blank=True, default="")
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
@@ -115,9 +112,7 @@ class AccountEntryManager(models.Manager):
 
 
 class AccountEntry(models.Model):
-    """
-    Single mutation in account state.
-    """
+    """Single mutation in account state."""
 
     objects: models.Manager = AccountEntryManager()
     account = models.ForeignKey(
@@ -215,17 +210,19 @@ class AccountEntry(models.Model):
 
     @property
     def is_parent(self) -> bool:
-        """
-        True if this is a parent of some other account entry.
-        :return: bool
+        """True if this is a parent of some other account entry.
+
+        Returns:
+            bool
         """
         return AccountEntry.objects.filter(parent=self).exists()
 
     @property
     def balance(self) -> Decimal:
-        """
-        Returns account balance after this entry.
-        :return: Decimal
+        """Returns account balance after this entry.
+
+        Returns:
+            Decimal
         """
         return sum_queryset(AccountEntry.objects.filter(account=self.account, timestamp__lte=self.timestamp).exclude(timestamp=self.timestamp, id__gt=self.id))
 
@@ -254,9 +251,7 @@ class AccountType(models.Model):
 
 
 class Account(models.Model):
-    """
-    Collects together accounting entries and provides summarizing functionality.
-    """
+    """Collects together accounting entries and provides summarizing functionality."""
 
     type = models.ForeignKey(AccountType, verbose_name=_("type"), related_name="+", on_delete=models.PROTECT)
     name = SafeCharField(verbose_name=_("name"), max_length=64, blank=True, default="", db_index=True)
@@ -299,15 +294,18 @@ class Account(models.Model):
         return sum_queryset(self.accountentry_set.all().filter(timestamp__lt=t))
 
     def needs_settling(self, e: AccountEntry) -> bool:
-        """
-        Returns True if all of following conditions are True:
+        """Returns True if all of following conditions are True:
         a) entry has valid amount set
         b) entry type is settlement
         c) entry has been recorded to this account
         d) invoice to be settled has been set
         e) entry has not been settled (=child set empty)
-        :param e: AccountEntry (settlement)
-        :return: bool
+
+        Args:
+            e: AccountEntry (settlement)
+
+        Returns:
+            bool
         """
         return bool(e.amount is not None and e.type and e.type.is_settlement and e.account.id == self.id and e.settled_invoice and not e.is_parent)
 
@@ -324,8 +322,7 @@ def get_default_due_date():
 
 
 class Invoice(models.Model, CachedFieldsMixin):
-    """
-    Invoice model. Typically used as base model for actual app-specific invoice model.
+    """Invoice model. Typically used as base model for actual app-specific invoice model.
 
     Convention for naming date/time variables:
     1) date fields are suffixed with _date if they are either plain date fields or interpreted as such (due_date)
@@ -402,9 +399,10 @@ class Invoice(models.Model, CachedFieldsMixin):
 
     @property
     def receivables_account(self) -> Optional[Account]:
-        """
-        Returns receivables account. Receivables account is assumed to be the one were invoice rows were recorded.
-        :return: Account or None
+        """Returns receivables account. Receivables account is assumed to be the one were invoice rows were recorded.
+
+        Returns:
+            Account or None
         """
         if self.cached_receivables_account is None:
             row = AccountEntry.objects.filter(source_invoice=self).order_by("id").first()
@@ -419,27 +417,36 @@ class Invoice(models.Model, CachedFieldsMixin):
         return recv.currency if recv else ""
 
     def get_entries(self, acc: Account, cls: Type[AccountEntry] = AccountEntry) -> QuerySet:
-        """
-        Returns entries related to this invoice on specified account.
-        :param acc: Account
-        :param cls: AccountEntry class
-        :return: QuerySet
+        """Returns entries related to this invoice on specified account.
+
+        Args:
+            acc: Account
+            cls: AccountEntry class
+
+        Returns:
+            QuerySet
         """
         return cls.objects.filter(Q(account=acc) & (Q(source_invoice=self) | Q(settled_invoice=self))) if acc else cls.objects.none()
 
     def get_balance(self, acc: Account) -> Decimal:
-        """
-        Returns balance of this invoice on specified account.
-        :param acc: Account
-        :return:
+        """Returns balance of this invoice on specified account.
+
+        Args:
+            acc: Account
+
+        Returns:
+
         """
         return sum_queryset(self.get_entries(acc))
 
     def get_item_balances(self, acc: Account) -> list:
-        """
-        Returns balances of items of the invoice.
-        :param acc: Account
-        :return: list (AccountEntry, Decimal) in item id order
+        """Returns balances of items of the invoice.
+
+        Args:
+            acc: Account
+
+        Returns:
+            list (AccountEntry, Decimal) in item id order
         """
         items = []
         entries = self.get_entries(acc)
@@ -451,10 +458,13 @@ class Invoice(models.Model, CachedFieldsMixin):
         return items
 
     def get_unpaid_items(self, acc: Account) -> list:
-        """
-        Returns unpaid items of the invoice in payback priority order.
-        :param acc: Account
-        :return: list (AccountEntry, Decimal) in payback priority order
+        """Returns unpaid items of the invoice in payback priority order.
+
+        Args:
+            acc: Account
+
+        Returns:
+            list (AccountEntry, Decimal) in payback priority order
         """
         unpaid_items = []
         for item, bal in self.get_item_balances(acc):
@@ -557,9 +567,7 @@ class Invoice(models.Model, CachedFieldsMixin):
 
 
 class Contract(models.Model):
-    """
-    Base class for contracts (e.g. rent contracts, loans, etc.)
-    """
+    """Base class for contracts (e.g. rent contracts, loans, etc.)"""
 
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True)

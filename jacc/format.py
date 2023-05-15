@@ -2,11 +2,14 @@ from typing import List
 
 
 def align_lines(lines: list, column_separator: str = "|") -> List[str]:
-    """
-    Pads lines so that all rows in single column match. Columns separated by '|' in every line.
-    :param lines: list of lines
-    :param column_separator: column separator. default is '|'
-    :return: list of lines
+    """Pads lines so that all rows in single column match. Columns separated by '|' in every line.
+
+    Args:
+        lines: list of lines
+        column_separator: column separator. default is '|'
+
+    Returns:
+        list of lines
     """
     rows = []
     col_len: List[int] = []

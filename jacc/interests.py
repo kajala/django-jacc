@@ -12,14 +12,17 @@ def calculate_simple_interest(  # pylint: disable=too-many-locals
     interest_date: Optional[date] = None,
     begin: Optional[date] = None,
 ) -> Decimal:
-    """
-    Calculates simple interest of specified entries over time.
+    """Calculates simple interest of specified entries over time.
     Does not accumulate interest to interest.
-    :param entries: AccountEntry iterable (e.g. list/QuerySet) ordered by timestamp (ascending)
-    :param rate_pct: Interest rate %, e.g. 8.00 for 8%
-    :param interest_date: Interest end date. Default is current date.
-    :param begin: Optional begin date for the interest. Default is whole range from the timestamp of account entries.
-    :return: Decimal accumulated interest
+
+    Args:
+        entries: AccountEntry iterable (e.g. list/QuerySet) ordered by timestamp (ascending)
+        rate_pct: Interest rate %, e.g. 8.00 for 8%
+        interest_date: Interest end date. Default is current date.
+        begin: Optional begin date for the interest. Default is whole range from the timestamp of account entries.
+
+    Returns:
+        Decimal accumulated interest
     """
     if interest_date is None:
         interest_date = now().date()

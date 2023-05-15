@@ -28,10 +28,13 @@ INTEREST_TYPE_CODES = [E_INTEREST]
 
 
 def create_account_by_type(type_id: str):
-    """
-    Create account by AccountType id.
-    :param type_id:
-    :return: Account
+    """Create account by AccountType id.
+
+    Args:
+        type_id
+
+    Returns:
+        Account
     """
     return Account.objects.create(type=AccountType.objects.get(code=type_id))
 

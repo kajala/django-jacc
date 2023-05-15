@@ -474,12 +474,15 @@ class AccountAdmin(ModelAdminBase):
 
 class AccountEntryInlineFormSet(forms.BaseInlineFormSet):
     def clean_entries(self, source_invoice: Optional[Invoice], settled_invoice: Optional[Invoice], account: Optional[Account], **kw):
-        """
-        This needs to be called from a derived class clean().
-        :param source_invoice:
-        :param settled_invoice:
-        :param account:
-        :return: None
+        """This needs to be called from a derived class clean().
+
+        Args:
+            source_invoice
+            settled_invoice
+            account
+
+        Returns:
+            None
         """
         for form in self.forms:
             obj = form.instance
@@ -651,12 +654,15 @@ class InvoiceSettlementInline(admin.TabularInline):  # TODO: override in app
 
 
 def resend_invoices(modeladmin, request: HttpRequest, queryset: QuerySet):  # pylint: disable=unused-argument
-    """
-    Marks invoices with as un-sent.
-    :param modeladmin:
-    :param request:
-    :param queryset:
-    :return:
+    """Marks invoices with as un-sent.
+
+    Args:
+        modeladmin
+        request
+        queryset
+
+    Returns:
+
     """
     user = request.user
     assert isinstance(user, User)
@@ -753,8 +759,7 @@ class InvoiceStateFilter(SimpleListFilter):
 
 
 class InvoiceAdmin(ModelAdminBase):
-    """
-    Invoice admin. Override following in derived classes:
+    """Invoice admin. Override following in derived classes:
     - InvoiceSettlementInline with formset derived from AccountEntryInlineFormSet, override clean and call clean_entries()
     - InvoiceItemsInline with formset derived from AccountEntryInlineFormSet, override clean and call clean_entries()
     - inlines = [] set with above mentioned derived classes
@@ -837,10 +842,13 @@ class InvoiceAdmin(ModelAdminBase):
         return super().construct_change_message(request, form, formsets, add)
 
     def _format_date(self, obj) -> str:
-        """
-        Short date format.
-        :param obj: date or datetime or None
-        :return: str
+        """Short date format.
+
+        Args:
+            obj: date or datetime or None
+
+        Returns:
+            str
         """
         if obj is None:
             return ""
