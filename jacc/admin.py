@@ -49,9 +49,14 @@ logger = logging.getLogger(__name__)
 
 
 def refresh_cached_fields(modeladmin, request, qs):  # pylint: disable=unused-argument
-    for e in qs:
-        e.update_cached_fields()
-    add_message(request, messages.SUCCESS, "Cached fields refreshed ({})".format(qs.count()))
+    n_count = 0
+    for obj in qs.order_by("id").distinct():
+        try:
+            obj.update_cached_fields()
+            n_count += 1
+        except Exception as exc:
+            add_message(request, messages.ERROR, f"{obj}: {exc}")
+    add_message(request, messages.SUCCESS, _("Cached fields refreshed ({})").format(n_count))
 
 
 def summarize_account_entries(modeladmin, request, qs):  # pylint: disable=unused-argument
