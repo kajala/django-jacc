@@ -191,6 +191,9 @@ class AccountEntry(models.Model):
     class Meta:
         verbose_name = _("account entry")
         verbose_name_plural = _("account entries")
+        indexes = [
+            models.Index(fields=["account", "created"]),
+        ]
 
     def __str__(self):
         return "[{}] {} {} {}".format(
