@@ -162,6 +162,7 @@ def add_reverse_charge(modeladmin, request, qs):
     assert hasattr(modeladmin, "reverse_charge_form")
     assert hasattr(modeladmin, "reverse_charge_template")
 
+    user = request.user
     cx: Dict[str, Any] = {}
     try:
         if qs.count() != 1:
@@ -202,6 +203,7 @@ def add_reverse_charge(modeladmin, request, qs):
             reverse_e.full_clean()
             reverse_e.save()
             messages.info(request, "{} {}".format(reverse_e, _("created")))
+            admin_log([e, reverse_e], f"Added {reverse_e} to reverse {e}: {description}", who=user)
         else:
             cx["form"] = form = form_cls(initial=initial)
             return render(request, modeladmin.reverse_charge_template, context=cx)
