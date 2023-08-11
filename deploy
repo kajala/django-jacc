@@ -4,6 +4,7 @@ REL=`parse-setup-version.py`
 echo "Making release $REL of $PROJECT"
 
 rm -rf dist
+rm -rf htmlcov
 python3 setup.py sdist
 
 # clean venv/ directory from the dist
