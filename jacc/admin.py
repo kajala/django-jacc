@@ -750,10 +750,10 @@ class InvoiceStateFilter(SimpleListFilter):
         day_abbr = _("day.abbr")
         return [
             ("O", capfirst(_("outstanding.invoice"))),
-            (INVOICE_NOT_DUE_YET, mark_safe("&nbsp;" * 4 + _("Not due yet"))),
-            ("DL", mark_safe("&nbsp;" * 4 + _("Due") + "&nbsp;/&nbsp;" + _("late"))),
-            (INVOICE_DUE, mark_safe("&nbsp;" * 8 + _("Due") + f"&nbsp;({late_limit_days}{day_abbr})")),
-            (INVOICE_LATE, mark_safe("&nbsp;" * 8 + _("Late"))),
+            (INVOICE_NOT_DUE_YET, mark_safe("&nbsp;" * 2 + _("Not due yet"))),
+            ("DL", mark_safe("&nbsp;" * 2 + _("Due") + "&nbsp;/&nbsp;" + _("late"))),
+            (INVOICE_DUE, mark_safe("&nbsp;" * 4 + _("Due") + f"&nbsp;({late_limit_days}{day_abbr})")),
+            (INVOICE_LATE, mark_safe("&nbsp;" * 4 + _("Late"))),
             ("C", capfirst(_("closed.invoice"))),
         ]
 

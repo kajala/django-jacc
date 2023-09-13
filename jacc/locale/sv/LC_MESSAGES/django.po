@@ -1,46 +1,41 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-13 01:03+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2023-09-13 01:04+0000\n"
+"PO-Revision-Date: 2023-09-12 20:04-0500\n"
+"Last-Translator: Google Translate API v3\n"
+"Language-Team: sv <jani>\n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: jacc/admin.py:59
 msgid "Cached fields refreshed ({})"
-msgstr ""
+msgstr "Cachade fält har uppdaterats ({})"
 
 #: jacc/admin.py:72
 #, python-brace-format
 msgid "({total_count} account entries)"
-msgstr ""
+msgstr "({total_count} kontoposter)"
 
 #: jacc/admin.py:74 jacc/models.py:84
 msgid "entry type"
-msgstr ""
+msgstr "ingångstyp"
 
 #: jacc/admin.py:74
 msgid "count"
-msgstr ""
+msgstr "räkna"
 
 #: jacc/admin.py:74
 msgid "credit"
-msgstr ""
+msgstr "kreditera"
 
 #: jacc/admin.py:74
 msgid "debit"
-msgstr ""
+msgstr "debitera"
 
 #: jacc/admin.py:93
 #, python-brace-format
@@ -48,135 +43,138 @@ msgid ""
 "Total debits {total_debits:.2f} | - total credits {total_credits:.2f} | = "
 "{total_amount:.2f}"
 msgstr ""
+"Totala debiteringar {total_debits:.2f} | - totala poäng {total_credits:.2f} "
+"| = {total_amount:.2f}"
 
 #: jacc/admin.py:102 jacc/admin.py:107
 msgid "settlement"
-msgstr ""
+msgstr "lösning"
 
 #: jacc/admin.py:108
 msgid "payment"
-msgstr ""
+msgstr "betalning"
 
 #: jacc/admin.py:109
 msgid "non-payment settlement"
-msgstr ""
+msgstr "utebliven betalning"
 
 #: jacc/admin.py:110
 msgid "not settlement"
-msgstr ""
+msgstr "inte uppgörelse"
 
 #: jacc/admin.py:128
 msgid "account entry type"
-msgstr ""
+msgstr "typ av kontoinmatning"
 
 #: jacc/admin.py:145 jacc/models.py:243
 msgid "account type"
-msgstr ""
+msgstr "kontotyp"
 
 #: jacc/admin.py:169 jacc/admin.py:173
 msgid "Exactly one account entry must be selected"
-msgstr ""
+msgstr "Exakt en kontopost måste väljas"
 
 #: jacc/admin.py:205 jacc/admin.py:877 jacc/models.py:62 jacc/models.py:77
 #: jacc/models.py:93 jacc/models.py:125 jacc/models.py:239 jacc/models.py:262
 #: jacc/models.py:341 jacc/models.py:575
 msgid "created"
-msgstr ""
+msgstr "skapas"
 
 #: jacc/admin.py:223
 msgid "cannot.modify.archived.account.entry"
-msgstr "Archived account entries cannot be modified."
+msgstr "Arkiverade kontoposter kan inte ändras."
 
 #: jacc/admin.py:230 jacc/models.py:106
 msgid "account entry note"
-msgstr ""
+msgstr "kontoanteckning"
 
 #: jacc/admin.py:231 jacc/models.py:107
 msgid "account entry notes"
-msgstr ""
+msgstr "kontoanteckningar"
 
 #: jacc/admin.py:353 jacc/admin.py:1025 jacc/models.py:66 jacc/models.py:141
 msgid "account entry source file"
-msgstr ""
+msgstr "källfil för kontoinmatning"
 
 #: jacc/admin.py:360 jacc/admin.py:666 jacc/models.py:267
 msgid "account"
-msgstr ""
+msgstr "konto"
 
 #: jacc/admin.py:369 jacc/models.py:151
 msgid "source invoice"
-msgstr ""
+msgstr "källfaktura"
 
 #: jacc/admin.py:378 jacc/models.py:161
 msgid "settled invoice"
-msgstr ""
+msgstr "reglerad faktura"
 
 #: jacc/admin.py:387 jacc/models.py:171
 msgid "settled item"
-msgstr ""
+msgstr "avgjord post"
 
 #: jacc/admin.py:396 jacc/models.py:181
 msgid "account.entry.parent"
-msgstr "parent"
+msgstr "förälder"
 
 #: jacc/admin.py:508
 msgid "Derived account entry amount cannot be larger than original"
-msgstr ""
+msgstr "Det härledda kontobeloppet kan inte vara större än det ursprungliga"
 
 #: jacc/admin.py:511 jacc/admin.py:514
 msgid ""
 "Payment settlements must have originating account entry which is also payment"
 msgstr ""
+"Betalningsavräkningar måste ha ursprunglig kontopost som också är betalning"
 
 #: jacc/admin.py:550
 msgid "invoice items"
-msgstr ""
+msgstr "fakturaartiklar"
 
 #: jacc/admin.py:551
 msgid "invoices items"
-msgstr ""
+msgstr "fakturor poster"
 
 #: jacc/admin.py:583 jacc/admin.py:656
 msgid "id"
-msgstr ""
+msgstr "id"
 
 #: jacc/admin.py:602 jacc/admin.py:603
 msgid "settlements"
-msgstr ""
+msgstr "avräkningar"
 
 #: jacc/admin.py:689 jacc/models.py:383
 msgid "late days"
-msgstr ""
+msgstr "sena dagar"
 
 #: jacc/admin.py:696
 msgid "late.days.filter.not.due"
-msgstr "not due yet"
+msgstr "inte förfallna ännu"
 
 #: jacc/admin.py:697 jacc/admin.py:698 jacc/admin.py:699 jacc/admin.py:700
 msgid "late.days.filter.late.range"
-msgstr "late {}-{}d"
+msgstr "sent {}-{}d"
 
 #: jacc/admin.py:701
 msgid "late.days.filter.late.over.days"
-msgstr "late over {}d"
+msgstr "sent över {}d"
 
 #: jacc/admin.py:723
 #, python-brace-format
 msgid "({total_count} invoices)"
-msgstr ""
+msgstr "({total_count} fakturor)"
 
 #: jacc/admin.py:737
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: jacc/admin.py:737 jacc/forms.py:8 jacc/models.py:138 jacc/models.py:348
 #: jacc/templates/admin/jacc/accountentry/reverse_entry.html:10
 msgid "amount"
-msgstr ""
+msgstr "belopp"
 
 #: jacc/admin.py:745 jacc/models.py:384 jacc/models.py:569
 msgid "state"
-msgstr ""
+msgstr "stat"
 
 #: jacc/admin.py:750
 msgid "day.abbr"
@@ -184,329 +182,328 @@ msgstr "d"
 
 #: jacc/admin.py:752
 msgid "outstanding.invoice"
-msgstr "outstanding"
+msgstr "utestående"
 
 #: jacc/admin.py:753 jacc/models.py:43
 msgid "Not due yet"
-msgstr ""
+msgstr "Inte förfallo ännu"
 
 #: jacc/admin.py:754 jacc/admin.py:755 jacc/models.py:44
 msgid "Due"
-msgstr ""
+msgstr "På grund av"
 
 #: jacc/admin.py:754
 msgid "late"
-msgstr ""
+msgstr "sent"
 
 #: jacc/admin.py:756 jacc/models.py:45
 msgid "Late"
-msgstr ""
+msgstr "Sent"
 
 #: jacc/admin.py:757
 msgid "closed.invoice"
-msgstr "ended"
+msgstr "slutade"
 
 #: jacc/admin.py:884 jacc/models.py:343
 msgid "sent"
-msgstr ""
+msgstr "skickas"
 
 #: jacc/admin.py:891 jacc/models.py:344
 msgid "due date"
-msgstr ""
+msgstr "förfallodatum"
 
 #: jacc/admin.py:898 jacc/models.py:382
 msgid "close date"
-msgstr ""
+msgstr "stängningsdatum"
 
 #: jacc/admin.py:927
 msgid "is liability"
-msgstr ""
+msgstr "är ansvar"
 
 #: jacc/admin.py:1104
 msgid "Add reverse charge"
-msgstr ""
+msgstr "Lägg till omvänd laddning"
 
 #: jacc/admin.py:1105
 msgid "Re-send invoices"
-msgstr ""
+msgstr "Skicka fakturor igen"
 
 #: jacc/admin.py:1106
 msgid "Refresh cached fields"
-msgstr ""
+msgstr "Uppdatera cachade fält"
 
 #: jacc/admin.py:1107
 msgid "Summarize account entries"
-msgstr ""
+msgstr "Sammanfatta kontoposter"
 
 #: jacc/admin.py:1108
 msgid "Summarize invoice statistics"
-msgstr ""
+msgstr "Sammanfatta fakturastatistik"
 
 #: jacc/admin.py:1109
 msgid "set_as_asset"
-msgstr "Set as asset"
+msgstr "Ange som tillgång"
 
 #: jacc/admin.py:1110
 msgid "set_as_liability"
-msgstr "Set as liability"
+msgstr "Ställs som ansvar"
 
 #: jacc/apps.py:7
 msgid "Accounting"
-msgstr ""
+msgstr "Bokföring"
 
 #: jacc/forms.py:7 jacc/models.py:127
 #: jacc/templates/admin/jacc/accountentry/reverse_entry.html:9
 msgid "timestamp"
-msgstr ""
+msgstr "tidsstämpel"
 
 #: jacc/forms.py:10 jacc/models.py:137
 #: jacc/templates/admin/jacc/accountentry/reverse_entry.html:11
 msgid "description"
-msgstr ""
+msgstr "beskrivning"
 
 #: jacc/forms.py:14
 msgid "reverse.charge.form.default.description"
-msgstr "refund"
+msgstr "återbetalning"
 
 #: jacc/models.py:33
 msgid "Debit"
-msgstr ""
+msgstr "Debitera"
 
 #: jacc/models.py:34
 msgid "Credit"
-msgstr ""
+msgstr "Kreditera"
 
 #: jacc/models.py:46
 msgid "Paid"
-msgstr ""
+msgstr "Betalt"
 
 #: jacc/models.py:53
 msgid "Invoice"
-msgstr ""
+msgstr "Faktura"
 
 #: jacc/models.py:54
 msgid "Credit Note"
-msgstr ""
+msgstr "Kreditnota"
 
 #: jacc/models.py:61 jacc/models.py:76 jacc/models.py:237 jacc/models.py:260
 #: jacc/models.py:577
 msgid "name"
-msgstr ""
+msgstr "namn"
 
 #: jacc/models.py:63 jacc/models.py:78 jacc/models.py:102 jacc/models.py:126
 #: jacc/models.py:240 jacc/models.py:263 jacc/models.py:342 jacc/models.py:576
 msgid "last modified"
-msgstr ""
+msgstr "Senast ändrad"
 
 #: jacc/models.py:67
 msgid "account entry source files"
-msgstr ""
+msgstr "källfiler för kontoinmatning"
 
 #: jacc/models.py:74 jacc/models.py:236
 msgid "code"
-msgstr ""
+msgstr "koda"
 
 #: jacc/models.py:75
 msgid "identifier"
-msgstr ""
+msgstr "identifierare"
 
 #: jacc/models.py:79
 msgid "payback priority"
-msgstr ""
+msgstr "återbetalningsprioritet"
 
 #: jacc/models.py:80
 msgid "is settlement"
-msgstr ""
+msgstr "är uppgörelse"
 
 #: jacc/models.py:81
 msgid "is payment"
-msgstr ""
+msgstr "är betalning"
 
 #: jacc/models.py:85
 msgid "entry types"
-msgstr ""
+msgstr "ingångstyper"
 
 #: jacc/models.py:92 jacc/models.py:192
 msgid "account entry"
-msgstr ""
+msgstr "kontoinmatning"
 
 #: jacc/models.py:96
 msgid "created by"
-msgstr ""
+msgstr "skapad av"
 
 #: jacc/models.py:103
 msgid "note"
-msgstr ""
+msgstr "notera"
 
 #: jacc/models.py:120
 msgid "record account"
-msgstr ""
+msgstr "registrera konto"
 
 #: jacc/models.py:130 jacc/models.py:259 jacc/models.py:339
 msgid "type"
-msgstr ""
+msgstr "typ"
 
 #: jacc/models.py:147
 msgid "entry.source.file.help.text"
-msgstr "e.g. settlement file"
+msgstr "t.ex. avräkningsfil"
 
 #: jacc/models.py:157
 msgid "entry.source.invoice.help.text"
-msgstr "e.g. invoice for invoice row entries"
+msgstr "t.ex. faktura för fakturaradposter"
 
 #: jacc/models.py:167
 msgid "entry.settled.invoice.help.text"
-msgstr "e.g. settled invoice"
+msgstr "t.ex. reglerad faktura"
 
 #: jacc/models.py:177
 msgid "entry.settled.item.help.text"
-msgstr "e.g. settled invoice row"
+msgstr "t.ex. avräknad fakturarad"
 
 #: jacc/models.py:189
 msgid "archived"
-msgstr ""
+msgstr "arkiveras"
 
 #: jacc/models.py:193
 #: jacc/templates/admin/jacc/accountentry/change_form.html:11
 #: jacc/templates/admin/jacc/accountentry/change_list.html:10
 msgid "account entries"
-msgstr ""
+msgstr "kontoposter"
 
 #: jacc/models.py:232 jacc/models.py:289
 msgid "balance"
-msgstr ""
+msgstr "balans"
 
 #: jacc/models.py:238 jacc/models.py:277
 msgid "asset"
-msgstr ""
+msgstr "tillgång"
 
 #: jacc/models.py:244
 msgid "account types"
-msgstr ""
+msgstr "kontotyper"
 
 #: jacc/models.py:253 jacc/models.py:283
 msgid "liability"
-msgstr ""
+msgstr "ansvar"
 
 #: jacc/models.py:261
 msgid "currency"
-msgstr ""
+msgstr "valuta"
 
 #: jacc/models.py:264 jacc/models.py:345
 msgid "notes"
-msgstr ""
+msgstr "anteckningar"
 
 #: jacc/models.py:268
 msgid "accounts"
-msgstr ""
+msgstr "konton"
 
 #: jacc/models.py:340
 msgid "invoice number"
-msgstr ""
+msgstr "fakturanummer"
 
 #: jacc/models.py:346
 msgid "filename"
-msgstr ""
+msgstr "filnamn"
 
 #: jacc/models.py:348
 msgid "invoice.amount.help_text"
-msgstr "Total amount of invoice"
+msgstr "Totalt fakturabelopp"
 
 #: jacc/models.py:351
 msgid "paid amount"
-msgstr ""
+msgstr "betald summa"
 
 #: jacc/models.py:358
 msgid "invoice.paid_amount.help_text"
-msgstr "Amount of payments associated with this invoice"
+msgstr "Betalningsbelopp som är kopplat till denna faktura"
 
 #: jacc/models.py:361
 msgid "unpaid amount"
-msgstr ""
+msgstr "obetalt belopp"
 
 #: jacc/models.py:369
 msgid "invoice.unpaid_amount.help_text"
-msgstr "Payment amount still expected for this invoice"
+msgstr "Betalningsbeloppet förväntas fortfarande för denna faktura"
 
 #: jacc/models.py:372
 msgid "overpaid amount"
-msgstr ""
+msgstr "överbetalt belopp"
 
 #: jacc/models.py:380
 msgid "invoice.overpaid_amount.help_text"
-msgstr "Amount of payments exceeding invoice total amount"
+msgstr "Betalningsbeloppet överstiger fakturans totala belopp"
 
 #: jacc/models.py:397
 msgid "invoice"
-msgstr ""
+msgstr "faktura"
 
 #: jacc/models.py:398
 msgid "invoices"
-msgstr ""
+msgstr "fakturor"
 
 #: jacc/models.py:518
 msgid "is paid"
-msgstr ""
+msgstr "är betalad"
 
 #: jacc/models.py:524
 msgid "is due"
-msgstr ""
+msgstr "förfaller"
 
 #: jacc/models.py:580
 msgid "contract"
-msgstr ""
+msgstr "avtal"
 
 #: jacc/models.py:581
 msgid "contracts"
-msgstr ""
+msgstr "kontrakt"
 
 #: jacc/settle.py:144
 msgid "Credit note type incorrect"
-msgstr ""
+msgstr "Kreditnotatyp felaktig"
 
 #: jacc/settle.py:146
 msgid "Debit note missing"
-msgstr ""
+msgstr "Debetsedel saknas"
 
 #: jacc/settle.py:148
 msgid "Debit note type incorrect"
-msgstr ""
+msgstr "Debetsedeltyp felaktig"
 
 #: jacc/settle.py:157
 msgid ""
 "Cannot settle credit note amount which is larger than remaining unpaid "
 "balance"
 msgstr ""
+"Det går inte att reglera kreditnotans belopp som är större än återstående "
+"obetalt saldo"
 
 #: jacc/settle.py:167
 msgid "credit.note.reconciliation"
-msgstr ""
+msgstr "avstämning.kreditnota"
 
 #: jacc/templates/admin/jacc/account/change_form.html:8
 msgid "Account Entries"
-msgstr ""
+msgstr "Kontoposter"
 
 #: jacc/templates/admin/jacc/account/change_form.html:12
 msgid "History"
-msgstr ""
+msgstr "Historia"
 
 #: jacc/templates/admin/jacc/account/change_form.html:14
 msgid "View on site"
-msgstr ""
+msgstr "Utsikt på plats"
 
 #: jacc/templates/admin/jacc/accountentry/change_form.html:7
 #: jacc/templates/admin/jacc/accountentry/change_list.html:6
 msgid "Home"
-msgstr ""
+msgstr "Hem"
 
 #: jacc/templates/admin/jacc/accountentry/change_form.html:20
 #, python-format
 msgid "Add %(name)s"
-msgstr ""
+msgstr "Lägg till %(name)s"
 
 #: jacc/templates/admin/jacc/accountentry/reverse_entry.html:18
 msgid "Save"
-msgstr ""
-
-#~ msgid "entry.settled.item"
-#~ msgstr "e.g. settled row in invoice"
+msgstr "Spara"

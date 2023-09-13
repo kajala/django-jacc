@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 16:19+0000\n"
+"POT-Creation-Date: 2023-09-13 01:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,181 +73,181 @@ msgstr "tilitapahtuman tyyppi"
 msgid "account type"
 msgstr "tilityyppi"
 
-#: jacc/admin.py:168 jacc/admin.py:172
+#: jacc/admin.py:169 jacc/admin.py:173
 msgid "Exactly one account entry must be selected"
 msgstr "Yksi tilitapahtuma pitää olla valittuna"
 
-#: jacc/admin.py:204 jacc/admin.py:875 jacc/models.py:62 jacc/models.py:77
+#: jacc/admin.py:205 jacc/admin.py:877 jacc/models.py:62 jacc/models.py:77
 #: jacc/models.py:93 jacc/models.py:125 jacc/models.py:239 jacc/models.py:262
 #: jacc/models.py:341 jacc/models.py:575
 msgid "created"
 msgstr "luotu"
 
-#: jacc/admin.py:221
+#: jacc/admin.py:223
 msgid "cannot.modify.archived.account.entry"
 msgstr "Arkistoitua tilitietuetta ei vo muokata"
 
-#: jacc/admin.py:228 jacc/models.py:106
+#: jacc/admin.py:230 jacc/models.py:106
 msgid "account entry note"
 msgstr "tilitapahtuman muistiinpano"
 
-#: jacc/admin.py:229 jacc/models.py:107
+#: jacc/admin.py:231 jacc/models.py:107
 msgid "account entry notes"
 msgstr "tilitapahtuman muistiinpanot"
 
-#: jacc/admin.py:351 jacc/admin.py:1023 jacc/models.py:66 jacc/models.py:141
+#: jacc/admin.py:353 jacc/admin.py:1025 jacc/models.py:66 jacc/models.py:141
 msgid "account entry source file"
 msgstr "tilitapahtumien lähdetiedosto"
 
-#: jacc/admin.py:358 jacc/admin.py:664 jacc/models.py:267
+#: jacc/admin.py:360 jacc/admin.py:666 jacc/models.py:267
 msgid "account"
 msgstr "tili"
 
-#: jacc/admin.py:367 jacc/models.py:151
+#: jacc/admin.py:369 jacc/models.py:151
 msgid "source invoice"
 msgstr "lähdelasku"
 
-#: jacc/admin.py:376 jacc/models.py:161
+#: jacc/admin.py:378 jacc/models.py:161
 msgid "settled invoice"
 msgstr "kohdelasku"
 
-#: jacc/admin.py:385 jacc/models.py:171
+#: jacc/admin.py:387 jacc/models.py:171
 msgid "settled item"
 msgstr "kohdistus"
 
-#: jacc/admin.py:394 jacc/models.py:181
+#: jacc/admin.py:396 jacc/models.py:181
 msgid "account.entry.parent"
 msgstr "johdettu"
 
-#: jacc/admin.py:506
+#: jacc/admin.py:508
 msgid "Derived account entry amount cannot be larger than original"
 msgstr "Johden tilitapahtuman summa ei voi olla suurempi kuin alkuperäinen"
 
-#: jacc/admin.py:509 jacc/admin.py:512
+#: jacc/admin.py:511 jacc/admin.py:514
 msgid ""
 "Payment settlements must have originating account entry which is also payment"
 msgstr ""
 "Maksusuorituksille pitää asettaa lähdekirjaus joka on myös maksusuoritus"
 
-#: jacc/admin.py:548
+#: jacc/admin.py:550
 msgid "invoice items"
 msgstr "laskurivit"
 
-#: jacc/admin.py:549
+#: jacc/admin.py:551
 msgid "invoices items"
 msgstr "laskurivit"
 
-#: jacc/admin.py:581 jacc/admin.py:654
+#: jacc/admin.py:583 jacc/admin.py:656
 msgid "id"
 msgstr ""
 
-#: jacc/admin.py:600 jacc/admin.py:601
+#: jacc/admin.py:602 jacc/admin.py:603
 msgid "settlements"
 msgstr "tilitykset"
 
-#: jacc/admin.py:687 jacc/models.py:383
+#: jacc/admin.py:689 jacc/models.py:383
 msgid "late days"
 msgstr "myöhässä"
 
-#: jacc/admin.py:694
+#: jacc/admin.py:696
 msgid "late.days.filter.not.due"
 msgstr "ei vielä erääntynyt"
 
-#: jacc/admin.py:695 jacc/admin.py:696 jacc/admin.py:697 jacc/admin.py:698
+#: jacc/admin.py:697 jacc/admin.py:698 jacc/admin.py:699 jacc/admin.py:700
 msgid "late.days.filter.late.range"
 msgstr "myöhässä {}-{}pv"
 
-#: jacc/admin.py:699
+#: jacc/admin.py:701
 msgid "late.days.filter.late.over.days"
 msgstr "myöhässä yli {}pv"
 
-#: jacc/admin.py:721
+#: jacc/admin.py:723
 #, python-brace-format
 msgid "({total_count} invoices)"
 msgstr "({total_count} laskua)"
 
-#: jacc/admin.py:735
+#: jacc/admin.py:737
 msgid "Total"
 msgstr "Yhteensä"
 
-#: jacc/admin.py:735 jacc/forms.py:8 jacc/models.py:138 jacc/models.py:348
+#: jacc/admin.py:737 jacc/forms.py:8 jacc/models.py:138 jacc/models.py:348
 #: jacc/templates/admin/jacc/accountentry/reverse_entry.html:10
 msgid "amount"
 msgstr "summa"
 
-#: jacc/admin.py:743 jacc/models.py:384 jacc/models.py:569
+#: jacc/admin.py:745 jacc/models.py:384 jacc/models.py:569
 msgid "state"
 msgstr "tila"
 
-#: jacc/admin.py:748
+#: jacc/admin.py:750
 msgid "day.abbr"
 msgstr "pv"
 
-#: jacc/admin.py:750
+#: jacc/admin.py:752
 msgid "outstanding.invoice"
 msgstr "avoinna"
 
-#: jacc/admin.py:751 jacc/models.py:43
+#: jacc/admin.py:753 jacc/models.py:43
 msgid "Not due yet"
 msgstr "Ei vielä erääntynyt"
 
-#: jacc/admin.py:752 jacc/admin.py:753 jacc/models.py:44
+#: jacc/admin.py:754 jacc/admin.py:755 jacc/models.py:44
 msgid "Due"
 msgstr "Erääntynyt"
 
-#: jacc/admin.py:752
+#: jacc/admin.py:754
 msgid "late"
 msgstr "myöhässä"
 
-#: jacc/admin.py:754 jacc/models.py:45
+#: jacc/admin.py:756 jacc/models.py:45
 msgid "Late"
 msgstr "Myöhässä"
 
-#: jacc/admin.py:755
+#: jacc/admin.py:757
 msgid "closed.invoice"
 msgstr "valmistunut"
 
-#: jacc/admin.py:882 jacc/models.py:343
+#: jacc/admin.py:884 jacc/models.py:343
 msgid "sent"
 msgstr "lähetetty"
 
-#: jacc/admin.py:889 jacc/models.py:344
+#: jacc/admin.py:891 jacc/models.py:344
 msgid "due date"
 msgstr "eräpäivä"
 
-#: jacc/admin.py:896 jacc/models.py:382
+#: jacc/admin.py:898 jacc/models.py:382
 msgid "close date"
 msgstr "valmistunut"
 
-#: jacc/admin.py:925
+#: jacc/admin.py:927
 msgid "is liability"
 msgstr "vastattavaa"
 
-#: jacc/admin.py:1102
+#: jacc/admin.py:1104
 msgid "Add reverse charge"
 msgstr "Lisää tilitapahtuman korjaus"
 
-#: jacc/admin.py:1103
+#: jacc/admin.py:1105
 msgid "Re-send invoices"
 msgstr "Lähetä laskut uudelleen"
 
-#: jacc/admin.py:1104
+#: jacc/admin.py:1106
 msgid "Refresh cached fields"
 msgstr "Päivitä välimuistissa olevat arvot"
 
-#: jacc/admin.py:1105
+#: jacc/admin.py:1107
 msgid "Summarize account entries"
 msgstr "Tilitapahtumien yhteenveto"
 
-#: jacc/admin.py:1106
+#: jacc/admin.py:1108
 msgid "Summarize invoice statistics"
 msgstr "Laskujen yhteenveto"
 
-#: jacc/admin.py:1107
+#: jacc/admin.py:1109
 msgid "set_as_asset"
 msgstr "Aseta vastaavaa tiliksi"
 
-#: jacc/admin.py:1108
+#: jacc/admin.py:1110
 msgid "set_as_liability"
 msgstr "Aseta vastattavaa tiliksi"
 
