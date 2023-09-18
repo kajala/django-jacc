@@ -1,10 +1,14 @@
 from decimal import Decimal
 from datetime import timedelta, datetime, date
 import pytz
+from django.core.exceptions import ValidationError
+
 from jacc.interests import calculate_simple_interest
-from jacc.models import AccountEntry, Account, Invoice, EntryType, AccountType, INVOICE_CREDIT_NOTE
+from jacc.models import AccountEntry, Account, Invoice, EntryType, AccountType, INVOICE_CREDIT_NOTE, INVOICE_DEFAULT
 from django.test import TestCase
 from django.utils.timezone import now
+
+from jacc.services import validate_invoice_settlement_amount
 from jacc.settle import settle_assigned_invoice, settle_credit_note
 from jutil.dates import add_month
 from jutil.format import dec2
@@ -387,3 +391,28 @@ class Tests(TestCase, TestSetupMixin):
         self.assertEqual(invoice.get_paid_amount(), Decimal("110.00"))
         self.assertEqual(invoice.get_amount(), Decimal("110.00"))
         self.assertEqual(invoice.get_overpaid_amount(), Decimal("0.00"))
+
+    def test_validate_invoice_settlement_amount(self):
+        succeeds = [
+            (INVOICE_DEFAULT, Decimal("1.23"), Decimal("1.23")),
+            (INVOICE_DEFAULT, Decimal("1.23"), Decimal("0.13")),
+            (INVOICE_CREDIT_NOTE, Decimal("-1.23"), Decimal("-1.23")),
+            (INVOICE_CREDIT_NOTE, Decimal("-1.23"), Decimal("-0.13")),
+        ]
+        for inv_type, unpaid_amount, amt in succeeds:
+            inv = Invoice(type=inv_type, unpaid_amount=unpaid_amount)
+            validate_invoice_settlement_amount(inv, amt)
+        fails = [
+            (INVOICE_DEFAULT, Decimal("1.23"), Decimal("1.33")),
+            (INVOICE_DEFAULT, Decimal("1.23"), Decimal("-0.13")),
+            (INVOICE_CREDIT_NOTE, Decimal("-1.23"), Decimal("-1.33")),
+            (INVOICE_CREDIT_NOTE, Decimal("-1.23"), Decimal("0.13")),
+            (INVOICE_CREDIT_NOTE, Decimal("1.23"), Decimal("0.00")),
+        ]
+        for inv_type, unpaid_amount, amt in fails:
+
+            def test_func():
+                inv = Invoice(type=inv_type, unpaid_amount=unpaid_amount)
+                validate_invoice_settlement_amount(inv, amt)
+
+            self.failUnlessRaises(ValidationError, test_func)
