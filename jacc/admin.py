@@ -163,7 +163,7 @@ def add_reverse_charge(modeladmin, request, qs):
     assert hasattr(modeladmin, "reverse_charge_template")
 
     user = request.user
-    cx: Dict[str, Any] = {}
+    cx: Dict[str, Any] = {}  # type: ignore
     try:
         if qs.count() != 1:
             raise ValidationError(_("Exactly one account entry must be selected"))

@@ -1,7 +1,6 @@
-from datetime import date, time, datetime
+from datetime import date, time, datetime, timezone
 from decimal import Decimal
 from typing import Optional
-import pytz
 from django.utils.timezone import now
 from jacc.models import AccountEntry
 
@@ -40,7 +39,7 @@ def calculate_simple_interest(  # pylint: disable=too-many-locals
         last = entries_list[nentries - 1]
         assert isinstance(last, AccountEntry)
         if last.timestamp.date() < interest_date:
-            timestamp = pytz.utc.localize(datetime.combine(interest_date, time(0, 0)))
+            timestamp = datetime.combine(interest_date, time(0, 0)).replace(tzinfo=timezone.utc)
             e = AccountEntry(timestamp=timestamp, amount=Decimal("0.00"), type=last.type)
             entries_list.append(e)
 

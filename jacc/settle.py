@@ -1,7 +1,7 @@
 from decimal import Decimal
 from typing import Optional, Dict, Any
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
@@ -83,7 +83,7 @@ def settle_invoice(receivables_account: Account, settlement: AccountEntry, invoi
                 if remaining >= Decimal(0):
                     break
         else:
-            raise Exception("jacc.settle.settle_assigned_invoice() unimplemented for invoice type {}".format(invoice.type))
+            raise NotImplementedError("jacc.settle.settle_assigned_invoice() unimplemented for invoice type {}".format(invoice.type))
 
     invoice.update_cached_fields()
     return new_payments
@@ -160,9 +160,8 @@ def settle_credit_note(  # noqa
     entry_type = kwargs.pop("entry_type", None)
     if entry_type is None:
         if not hasattr(settings, "E_CREDIT_NOTE_RECONCILIATION"):
-            raise Exception(
-                "settle_credit_note() requires settings.E_CREDIT_NOTE_RECONCILIATION (account entry type code) " "or entry_type to be pass in kwargs"
-            )
+            err_msg = "settle_credit_note() requires settings.E_CREDIT_NOTE_RECONCILIATION (account entry type code) or entry_type to be pass in kwargs"
+            raise ImproperlyConfigured(err_msg)
         entry_type = EntryType.objects.get(code=settings.E_CREDIT_NOTE_RECONCILIATION)
     description = kwargs.pop("description", _("credit.note.reconciliation"))
 

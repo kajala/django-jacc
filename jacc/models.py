@@ -480,7 +480,7 @@ class Invoice(models.Model, CachedFieldsMixin):
                 if bal < Decimal(0):
                     unpaid_items.append((priority, item, bal))
             else:
-                raise Exception("jacc.models.Invoice.get_unpaid_items() unimplemented for invoice type {}".format(self.type))
+                raise NotImplementedError("jacc.models.Invoice.get_unpaid_items() unimplemented for invoice type {}".format(self.type))
         return [i[1:] for i in sorted(unpaid_items, key=lambda x: x[0])]
 
     def get_amount(self) -> Decimal:

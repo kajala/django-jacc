@@ -21,7 +21,8 @@ def validate_invoice_settlement_amount(inv: Invoice, amt: Decimal, field_name: s
         raise ValidationError({field_name: _("Amount cannot be zero")})
     if inv.type == INVOICE_DEFAULT and amt < Decimal("0.00"):
         raise ValidationError({field_name: _("Debit note settlement amount cannot be negative")})
-    elif inv.type == INVOICE_CREDIT_NOTE and amt > Decimal("0.00"):
+    if inv.type == INVOICE_CREDIT_NOTE and amt > Decimal("0.00"):
         raise ValidationError({field_name: _("Credit note settlement amount cannot be positive")})
-    if abs(amt) > abs(inv.unpaid_amount):
+    unpaid_amt = inv.unpaid_amount or Decimal("0.00")
+    if abs(amt) > abs(unpaid_amt):
         raise ValidationError({field_name: _("Settlement amount exceeds invoice unpaid amount")})

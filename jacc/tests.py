@@ -1,6 +1,5 @@
 from decimal import Decimal
-from datetime import timedelta, datetime, date
-import pytz
+from datetime import timedelta, datetime, date, timezone
 from django.core.exceptions import ValidationError
 
 from jacc.interests import calculate_simple_interest
@@ -44,7 +43,7 @@ def create_account_by_type(type_id: str):
 
 
 def make_datetime(year, month, day) -> datetime:
-    return pytz.utc.localize(datetime(year=year, month=month, day=day))
+    return datetime(year=year, month=month, day=day).replace(tzinfo=timezone.utc)
 
 
 class Tests(TestCase, TestSetupMixin):
