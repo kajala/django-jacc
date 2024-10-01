@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-13 01:03+0000\n"
+"POT-Creation-Date: 2023-12-13 04:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -461,6 +461,26 @@ msgstr "sopimus"
 msgid "contracts"
 msgstr "sopimukset"
 
+#: jacc/services.py:19
+msgid "Field value missing"
+msgstr ""
+
+#: jacc/services.py:21
+msgid "Amount cannot be zero"
+msgstr ""
+
+#: jacc/services.py:23
+msgid "Debit note settlement amount cannot be negative"
+msgstr ""
+
+#: jacc/services.py:25
+msgid "Credit note settlement amount cannot be positive"
+msgstr ""
+
+#: jacc/services.py:28
+msgid "Settlement amount exceeds invoice unpaid amount"
+msgstr ""
+
 #: jacc/settle.py:144
 msgid "Credit note type incorrect"
 msgstr ""
@@ -481,7 +501,7 @@ msgstr ""
 "Hyvityslaskua jonka summa on suurempi kuin laskun jäljellä oleva saldo ei "
 "voida kohdistaa"
 
-#: jacc/settle.py:167
+#: jacc/settle.py:166
 msgid "credit.note.reconciliation"
 msgstr "hyvityslaskun kohdistus"
 
