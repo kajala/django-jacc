@@ -175,7 +175,7 @@ class Tests(TestCase, TestSetupMixin):
                 inv = invoices[i]
                 assert isinstance(inv, Invoice)
             for i in range(n):
-                paid_amount_real = invoices[i]
+                # paid_amount_real = invoices[i]
                 unpaid_amount_real = invoices[i].get_unpaid_amount()
                 unpaid_amount_ref = unpaid_amounts[i]
                 print("checking invoice {} payment status after payment op {} (real {}, expected {})".format(i, j, unpaid_amount_real, unpaid_amount_ref))
@@ -247,7 +247,7 @@ class Tests(TestCase, TestSetupMixin):
         e_fee = EntryType.objects.get(code=E_FEE)
         e_interest = EntryType.objects.get(code=E_INTEREST)
         e_settlement = EntryType.objects.get(code=E_SETTLEMENT)
-        e_overpayment = EntryType.objects.get(code=E_OVERPAYMENT)
+        # e_overpayment = EntryType.objects.get(code=E_OVERPAYMENT)
 
         # invoice: cap 100, fee 10, interest 5
         invoice_components = [
@@ -409,9 +409,9 @@ class Tests(TestCase, TestSetupMixin):
             (INVOICE_CREDIT_NOTE, Decimal("1.23"), Decimal("0.00")),
         ]
         for inv_type, unpaid_amount, amt in fails:
-
-            def test_func():
+            try:
                 inv = Invoice(type=inv_type, unpaid_amount=unpaid_amount)
                 validate_invoice_settlement_amount(inv, amt)
-
-            self.failUnlessRaises(ValidationError, test_func)
+                self.fail(f"Test failed: type={inv_type}, unpaid_amount={unpaid_amount}")
+            except ValidationError:
+                pass
