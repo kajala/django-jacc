@@ -173,9 +173,11 @@ def add_reverse_charge(modeladmin, request, qs):
             raise ValidationError(_("Exactly one account entry must be selected"))
 
         form_cls = modeladmin.reverse_charge_form  # Type: ignore
+        form = form_cls()
+        default_description = form.get_initial_for_field(form.fields["description"], "description") if hasattr(form, "get_initial_for_field") else ""
         initial = {
             "amount": -e.amount,
-            "description": form_cls().fields["description"].initial,
+            "description": default_description,
         }
         if e.description:
             initial["description"] += " / {}".format(e.description)
