@@ -8,11 +8,11 @@ A credit is an accounting entry that either increases a liability or equity acco
 or decreases an asset or expense account.
 Credit means "right", gains/income/revenues/liabilities/equity increased with credit.
 """
+
 from datetime import datetime, timedelta
 from decimal import Decimal
 from typing import Optional, Type
 from math import floor
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from jacc.helpers import sum_queryset
 from django.conf import settings
@@ -92,7 +92,7 @@ class AccountEntryNote(models.Model):
     account_entry = models.ForeignKey("AccountEntry", verbose_name=_("account entry"), related_name="note_set", on_delete=models.CASCADE)
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
     created_by = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         verbose_name=_("created by"),
         editable=False,
         blank=True,

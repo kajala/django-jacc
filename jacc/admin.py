@@ -35,7 +35,6 @@ from jacc.models import (
 )
 from django.conf import settings
 from django.contrib import admin
-from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import QuerySet, Sum, Count
 from django.http import HttpRequest
@@ -680,7 +679,6 @@ def resend_invoices(modeladmin, request: HttpRequest, queryset: QuerySet):  # py
 
     """
     user = request.user
-    assert isinstance(user, User)
     for obj in queryset:
         assert isinstance(obj, Invoice)
         admin_log([obj, user], "Invoice id={invoice} marked for re-sending".format(invoice=obj.id), who=user)
