@@ -1,3 +1,37 @@
+[build-system]
+requires = ["setuptools>=80.9.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-jacc"
+version = "3.12.0"
+description = "Collection of small utilities for Django and Django REST framework projects."
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+license-files = ["LICENSE.txt"]
+authors = [
+  { name = "Jani Kajala", email = "kajala@gmail.com" }
+]
+dependencies = [
+    "Django>=2.1.7",
+    "django-ipware>=3.0.0",
+    "djangorestframework>=2.19.1",
+    "requests>=2.19.1",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+]
+
+[tool.setuptools]
+packages = ["jacc"]
+include-package-data = true
+
+[project.urls]
+"Homepage" = "https://github.com/kajala/django-jacc"
+"Issues" = "https://github.com/kajala/django-jacc/issues"
+
 [tool.black]
 line-length = 159
 

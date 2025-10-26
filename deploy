@@ -1,15 +1,29 @@
 DIR=`pwd`
 PROJECT_DIR=`basename $DIR`
 PROJECT="`echo $PROJECT_DIR | tr '-' '_'`"
-REL=`parse-setup-version.py`
+
+REL="`parse-pyproject-version.py --patch`"
+if [ "$?" != "0" ]; then
+    REL=""
+fi
+if [ -z "$1" ] && [ "$REL" == "" ]; then
+    echo "Usage: <release version>"
+    exit 1
+fi
+if [ -z "$REL" ]; then
+    REL="$1"
+fi
+
 echo "Making release $REL of $PROJECT"
 
-rm -rf dist
-rm -rf htmlcov
-python3 setup.py sdist
+rm -rf dist htmlcov buyild MANIFEST *.egg-info
+./venv/bin/python -m build
+if [ "$?" != "0" ]; then
+    echo "ERROR: ./venv/bin/python -m build failed, exiting"
+    exit
+fi
 
-# clean venv/ directory from the dist
-# TODO: cleaner way to do this
+# clean venv/ and htmlcov/ directories from the dist
 cd dist
 FILE="$PROJECT-$REL"
 echo $FILE
@@ -19,6 +33,7 @@ for DIR_TO_BE_DELETED in venv uploads downloads certs .idea coverage.xml project
 done
 find . -name "__pycache__" -type d -exec rm -r "{}" \;
 rm "$FILE.tar.gz"
+rm "*.whl"
 tar zcvf "$FILE.tar.gz" $FILE
 rm -rf $FILE
 cd ..
@@ -26,4 +41,3 @@ cd ..
 if [ "$1" != "--no-upload" ]; then
     twine upload dist/$FILE.tar.gz
 fi
-
