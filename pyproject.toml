@@ -24,8 +24,11 @@ classifiers = [
 ]
 
 [tool.setuptools]
-packages = ["jacc"]
 include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["jacc*"]
 
 [project.urls]
 "Homepage" = "https://github.com/kajala/django-jacc"
