@@ -3,6 +3,8 @@ PROJECT_DIR=`basename $DIR`
 PROJECT="`echo $PROJECT_DIR | tr '-' '_'`"
 
 REL="`parse-pyproject-version.py --patch`"
+git add -A pyproject.toml
+git commit -m 'version bump'
 if [ "$?" != "0" ]; then
     REL=""
 fi
@@ -34,6 +36,7 @@ done
 find . -name "__pycache__" -type d -exec rm -r "{}" \;
 rm "$FILE.tar.gz"
 rm "*.whl"
+cp ../pyproject.toml $FILE/
 tar zcvf "$FILE.tar.gz" $FILE
 rm -rf $FILE
 cd ..
