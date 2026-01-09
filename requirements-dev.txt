@@ -22,3 +22,4 @@ schwifty
 setuptools
 build
 twine
+django-stubs-ext
