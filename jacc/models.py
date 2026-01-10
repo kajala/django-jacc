@@ -11,7 +11,7 @@ Credit means "right", gains/income/revenues/liabilities/equity increased with cr
 
 from datetime import datetime, timedelta
 from decimal import Decimal
-from typing import Optional, Type
+from typing import Optional, Type, TYPE_CHECKING
 from math import floor
 from django.core.exceptions import ValidationError
 from jacc.helpers import sum_queryset
@@ -23,6 +23,9 @@ from jutil.cache import CachedFieldsMixin
 from django.utils.translation import gettext_lazy as _
 from jutil.format import choices_label
 from jutil.modelfields import SafeCharField, SafeTextField
+
+if TYPE_CHECKING:
+    from django_stubs_ext.db.models.manager import RelatedManager
 
 CATEGORY_ANY = ""
 CATEGORY_DEBIT = "D"  # "left", dividends/expenses/assets/losses increased with debit
@@ -101,6 +104,9 @@ class AccountEntryNote(models.Model):
     )
     last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, editable=False, blank=True)
     note = models.TextField(_("note"))
+
+    if TYPE_CHECKING:
+        note_set: RelatedManager["AccountEntry"]
 
     class Meta:
         verbose_name = _("account entry note")
@@ -188,6 +194,10 @@ class AccountEntry(models.Model):
     )
     archived = models.BooleanField(_("archived"), default=False, blank=True)
 
+    if TYPE_CHECKING:
+        child_set: RelatedManager["AccountEntry"]
+        settlement_set: RelatedManager["AccountEntry"]
+
     class Meta:
         verbose_name = _("account entry")
         verbose_name_plural = _("account entries")
@@ -262,6 +272,9 @@ class Account(models.Model):
     created = models.DateTimeField(verbose_name=_("created"), default=now, db_index=True, editable=False, blank=True)
     last_modified = models.DateTimeField(verbose_name=_("last modified"), auto_now=True, db_index=True, editable=False, blank=True)
     notes = models.TextField(_("notes"), blank=True, default="")
+
+    if TYPE_CHECKING:
+        accountentry_set: RelatedManager[AccountEntry]
 
     class Meta:
         verbose_name = _("account")
