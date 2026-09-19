@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "django-jacc"
 version = "3.12.7"
-description = "Collection of small utilities for Django and Django REST framework projects."
+description = "Simple double entry accounting system (debits/credits) for Django projects."
 readme = "README.md"
 requires-python = ">=3.8"
 license = "MIT"
